@@ -1,0 +1,43 @@
+package be.mauricedeke.shinkai.ui.events.manage
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import be.mauricedeke.shinkai.domain.usecase.GetEventsUseCase
+import be.mauricedeke.shinkai.domain.usecase.GetInboxEventsUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import javax.inject.Inject
+
+@HiltViewModel
+class ManageEventsViewModel @Inject constructor(
+    private val getEvents: GetEventsUseCase,
+    private val getInboxEvents: GetInboxEventsUseCase
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(ManageEventsUiState())
+    val uiState: StateFlow<ManageEventsUiState> = _uiState
+
+    init {
+        viewModelScope.launch {
+            val all = getEvents() + getInboxEvents()
+            val initialRsvp = all.associate { it.id to it.rsvp }
+            _uiState.update { it.copy(events = all, rsvp = initialRsvp) }
+        }
+    }
+
+    fun setRsvp(eventId: String, attending: Boolean) {
+        val event = _uiState.value.events.find { it.id == eventId } ?: return
+        val isUpcoming = event.localDate == null || !event.localDate.isBefore(LocalDate.now())
+        if (!isUpcoming) return
+
+        _uiState.update { state ->
+            val current = state.rsvp[eventId]
+            val next = if (current == attending) null else attending
+            state.copy(rsvp = state.rsvp + (eventId to next))
+        }
+    }
+}

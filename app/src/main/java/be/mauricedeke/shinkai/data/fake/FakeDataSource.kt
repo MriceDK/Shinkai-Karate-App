@@ -13,26 +13,61 @@ import be.mauricedeke.shinkai.domain.model.Techniek
 import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.domain.model.UserProfile
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object FakeDataSource {
 
     val events = listOf(
         Event(
-            "1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
+            "1", "Stage Naigairyu", "10:00", "16:00",
+            LocalDate.now().plusDays(7).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Kapellestraat 79", "Evergem",
             "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts.",
-            localDate = LocalDate.of(2026, 3, 14)
+            localDate = LocalDate.now().plusDays(7),
+            rsvp = true
         ),
         Event(
-            "2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts.",
-            localDate = LocalDate.of(2026, 3, 14)
+            "2", "Kata Training", "19:00", "21:00",
+            LocalDate.now().plusDays(14).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Sporthal De Kuip", "Gent",
+            "Gezamenlijke kata training voor alle graden.",
+            localDate = LocalDate.now().plusDays(14),
+            rsvp = null
+        ),
+        Event(
+            "4", "Kumite Stage", "09:00", "17:00",
+            LocalDate.now().plusDays(21).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Martial Arts Center", "Brugge",
+            "Intensieve kumite stage voor gevorderde leerlingen.",
+            localDate = LocalDate.now().plusDays(21),
+            rsvp = null
+        ),
+        Event(
+            "5", "Grading Examen", "10:00", "14:00",
+            LocalDate.now().plusDays(30).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Hoofddojo", "Antwerpen",
+            "Officieel grading examen voor de volgende bandkleur.",
+            localDate = LocalDate.now().plusDays(30),
+            rsvp = null
         ),
     )
 
     val inboxEvents = listOf(
         Event(
-            "3", "Stage test1234", "9:00", "12:00", "16 maart 2026", "", "Limburg",
-            "", isInbox = true, localDate = LocalDate.of(2026, 3, 16)
+            "3", "Uitnodiging Vriendenkamp", "9:00", "17:00",
+            LocalDate.now().plusDays(10).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "", "Limburg",
+            "Speciaal vriendenkamp georganiseerd door de regionale federatie.",
+            isInbox = true, localDate = LocalDate.now().plusDays(10),
+            rsvp = false
+        ),
+        Event(
+            "6", "Demonstratie Openingsdag", "13:00", "15:00",
+            LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Gemeenteplein", "Aalst",
+            "Publieke demonstratie ter gelegenheid van de openingsdag van het sportseizoen.",
+            isInbox = true, localDate = LocalDate.now().plusDays(5),
+            rsvp = null
         ),
     )
 
@@ -256,6 +291,14 @@ object FakeDataSource {
         StrengthResult("Kiai Strength", 250, "#FF8C00"),
     )
 
-    val defaultNotificationSettings = NotificationSettings()
-    val defaultLocationSettings = LocationSettings()
+    // Lege lijsten voor testing van schermen zonder data
+//
+//    val events: List<Event>? = null
+//    val inboxEvents: List<Event>? = null
+//    val trainings: List<Training>? = null
+//    val nextTraining: Training? = null
+//    val belts: List<Belt>? = null
+//    val lexiconEntries: List<LexiconEntry>? = null
+//    val strengthResults: List<StrengthResult>? = null
+//    val userProfile = null
 }
