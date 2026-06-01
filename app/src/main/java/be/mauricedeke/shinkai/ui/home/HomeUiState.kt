@@ -5,5 +5,6 @@ import be.mauricedeke.shinkai.domain.model.Training
 
 data class HomeUiState(
     val upcomingEvents: List<Event> = emptyList(),
-    val nextTraining: Training? = null
+    val nextTraining: Training? = null,
+    val isEventsError: Boolean = false
 )

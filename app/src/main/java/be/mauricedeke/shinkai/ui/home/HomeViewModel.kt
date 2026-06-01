@@ -23,12 +23,18 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val today = LocalDate.now()
             val events = getEvents()
-            val todayTrainings = getTrainings(LocalDate.now())
+            val upcomingEvents = events
+                ?.filter { it.localDate == null || !it.localDate.isBefore(today) }
+                ?.take(2)
+                ?: emptyList()
+            val todayTrainings = getTrainings(today)
             _uiState.update {
                 it.copy(
-                    upcomingEvents = events,
-                    nextTraining = todayTrainings.firstOrNull()
+                    upcomingEvents = upcomingEvents,
+                    nextTraining = todayTrainings?.firstOrNull(),
+                    isEventsError = events == null
                 )
             }
         }

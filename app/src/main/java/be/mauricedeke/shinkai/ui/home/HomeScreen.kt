@@ -33,12 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.ui.navigation.Screen
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
@@ -52,12 +52,7 @@ fun HomeScreen(
     onNavigate: (String) -> Unit = {},
     onEventClick: (String) -> Unit = {},
 ) {
-    val fallbackEvents = if (uiState.upcomingEvents.isEmpty())
-        listOf(
-            Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem"),
-            Event("2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem"),
-        )
-    else uiState.upcomingEvents
+    val upcomingEvents = uiState.upcomingEvents
 
     val fallbackTraining = uiState.nextTraining ?: Training(
         id = "1", type = "Technieken",
@@ -75,13 +70,31 @@ fun HomeScreen(
         Spacer(Modifier.height(16.dp))
 
         EventSection(title = "UPCOMING EVENTS") {
-            fallbackEvents.forEach { event ->
-                EventRow(
-                    "${event.startTime} - ${event.endTime}",
-                    event.date,
-                    event.title,
-                    event.location,
-                    onClick = { onEventClick(event.id) })
+            if (uiState.isEventsError) {
+                Text(
+                    "Kon events niet laden. Probeer opnieuw.",
+                    fontSize = 13.sp,
+                    color = ShinkaiRed,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                )
+            } else if (upcomingEvents.isEmpty()) {
+                Text(
+                    "Geen aankomende events.",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                )
+            } else {
+                upcomingEvents.forEach { event ->
+                    EventRow(
+                        "${event.startTime} - ${event.endTime}",
+                        event.date,
+                        event.title,
+                        event.location,
+                        onClick = { onEventClick(event.id) })
+                }
             }
         }
 

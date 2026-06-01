@@ -23,11 +23,16 @@ class EventsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            val today = LocalDate.now()
+            fun isUpcoming(date: LocalDate?) = date == null || !date.isBefore(today)
+            val events = getEvents()
+            val inboxEvents = getInboxEvents()
             _uiState.update {
                 it.copy(
-                    upcomingEvents = getEvents(),
-                    inboxEvents = getInboxEvents(),
-                    selectedDate = LocalDate.now()
+                    upcomingEvents = events?.filter { e -> isUpcoming(e.localDate) }?.take(4) ?: emptyList(),
+                    inboxEvents = inboxEvents?.filter { e -> isUpcoming(e.localDate) } ?: emptyList(),
+                    selectedDate = today,
+                    isError = events == null || inboxEvents == null
                 )
             }
         }

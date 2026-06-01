@@ -71,6 +71,7 @@ fun EventsScreen(
     uiState: EventsUiState,
     onDateSelected: (LocalDate) -> Unit = {},
     onEventClick: (String) -> Unit = {},
+    onManageEventsClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val events = uiState.upcomingEvents
@@ -149,30 +150,47 @@ fun EventsScreen(
             Text("Toekomstige Events", modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 32.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            if (uiState.isError) {
+                Text(
+                    "Kon events niet laden. Probeer opnieuw.",
+                    color = ShinkaiRed,
+                    fontSize = 13.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
+                )
+            }
             Spacer(Modifier.height(16.dp))
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 32.dp, vertical = 8.dp)) {
-                events.forEach { event ->
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                        .clickable { onEventClick(event.id) }, verticalAlignment = Alignment.CenterVertically) {
-                        Column(modifier = Modifier.width(110.dp)) {
-                            Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-                            Text(event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                if (events.isEmpty()) {
+                    Text(
+                        "Geen aankomende events.",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp)
+                    )
+                } else {
+                    events.forEach { event ->
+                        Row(modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .clickable { onEventClick(event.id) }, verticalAlignment = Alignment.CenterVertically) {
+                            Column(modifier = Modifier.width(110.dp)) {
+                                Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                                Text(event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                            }
+                            Box(modifier = Modifier
+                                .width(1.dp)
+                                .height(36.dp)
+                                .background(MaterialTheme.colorScheme.outlineVariant))
+                            Spacer(Modifier.width(12.dp))
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+                                Text(event.location, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                            }
+                            IconButton(onClick = {}) { Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
                         }
-                        Box(modifier = Modifier
-                            .width(1.dp)
-                            .height(36.dp)
-                            .background(MaterialTheme.colorScheme.outlineVariant))
-                        Spacer(Modifier.width(12.dp))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-                            Text(event.location, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
-                        }
-                        IconButton(onClick = {}) { Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
                     }
                 }
             }
@@ -182,40 +200,60 @@ fun EventsScreen(
                 .padding(horizontal = 16.dp)) {
                 Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 Spacer(Modifier.height(8.dp))
-                inboxEvents.firstOrNull()?.let { event ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(ShinkaiRed)
-                            .clickable { onEventClick(event.id) }
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(event.title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                        Spacer(Modifier.height(8.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Column(horizontalAlignment = Alignment.End) {
-                                Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
-                                Text(event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                if (inboxEvents.isEmpty()) {
+                    Text(
+                        "Geen inbox events.",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp)
+                    )
+                } else {
+                    inboxEvents.firstOrNull()?.let { event ->
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(ShinkaiRed)
+                                .clickable { onEventClick(event.id) }
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(event.title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            Spacer(Modifier.height(8.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Column(horizontalAlignment = Alignment.End) {
+                                    Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
+                                    Text(event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                                }
+                                Box(modifier = Modifier
+                                    .padding(horizontal = 12.dp)
+                                    .width(1.dp)
+                                    .height(36.dp)
+                                    .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)))
+                                Column {
+                                    if (event.location.isNotBlank()) Text(event.location, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
+                                    if (event.city.isNotBlank()) Text(event.city, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                                }
                             }
-                            Box(modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                                .width(1.dp)
-                                .height(36.dp)
-                                .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)))
-                            Column {
-                                if (event.location.isNotBlank()) Text(event.location, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
-                                if (event.city.isNotBlank()) Text(event.city, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                            Spacer(Modifier.height(12.dp))
+                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                OutlinedButton(onClick = {}, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text("Ik kan niet") }
+                                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary, contentColor = ShinkaiRed)) { Text("Ik kan", fontWeight = FontWeight.Bold) }
                             }
-                        }
-                        Spacer(Modifier.height(12.dp))
-                        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                            OutlinedButton(onClick = {}, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text("Ik kan niet") }
-                            Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary, contentColor = ShinkaiRed)) { Text("Ik kan", fontWeight = FontWeight.Bold) }
                         }
                     }
                 }
+            }
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onManageEventsClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text("Beheer alle events", fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.height(with(density) { headerHeightPx.toDp() } + 16.dp))
         }
