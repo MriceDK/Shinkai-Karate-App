@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -42,12 +41,7 @@ fun EventDetailScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {}
 ) {
-    val event = if (uiState.event.title.isBlank())
-        Event(
-            "1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai  内外流武術会\nSchool for traditional Japanese martial arts recognized by the Dai Nippon Butoku Kai Japan (DNBK).\nFor more information or a personal meeting you can contact the honbu dojo."
-        )
-    else uiState.event
+    val event = uiState.event
 
     Box(modifier = modifier.fillMaxSize()) {
     Column(

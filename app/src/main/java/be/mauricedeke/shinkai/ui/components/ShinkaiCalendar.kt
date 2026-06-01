@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -47,6 +48,7 @@ fun ShinkaiCalendar(
     initialMonth: LocalDate = LocalDate.now().withDayOfMonth(1),
     selectedDate: LocalDate? = null,
     today: LocalDate = LocalDate.now(),
+    eventDates: Set<LocalDate> = emptySet(),
     onDateSelected: (LocalDate) -> Unit = {},
     onClear: () -> Unit = {}
 ) {
@@ -139,6 +141,7 @@ fun ShinkaiCalendar(
                             val date = currentMonth.withDayOfMonth(day)
                             val isSelected = selectedDate == date
                             val isToday = today == date
+                            val hasEvent = date in eventDates
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -161,6 +164,19 @@ fun ShinkaiCalendar(
                                     fontSize = 13.sp,
                                     fontWeight = if (isSelected || isToday) FontWeight.Bold else FontWeight.Normal
                                 )
+                                if (hasEvent) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(4.dp)
+                                            .clip(CircleShape)
+                                            .background(
+                                                if (isSelected) containerColor
+                                                else MaterialTheme.colorScheme.onPrimary
+                                            )
+                                            .align(Alignment.BottomCenter)
+                                            .offset(y = (-2).dp)
+                                    )
+                                }
                             }
                         }
                     }

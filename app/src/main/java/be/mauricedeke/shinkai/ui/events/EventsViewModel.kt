@@ -27,7 +27,7 @@ class EventsViewModel @Inject constructor(
                 it.copy(
                     upcomingEvents = getEvents(),
                     inboxEvents = getInboxEvents(),
-                    selectedDate = LocalDate.of(2025, 8, 17)
+                    selectedDate = LocalDate.now()
                 )
             }
         }

@@ -50,12 +50,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
@@ -65,15 +66,11 @@ fun EventsScreen(
     onEventClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val events = uiState.upcomingEvents.ifEmpty {
-        listOf(
-            Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem"),
-            Event("2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem")
-        )
-    }
-    val inboxEvents = uiState.inboxEvents.ifEmpty {
-        listOf(Event("3", "Stage test1234", "9:00", "12:00", "16 maart 2026", city = "Limburg", isInbox = true))
-    }
+    val events = uiState.upcomingEvents
+    val inboxEvents = uiState.inboxEvents
+    val eventDates = (events + inboxEvents).mapNotNull { it.localDate }.toSet()
+    val today = LocalDate.now()
+    val displayDate = uiState.selectedDate ?: today
 
     val density = LocalDensity.current
     // Height of the drag handle + "Mon, Aug 17" date header that stays visible when minimized
@@ -221,12 +218,18 @@ fun EventsScreen(
                 Box(modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 12.dp)) {
-                    Text("Mon, Aug 17", color = MaterialTheme.colorScheme.onPrimary, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        displayDate.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.ENGLISH)),
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 ShinkaiCalendar(
-                    initialMonth = LocalDate.of(2025, 8, 1),
+                    initialMonth = today.withDayOfMonth(1),
                     selectedDate = uiState.selectedDate,
-                    today = LocalDate.of(2025, 8, 5),
+                    today = today,
+                    eventDates = eventDates,
                     onDateSelected = onDateSelected
                 )
             }

@@ -19,18 +19,20 @@ object FakeDataSource {
     val events = listOf(
         Event(
             "1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."
+            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts.",
+            localDate = LocalDate.of(2026, 3, 14)
         ),
         Event(
             "2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."
+            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts.",
+            localDate = LocalDate.of(2026, 3, 14)
         ),
     )
 
     val inboxEvents = listOf(
         Event(
             "3", "Stage test1234", "9:00", "12:00", "16 maart 2026", "", "Limburg",
-            "", isInbox = true
+            "", isInbox = true, localDate = LocalDate.of(2026, 3, 16)
         ),
     )
 

@@ -1,5 +1,7 @@
 package be.mauricedeke.shinkai.domain.model
 
+import java.time.LocalDate
+
 data class Event(
     val id: String = "",
     val title: String = "",
@@ -9,5 +11,6 @@ data class Event(
     val location: String = "",
     val city: String = "",
     val description: String = "",
-    val isInbox: Boolean = false
+    val isInbox: Boolean = false,
+    val localDate: LocalDate? = null
 )
