@@ -5,5 +5,6 @@ import java.time.LocalDate
 
 data class TrainingHistoryUiState(
     val selectedDate: LocalDate? = LocalDate.of(2025, 8, 14),
-    val selectedTrainings: List<Training> = emptyList()
+    val selectedTrainings: List<Training> = emptyList(),
+    val isError: Boolean = false
 )

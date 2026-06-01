@@ -24,7 +24,9 @@ class AccountViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val profile = getUserProfile()
-            _uiState.update { it.copy(naam = profile.name, email = profile.email) }
+            if (profile != null) {
+                _uiState.update { it.copy(naam = profile.name, email = profile.email) }
+            }
         }
     }
 

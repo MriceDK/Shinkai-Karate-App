@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -71,10 +72,20 @@ fun LexiconScreen(
             ),
             singleLine = true
         )
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 12.dp)) {
-            items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
+        if (uiState.isError) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    "Kon lexicon niet laden. Probeer opnieuw.",
+                    color = ShinkaiRed,
+                    fontSize = 14.sp
+                )
+            }
+        } else {
+            LazyColumn(modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 12.dp)) {
+                items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
+            }
         }
     }
 }

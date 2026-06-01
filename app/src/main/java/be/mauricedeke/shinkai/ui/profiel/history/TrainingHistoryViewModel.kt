@@ -21,7 +21,14 @@ class TrainingHistoryViewModel @Inject constructor(
 
     fun onDateSelected(date: LocalDate) {
         viewModelScope.launch {
-            _uiState.update { it.copy(selectedDate = date, selectedTrainings = getTrainingsByDate(date)) }
+            val trainings = getTrainingsByDate(date)
+            _uiState.update {
+                it.copy(
+                    selectedDate = date,
+                    selectedTrainings = trainings ?: emptyList(),
+                    isError = trainings == null
+                )
+            }
         }
     }
 }

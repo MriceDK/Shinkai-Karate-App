@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.StrengthResult
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.BeltGreen
 import be.mauricedeke.shinkai.ui.theme.BeltOrange
@@ -37,14 +36,16 @@ fun StrengthTestScreen(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val results = uiState.results.ifEmpty {
-        listOf(
-            StrengthResult("Punching Strength", 659, "#1B5E20"),
-            StrengthResult("Kiai Strength", 250, "#FF8C00")
-        )
-    }
-
     Box(modifier = modifier.fillMaxSize()) {
+        if (uiState.isError) {
+            Box(modifier = Modifier.fillMaxSize().background(ShinkaiGray), contentAlignment = Alignment.Center) {
+                Text(
+                    "Kon resultaten niet laden. Probeer opnieuw.",
+                    color = ShinkaiRed,
+                    fontSize = 14.sp
+                )
+            }
+        } else {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -52,7 +53,7 @@ fun StrengthTestScreen(
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            results.forEachIndexed { i, result ->
+            uiState.results.forEachIndexed { i, result ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.padding(24.dp)
@@ -103,6 +104,7 @@ fun StrengthTestScreen(
                 }
             }
         }
+        } // end else
         RoundBackButton(
             onClick = onBackClick,
             modifier = Modifier

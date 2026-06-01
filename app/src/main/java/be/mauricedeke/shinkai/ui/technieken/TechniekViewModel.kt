@@ -20,7 +20,13 @@ class TechniekViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _uiState.update { it.copy(belts = getBelts()) }
+            val belts = getBelts()
+            _uiState.update {
+                it.copy(
+                    belts = belts ?: emptyList(),
+                    isError = belts == null
+                )
+            }
         }
     }
 }

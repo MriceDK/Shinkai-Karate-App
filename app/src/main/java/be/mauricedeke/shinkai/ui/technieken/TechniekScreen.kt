@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Belt
-import be.mauricedeke.shinkai.domain.model.BeltColor
+import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -42,12 +42,19 @@ fun TechniekScreen(
     onBeltClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val belts = uiState.belts.ifEmpty {
-        listOf(
-            Belt("Geel", BeltColor.YELLOW), Belt("Oranje", BeltColor.ORANGE),
-            Belt("Rood", BeltColor.RED), Belt("Groen", BeltColor.GREEN),
-            Belt("Blauw", BeltColor.BLUE),
-        )
+    if (uiState.isError) {
+        Box(
+            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                "Kon technieken niet laden. Probeer opnieuw.",
+                color = ShinkaiRed,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(32.dp)
+            )
+        }
+        return
     }
 
     LazyVerticalGrid(
@@ -60,7 +67,7 @@ fun TechniekScreen(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(belts) { belt ->
+        items(uiState.belts) { belt ->
             BeltCard(belt = belt, onClick = { onBeltClick(belt.name) })
         }
     }

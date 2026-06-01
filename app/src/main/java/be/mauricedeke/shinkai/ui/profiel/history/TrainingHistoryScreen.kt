@@ -24,7 +24,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
@@ -38,28 +37,7 @@ fun TrainingHistoryScreen(
     onBackClick: () -> Unit = {},
     onDateSelected: (LocalDate) -> Unit = {},
 ) {
-    val displayTrainings = uiState.selectedTrainings.ifEmpty {
-        listOf(
-            Training(
-                "1",
-                "Technieken",
-                "20:00",
-                "22:00",
-                LocalDate.of(2025, 8, 14),
-                "Geen",
-                "Geen"
-            ),
-            Training(
-                "2",
-                "Technieken",
-                "20:00",
-                "22:00",
-                LocalDate.of(2025, 8, 14),
-                "Geen",
-                "Geen"
-            ),
-        )
-    }
+    val displayTrainings = uiState.selectedTrainings
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -116,6 +94,21 @@ fun TrainingHistoryScreen(
                 }
             }
             Spacer(Modifier.height(12.dp))
+            if (uiState.isError) {
+                Text(
+                    "Kon trainingen niet laden. Probeer opnieuw.",
+                    color = ShinkaiRed,
+                    fontSize = 13.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            } else if (displayTrainings.isEmpty()) {
+                Text(
+                    "Geen trainingen op deze dag.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 13.sp,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
             Row(modifier = Modifier.fillMaxWidth()) {
                 displayTrainings.take(2).forEach { training ->
                     Column(modifier = Modifier

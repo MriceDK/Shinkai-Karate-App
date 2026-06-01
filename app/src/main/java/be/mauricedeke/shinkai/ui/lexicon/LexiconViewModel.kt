@@ -20,7 +20,8 @@ class LexiconViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _uiState.update { it.copy(entries = getLexiconEntries()) }
+            val entries = getLexiconEntries()
+            _uiState.update { it.copy(entries = entries ?: emptyList(), isError = entries == null) }
         }
     }
 

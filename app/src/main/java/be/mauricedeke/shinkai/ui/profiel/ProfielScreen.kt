@@ -46,6 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.domain.model.UserProfile
 import be.mauricedeke.shinkai.ui.theme.BeltYellow
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -63,6 +64,7 @@ fun ProfielScreen(
     onDarkThemeToggle: (Boolean) -> Unit = {},
 ) {
     val profile = uiState.userProfile
+    val loggedIn = profile != null
 
     Column(
         modifier = modifier
@@ -82,26 +84,26 @@ fun ProfielScreen(
                     modifier = Modifier
                         .size(72.dp)
                         .clip(CircleShape)
-                        .background(ShinkaiRed),
+                        .background(if (loggedIn) ShinkaiRed else MaterialTheme.colorScheme.surfaceVariant),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.Person,
                         null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
+                        tint = if (loggedIn) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(44.dp)
                     )
                 }
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        profile.name.ifBlank { "Maurice De Kegel" },
+                        if (loggedIn) profile!!.name.ifBlank { "Onbekende gebruiker" } else "Niet ingelogd",
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = if (loggedIn) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        profile.email.ifBlank { "maurice.de.kegel@student.howest.be" },
+                        if (loggedIn) profile!!.email.ifBlank { "" } else "Log in om je profiel te bekijken",
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -129,7 +131,7 @@ fun ProfielScreen(
                 }
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    profile.belt.ifBlank { "Yellow belt" },
+                    profile?.belt?.ifBlank { "Yellow belt" } ?: "Yellow belt",
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface
                 )
