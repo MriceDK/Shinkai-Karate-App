@@ -28,15 +28,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -50,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -59,6 +65,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen(
     uiState: EventsUiState,
@@ -68,22 +75,67 @@ fun EventsScreen(
 ) {
     val events = uiState.upcomingEvents
     val inboxEvents = uiState.inboxEvents
-    val eventDates = (events + inboxEvents).mapNotNull { it.localDate }.toSet()
+    val dateToEvents: Map<LocalDate, List<Event>> = (events + inboxEvents)
+        .filter { it.localDate != null }
+        .groupBy { it.localDate!! }
+    val eventDates = dateToEvents.keys
     val today = LocalDate.now()
     val displayDate = uiState.selectedDate ?: today
 
+    var bottomSheetEvents by remember { mutableStateOf<List<Event>>(emptyList()) }
+    val sheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+
     val density = LocalDensity.current
-    // Height of the drag handle + "Mon, Aug 17" date header that stays visible when minimized
     val headerHeightPx = with(density) { 56.dp.toPx() }
 
     var calendarHeightPx by remember { mutableIntStateOf(0) }
     val animatable = remember { Animatable(2000f) }
-    val scope = rememberCoroutineScope()
 
-    // Once we know the actual calendar height, snap to minimized position
     LaunchedEffect(calendarHeightPx) {
         if (calendarHeightPx > 0 && animatable.value >= 1500f) {
             animatable.snapTo((calendarHeightPx - headerHeightPx).coerceAtLeast(0f))
+        }
+    }
+
+    if (bottomSheetEvents.isNotEmpty()) {
+        ModalBottomSheet(
+            onDismissRequest = { bottomSheetEvents = emptyList() },
+            sheetState = sheetState
+        ) {
+            Text(
+                "Events on this day",
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
+            )
+            bottomSheetEvents.forEachIndexed { index, event ->
+                if (index > 0) HorizontalDivider(modifier = Modifier.padding(horizontal = 24.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                bottomSheetEvents = emptyList()
+                                onEventClick(event.id)
+                            }
+                        }
+                        .padding(horizontal = 24.dp, vertical = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(modifier = Modifier.width(100.dp)) {
+                        Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                        Text(event.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp)
+                        if (event.location.isNotBlank())
+                            Text(event.location, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+            Spacer(Modifier.height(24.dp))
         }
     }
 
@@ -91,7 +143,6 @@ fun EventsScreen(
         .fillMaxSize()
         .background(MaterialTheme.colorScheme.background)) {
 
-        // Scrollable background content
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())) {
@@ -199,7 +250,6 @@ fun EventsScreen(
                     }
                 )
         ) {
-            // Drag handle pill
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 1.dp), contentAlignment = Alignment.Center) {
@@ -230,7 +280,15 @@ fun EventsScreen(
                     selectedDate = uiState.selectedDate,
                     today = today,
                     eventDates = eventDates,
-                    onDateSelected = onDateSelected
+                    onDateSelected = { date ->
+                        onDateSelected(date)
+                        val eventsOnDate = dateToEvents[date]
+                        when {
+                            eventsOnDate == null -> {}
+                            eventsOnDate.size == 1 -> onEventClick(eventsOnDate.first().id)
+                            else -> bottomSheetEvents = eventsOnDate
+                        }
+                    }
                 )
             }
         }
