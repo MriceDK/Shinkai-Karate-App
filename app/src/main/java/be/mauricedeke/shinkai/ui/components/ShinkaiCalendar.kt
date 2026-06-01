@@ -62,14 +62,8 @@ fun ShinkaiCalendar(
             .background(containerColor)
             .padding(16.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.weight(1f)
-            ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                 Text(
                     text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)),
                     color = MaterialTheme.colorScheme.onPrimary,
@@ -78,16 +72,10 @@ fun ShinkaiCalendar(
                 )
                 Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
             }
-            IconButton(
-                onClick = { currentMonth = currentMonth.minusMonths(1) },
-                modifier = Modifier.size(32.dp)
-            ) {
+            IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }, modifier = Modifier.size(32.dp)) {
                 Icon(Icons.Default.ChevronLeft, contentDescription = "Previous", tint = MaterialTheme.colorScheme.onPrimary)
             }
-            IconButton(
-                onClick = { currentMonth = currentMonth.plusMonths(1) },
-                modifier = Modifier.size(32.dp)
-            ) {
+            IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }, modifier = Modifier.size(32.dp)) {
                 Icon(Icons.Default.ChevronRight, contentDescription = "Next", tint = MaterialTheme.colorScheme.onPrimary)
             }
         }
@@ -112,30 +100,23 @@ fun ShinkaiCalendar(
                 for (col in 0 until 7) {
                     val day = row * 7 + col - firstDayOfWeek + 1
                     Box(
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f)
-                            .padding(2.dp),
+                        modifier = Modifier.weight(1f).aspectRatio(1f).padding(2.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         if (day in 1..daysInMonth) {
                             val date = currentMonth.withDayOfMonth(day)
                             val isSelected = selectedDate == date
                             val isToday = today == date
-
-                            val cellModifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clip(CircleShape)
-                                .background(if (isSelected) MaterialTheme.colorScheme.onPrimary else Color.Transparent)
-                                .then(
-                                    if (isToday && !isSelected)
-                                        Modifier.border(1.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
-                                    else Modifier
-                                )
-                                .clickable { onDateSelected(date) }
-
-                            Box(modifier = cellModifier, contentAlignment = Alignment.Center) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(1f)
+                                    .clip(CircleShape)
+                                    .background(if (isSelected) MaterialTheme.colorScheme.onPrimary else Color.Transparent)
+                                    .then(if (isToday && !isSelected) Modifier.border(1.dp, MaterialTheme.colorScheme.onPrimary, CircleShape) else Modifier)
+                                    .clickable { onDateSelected(date) },
+                                contentAlignment = Alignment.Center
+                            ) {
                                 Text(
                                     text = day.toString(),
                                     color = if (isSelected) containerColor else MaterialTheme.colorScheme.onPrimary,
@@ -152,10 +133,14 @@ fun ShinkaiCalendar(
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
             Text(
                 text = "Clear",
-                color = MaterialTheme.colorScheme.onPrimary,
+                color = containerColor,
+                fontWeight = FontWeight.Medium,
+                fontSize = 13.sp,
                 modifier = Modifier
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White)
                     .clickable { onClear() }
-                    .padding(8.dp)
+                    .padding(horizontal = 20.dp, vertical = 6.dp)
             )
         }
     }

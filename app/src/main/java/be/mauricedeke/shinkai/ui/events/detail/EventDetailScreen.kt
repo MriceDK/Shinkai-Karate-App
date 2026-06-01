@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -41,7 +42,7 @@ fun EventDetailScreen(
     modifier: Modifier = Modifier
 ) {
     val event = if (uiState.event.title.isBlank())
-        Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79, Evergem",
+        Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
             "Naigairyu Bujutsu Kai  内外流武術会\nSchool for traditional Japanese martial arts recognized by the Dai Nippon Butoku Kai Japan (DNBK).\nFor more information or a personal meeting you can contact the honbu dojo.")
     else uiState.event
 
@@ -57,8 +58,11 @@ fun EventDetailScreen(
                 Text("${event.startTime} - ${event.endTime}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Text(event.date, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Text(" | ", fontSize = 20.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp))
-            Column { Text(event.location, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            Box(modifier = Modifier.padding(horizontal = 12.dp).width(1.dp).height(36.dp).background(MaterialTheme.colorScheme.outlineVariant))
+            Column {
+                Text(event.location, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(event.city, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
         Spacer(Modifier.height(16.dp))
         Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50)) {
