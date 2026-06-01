@@ -5,7 +5,7 @@ import be.mauricedeke.shinkai.domain.model.Training
 import java.time.LocalDate
 
 interface TrainingRepository {
-    suspend fun getTrainings(): List<Training>
-    suspend fun getTrainingsByDate(date: LocalDate): List<Training>
-    suspend fun getStrengthResults(): List<StrengthResult>
+    suspend fun getTrainings(): List<Training>?
+    suspend fun getTrainingsByDate(date: LocalDate): List<Training>?
+    suspend fun getStrengthResults(): List<StrengthResult>?
 }

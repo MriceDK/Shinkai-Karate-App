@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetBeltsUseCase @Inject constructor(
     private val techniekRepository: TechniekRepository
 ) {
-    suspend operator fun invoke(): List<Belt> = techniekRepository.getBelts()
+    suspend operator fun invoke(): List<Belt>? = techniekRepository.getBelts()
 }

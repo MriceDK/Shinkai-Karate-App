@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetStrengthResultsUseCase @Inject constructor(
     private val trainingRepository: TrainingRepository
 ) {
-    suspend operator fun invoke(): List<StrengthResult> = trainingRepository.getStrengthResults()
+    suspend operator fun invoke(): List<StrengthResult>? = trainingRepository.getStrengthResults()
 }

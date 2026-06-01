@@ -8,5 +8,5 @@ import javax.inject.Singleton
 
 @Singleton
 class LexiconRepositoryImpl @Inject constructor() : LexiconRepository {
-    override suspend fun getLexiconEntries(): List<LexiconEntry> = FakeDataSource.lexiconEntries
+    override suspend fun getLexiconEntries(): List<LexiconEntry>? = FakeDataSource.lexiconEntries
 }

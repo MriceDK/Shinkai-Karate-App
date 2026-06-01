@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetEventsUseCase @Inject constructor(
     private val eventRepository: EventRepository
 ) {
-    suspend operator fun invoke(): List<Event> = eventRepository.getEvents()
+    suspend operator fun invoke(): List<Event>? = eventRepository.getEvents()
 }

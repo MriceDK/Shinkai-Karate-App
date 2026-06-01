@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetTrainingsByDateUseCase @Inject constructor(
     private val trainingRepository: TrainingRepository
 ) {
-    suspend operator fun invoke(date: LocalDate): List<Training> =
+    suspend operator fun invoke(date: LocalDate): List<Training>? =
         trainingRepository.getTrainingsByDate(date)
 }

@@ -8,9 +8,9 @@ import javax.inject.Singleton
 
 @Singleton
 class UserRepositoryImpl @Inject constructor() : UserRepository {
-    private var profile = FakeDataSource.userProfile
+    private var profile: UserProfile? = FakeDataSource.userProfile
 
-    override suspend fun getUserProfile(): UserProfile = profile
+    override suspend fun getUserProfile(): UserProfile? = profile
     override suspend fun updateUserProfile(profile: UserProfile) { this.profile = profile }
     override suspend fun updatePassword(newPassword: String) { /* no-op for fake */ }
 }

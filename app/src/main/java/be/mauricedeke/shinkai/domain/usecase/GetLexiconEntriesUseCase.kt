@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetLexiconEntriesUseCase @Inject constructor(
     private val lexiconRepository: LexiconRepository
 ) {
-    suspend operator fun invoke(): List<LexiconEntry> = lexiconRepository.getLexiconEntries()
+    suspend operator fun invoke(): List<LexiconEntry>? = lexiconRepository.getLexiconEntries()
 }

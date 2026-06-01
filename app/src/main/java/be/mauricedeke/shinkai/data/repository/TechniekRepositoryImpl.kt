@@ -9,8 +9,8 @@ import javax.inject.Singleton
 
 @Singleton
 class TechniekRepositoryImpl @Inject constructor() : TechniekRepository {
-    override suspend fun getBelts(): List<Belt> = FakeDataSource.belts
-    override suspend fun getBeltByName(name: String): Belt? = FakeDataSource.belts.find { it.name == name }
+    override suspend fun getBelts(): List<Belt>? = FakeDataSource.belts
+    override suspend fun getBeltByName(name: String): Belt? = FakeDataSource.belts?.find { it.name == name }
     override suspend fun getTechnieksByBelt(belt: String): List<Techniek> =
-        FakeDataSource.belts.find { it.name == belt }?.technieken ?: emptyList()
+        FakeDataSource.belts?.find { it.name == belt }?.technieken ?: emptyList()
 }
