@@ -23,7 +23,13 @@ class ManageEventsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val all = getEvents() + getInboxEvents()
+            val events = getEvents()
+            val inboxEvents = getInboxEvents()
+            if (events == null || inboxEvents == null) {
+                _uiState.update { it.copy(isError = true) }
+                return@launch
+            }
+            val all = events + inboxEvents
             val initialRsvp = all.associate { it.id to it.rsvp }
             _uiState.update { it.copy(events = all, rsvp = initialRsvp) }
         }

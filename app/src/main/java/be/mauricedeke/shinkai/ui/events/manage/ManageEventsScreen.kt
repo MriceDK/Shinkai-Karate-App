@@ -62,7 +62,15 @@ fun ManageEventsScreen(
             )
             Spacer(Modifier.height(24.dp))
 
-            if (uiState.events.isEmpty()) {
+            if (uiState.isError) {
+                Spacer(Modifier.height(48.dp))
+                Text(
+                    "Kon events niet laden. Probeer opnieuw.",
+                    fontSize = 14.sp,
+                    color = ShinkaiRed,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            } else if (uiState.events.isEmpty()) {
                 Spacer(Modifier.height(48.dp))
                 Text(
                     "Geen events gevonden.",
