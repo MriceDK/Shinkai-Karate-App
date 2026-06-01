@@ -33,15 +33,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Techniek
+import be.mauricedeke.shinkai.domain.model.ProgramSection
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -51,21 +48,9 @@ fun TechniekDetailScreen(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val belt = uiState.belt.ifBlank { "Geel" }
-    val technieken = uiState.technieken.ifEmpty {
-        listOf(
-            Techniek("Gekruis vastnemen 1 hand", belt),
-            Techniek("Parallel vastnemen 1 hand", belt),
-            Techniek("Vastnemen 2 handen op 1", belt),
-            Techniek(
-                "Wurging met 1 hand en hoekstoot", belt,
-                "Kin naar beneden doen en met de rechter hand de linkse hoekstoot blokkeren " +
-                        "en met de linkerhand controle uitoefenen op de rechtse hand van de aanvaller."
-            ),
-        )
-    }
+    val technieken = uiState.technieken
     val expandedStates =
-        remember(technieken) { technieken.map { mutableStateOf(it == technieken.last()) } }
+        remember(technieken) { technieken.map { mutableStateOf(false) } }
     var programmaExpanded by remember { mutableStateOf(true) }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -89,7 +74,7 @@ fun TechniekDetailScreen(
                         )
                         .padding(16.dp)
                 ) {
-                    ProgrammaContent()
+                    ProgrammaContent(uiState.program)
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -97,7 +82,7 @@ fun TechniekDetailScreen(
                 AccordionHeader(t.name, expandedStates[i].value) {
                     expandedStates[i].value = !expandedStates[i].value
                 }
-                if (expandedStates[i].value && t.description.isNotEmpty()) {
+                if (expandedStates[i].value) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -105,21 +90,31 @@ fun TechniekDetailScreen(
                                 MaterialTheme.colorScheme.surface,
                                 RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
                             )
+                            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
                             .padding(16.dp)
                     ) {
-                        Text(
-                            t.description,
-                            fontSize = 14.sp,
-                            lineHeight = 20.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            "Alle technieken dienen links en rechts uitgevoerd te worden",
-                            fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            fontStyle = FontStyle.Italic
-                        )
+                        if (t.description.isNotEmpty()) {
+                            Text(
+                                t.description,
+                                fontSize = 14.sp,
+                                lineHeight = 20.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            Text(
+                                "Alle technieken dienen links en rechts uitgevoerd te worden",
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontStyle = FontStyle.Italic
+                            )
+                        } else {
+                            Text(
+                                "Nog geen beschrijving beschikbaar",
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontStyle = FontStyle.Italic
+                            )
+                        }
                     }
                 }
                 Spacer(Modifier.height(8.dp))
@@ -196,73 +191,23 @@ private fun AccordionHeader(title: String, expanded: Boolean, onClick: () -> Uni
 }
 
 @Composable
-private fun ProgrammaContent() {
-    Text(
-        "10 bevrijdingstechnieken :",
-        fontWeight = FontWeight.Bold,
-        fontSize = 13.sp,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-    listOf(
-        "Tegen gekruist vastnemen hand",
-        "Tegen parallel vastnemen hand",
-        "Tegen vastnemen aan beide handen",
-        "Tegen vastnemen twee handen op één",
-        "Tegen wurging met één hand en hoekstoot"
-    )
-        .forEach {
+private fun ProgrammaContent(sections: List<ProgramSection>) {
+    sections.forEachIndexed { index, section ->
+        if (index > 0) Spacer(Modifier.height(6.dp))
+        Text(
+            section.title,
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        section.items.forEach { item ->
             Text(
-                "- $it",
+                "- $item",
                 fontSize = 13.sp,
                 modifier = Modifier.padding(start = 8.dp),
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
-    Spacer(Modifier.height(6.dp))
-    Text(
-        "2 Technieken vrije keuze self defense",
-        fontWeight = FontWeight.Bold,
-        fontSize = 13.sp,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-    Spacer(Modifier.height(6.dp))
-    Text(buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.Bold
-            )
-        ) { append("Traptechnieken / geri waza") }
-    }, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
-    listOf(
-        "Mae Geri (voorwaartse trap)",
-        "Mawashi Geri (cirkelvormige trap)",
-        "Yoko Geri (zijwaartse trap)",
-        "Ushiro Geri (achterwaartse trap)"
-    )
-        .forEach {
-            Text(
-                "- $it",
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 8.dp),
-                fontStyle = FontStyle.Italic,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-    Spacer(Modifier.height(6.dp))
-    Text(
-        "Kata",
-        fontWeight = FontWeight.Bold,
-        fontSize = 13.sp,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-    listOf("Shodan Kata", "Blokkingset 1").forEach {
-        Text(
-            "- $it",
-            fontSize = 12.sp,
-            modifier = Modifier.padding(start = 8.dp),
-            color = MaterialTheme.colorScheme.onSurface
-        )
     }
 }
 

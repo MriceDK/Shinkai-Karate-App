@@ -2,6 +2,7 @@ package be.mauricedeke.shinkai.ui.technieken.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.mauricedeke.shinkai.domain.usecase.GetBeltByNameUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetNoteUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetTechnieksByBeltUseCase
 import be.mauricedeke.shinkai.domain.usecase.SaveNoteUseCase
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TechniekDetailViewModel @Inject constructor(
+    private val getBeltByName: GetBeltByNameUseCase,
     private val getTechnieksByBelt: GetTechnieksByBeltUseCase,
     private val getNote: GetNoteUseCase,
     private val saveNote: SaveNoteUseCase,
@@ -24,9 +26,11 @@ class TechniekDetailViewModel @Inject constructor(
 
     fun loadBelt(belt: String) {
         viewModelScope.launch {
+            val beltData = getBeltByName(belt)
             _uiState.update {
                 it.copy(
                     belt = belt,
+                    program = beltData?.pogramma?.sections ?: emptyList(),
                     technieken = getTechnieksByBelt(belt),
                     notes = getNote(belt)
                 )
