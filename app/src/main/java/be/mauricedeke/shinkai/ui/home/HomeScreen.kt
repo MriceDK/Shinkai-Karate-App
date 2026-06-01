@@ -71,12 +71,18 @@ fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
+            .padding(vertical = 16.dp)
     ) {
         Spacer(Modifier.height(16.dp))
 
         EventSection(title = "UPCOMING EVENTS") {
             fallbackEvents.forEach { event ->
-                EventRow("${event.startTime} - ${event.endTime}", event.date, event.title, event.location, onClick = { onEventClick(event.id) })
+                EventRow(
+                    "${event.startTime} - ${event.endTime}",
+                    event.date,
+                    event.title,
+                    event.location,
+                    onClick = { onEventClick(event.id) })
             }
         }
 
@@ -87,17 +93,25 @@ fun HomeScreen(
                 "${fallbackTraining.startTime} - ${fallbackTraining.endTime}",
                 fallbackTraining.date.toString(),
                 fallbackTraining.type,
-                ""
+                "",
+                onClick = { onEventClick(fallbackTraining.id) },
             )
         }
 
         Spacer(Modifier.height(16.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("SHORTCUTS", fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, fontSize = 16.sp)
+            Text(
+                "SHORTCUTS",
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                fontSize = 16.sp
+            )
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {},
@@ -111,15 +125,31 @@ fun HomeScreen(
 
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                ShortcutCard("Events", Icons.Default.Event, Modifier.weight(1f)) { onNavigate(Screen.Events.route) }
+                ShortcutCard(
+                    "Events",
+                    Icons.Default.Event,
+                    Modifier.weight(1f)
+                ) { onNavigate(Screen.Events.route) }
                 Spacer(Modifier.width(8.dp))
-                ShortcutCard("Kaart", Icons.Default.Map, Modifier.weight(1f)) { onNavigate(Screen.Kaart.route) }
+                ShortcutCard(
+                    "Kaart",
+                    Icons.Default.Map,
+                    Modifier.weight(1f)
+                ) { onNavigate(Screen.Kaart.route) }
             }
             Spacer(Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
-                ShortcutCard("Lexicon", Icons.AutoMirrored.Filled.MenuBook, Modifier.weight(1f)) { onNavigate(Screen.Lexicon.route) }
+                ShortcutCard(
+                    "Lexicon",
+                    Icons.AutoMirrored.Filled.MenuBook,
+                    Modifier.weight(1f)
+                ) { onNavigate(Screen.Lexicon.route) }
                 Spacer(Modifier.width(8.dp))
-                ShortcutCard("Technieken", Icons.AutoMirrored.Filled.DirectionsWalk, Modifier.weight(1f)) { onNavigate(Screen.Technieken.route) }
+                ShortcutCard(
+                    "Technieken",
+                    Icons.AutoMirrored.Filled.DirectionsWalk,
+                    Modifier.weight(1f)
+                ) { onNavigate(Screen.Technieken.route) }
             }
         }
 
@@ -129,40 +159,95 @@ fun HomeScreen(
 
 @Composable
 private fun EventSection(title: String, content: @Composable () -> Unit) {
-    Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(16.dp)) {
-        Text(title, fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline,
-            modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
+    Column(modifier = Modifier
+        .background(MaterialTheme.colorScheme.background)
+        .padding(16.dp)) {
+        Text(
+            title,
+            fontWeight = FontWeight.Bold,
+            textDecoration = TextDecoration.Underline,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            fontSize = 15.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
         Spacer(Modifier.height(8.dp))
         content()
     }
 }
 
 @Composable
-private fun EventRow(time: String, date: String, name: String, location: String, onClick: (() -> Unit)? = null) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).then(if (onClick != null) Modifier.clickable { onClick() } else Modifier), verticalAlignment = Alignment.CenterVertically) {
-        Column(modifier = Modifier.width(110.dp)) {
-            Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+private fun EventRow(
+    time: String,
+    date: String,
+    name: String,
+    location: String,
+    onClick: (() -> Unit)? = null
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center) {
+        Column(modifier = Modifier.width(100.dp)) {
+            Text(
+                time,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Text(date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
-        Box(modifier = Modifier.width(1.dp).height(36.dp).background(MaterialTheme.colorScheme.outlineVariant))
+        Box(
+            modifier = Modifier
+                .width(1.dp)
+                .height(36.dp)
+                .background(MaterialTheme.colorScheme.outlineVariant)
+        )
         Spacer(Modifier.width(12.dp))
-        Column {
-            Text(name, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (location.isNotBlank()) Text(location, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+        Column(modifier = Modifier.width(100.dp)) {
+            Text(
+                name,
+                fontWeight = FontWeight.Medium,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            if (location.isNotBlank()) Text(
+                location,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 12.sp
+            )
         }
     }
 }
 
 @Composable
-private fun ShortcutCard(label: String, icon: ImageVector, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
+private fun ShortcutCard(
+    label: String,
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
     Card(
-        modifier = modifier.height(140.dp).clickable(onClick = onClick),
+        modifier = modifier
+            .height(140.dp)
+            .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-            Icon(icon, contentDescription = label, modifier = Modifier.size(56.dp), tint = MaterialTheme.colorScheme.onSurface)
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(
+                icon,
+                contentDescription = label,
+                modifier = Modifier.size(56.dp),
+                tint = MaterialTheme.colorScheme.onSurface
+            )
             Spacer(Modifier.height(8.dp))
             Text(label, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
         }

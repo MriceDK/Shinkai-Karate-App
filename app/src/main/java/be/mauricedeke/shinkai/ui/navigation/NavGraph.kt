@@ -71,7 +71,11 @@ fun ShinkaiNavGraph(
     val locationUiState by locationViewModel.uiState.collectAsStateWithLifecycle()
     val accountUiState by accountViewModel.uiState.collectAsStateWithLifecycle()
 
-    NavHost(navController = navController, startDestination = Screen.Home.route, modifier = modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route,
+        modifier = modifier
+    ) {
 
         composable(Screen.Home.route) {
             HomeScreen(
@@ -94,7 +98,10 @@ fun ShinkaiNavGraph(
             )
         }
 
-        composable(Screen.TechniekDetail.route, arguments = listOf(navArgument("belt") { type = NavType.StringType })) { backStack ->
+        composable(
+            Screen.TechniekDetail.route,
+            arguments = listOf(navArgument("belt") { type = NavType.StringType })
+        ) { backStack ->
             val belt = backStack.arguments?.getString("belt") ?: "Geel"
             techniekDetailViewModel.loadBelt(belt)
             TechniekDetailScreen(
@@ -105,21 +112,28 @@ fun ShinkaiNavGraph(
         }
 
         composable(Screen.Events.route) {
-            EventsScreen(uiState = eventsUiState, onDateSelected = eventsViewModel::onDateSelected,
+            EventsScreen(
+                uiState = eventsUiState, onDateSelected = eventsViewModel::onDateSelected,
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id))
                 })
         }
 
-        composable(Screen.EventDetail.route, arguments = listOf(navArgument("eventId") { type = NavType.StringType })) { backStack ->
+        composable(
+            Screen.EventDetail.route,
+            arguments = listOf(navArgument("eventId") { type = NavType.StringType })
+        ) { backStack ->
             val id = backStack.arguments?.getString("eventId") ?: ""
             eventDetailViewModel.loadEvent(id)
             EventDetailScreen(uiState = eventDetailUiState)
         }
 
         composable(Screen.Lexicon.route) {
-            LexiconScreen(uiState = lexiconUiState, onSearchQueryChanged = lexiconViewModel::onSearchQueryChanged)
+            LexiconScreen(
+                uiState = lexiconUiState,
+                onSearchQueryChanged = lexiconViewModel::onSearchQueryChanged
+            )
         }
 
         composable(Screen.Profiel.route) {

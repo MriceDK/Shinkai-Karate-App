@@ -40,54 +40,122 @@ fun TrainingHistoryScreen(
 ) {
     val displayTrainings = uiState.selectedTrainings.ifEmpty {
         listOf(
-            Training("1", "Technieken", "20:00", "22:00", LocalDate.of(2025, 8, 14), "Geen", "Geen"),
-            Training("2", "Technieken", "20:00", "22:00", LocalDate.of(2025, 8, 14), "Geen", "Geen"),
+            Training(
+                "1",
+                "Technieken",
+                "20:00",
+                "22:00",
+                LocalDate.of(2025, 8, 14),
+                "Geen",
+                "Geen"
+            ),
+            Training(
+                "2",
+                "Technieken",
+                "20:00",
+                "22:00",
+                LocalDate.of(2025, 8, 14),
+                "Geen",
+                "Geen"
+            ),
         )
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(16.dp)) {
-        Text("TRAINING LOG", fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, fontSize = 18.sp, modifier = Modifier.align(Alignment.CenterHorizontally), color = MaterialTheme.colorScheme.onBackground)
-        Spacer(Modifier.height(12.dp))
-        ShinkaiCalendar(
-            modifier = Modifier.padding(horizontal = 4.dp),
-            initialMonth = LocalDate.of(2025, 8, 1),
-            selectedDate = uiState.selectedDate,
-            today = LocalDate.of(2025, 8, 5),
-            onDateSelected = onDateSelected
-        )
-        Spacer(Modifier.height(16.dp))
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column {
-                Text("TRAINING DATA", fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
-                Text("Maandag ${uiState.selectedDate?.toString() ?: "14/08/2025"}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            Spacer(Modifier.weight(1f))
-            Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(4.dp), modifier = Modifier.height(32.dp), contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)) {
-                Text("Edit", fontSize = 13.sp)
-            }
-        }
-        Spacer(Modifier.height(12.dp))
-        Row(modifier = Modifier.fillMaxWidth()) {
-            displayTrainings.take(2).forEach { training ->
-                Column(modifier = Modifier.weight(1f).padding(4.dp)) {
-                    listOf("TYPE :" to training.type, "DUUR :" to "${training.startTime} - ${training.endTime}", "BLESSURES :" to training.injuries, "SENSEI :" to training.sensei)
-                        .forEach { (label, value) ->
-                            Row(modifier = Modifier.padding(vertical = 3.dp)) {
-                                Text(label, fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, fontSize = 12.sp, modifier = Modifier.padding(end = 4.dp), color = MaterialTheme.colorScheme.onSurface)
-                                Text(value, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurface)
-                            }
-                        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
+        ) {
+            Text(
+                "TRAINING LOG",
+                fontWeight = FontWeight.Bold,
+                textDecoration = TextDecoration.Underline,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(Modifier.height(12.dp))
+            ShinkaiCalendar(
+                modifier = Modifier.padding(horizontal = 4.dp),
+                initialMonth = LocalDate.of(2025, 8, 1),
+                selectedDate = uiState.selectedDate,
+                today = LocalDate.of(2025, 8, 5),
+                onDateSelected = onDateSelected
+            )
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        "TRAINING DATA",
+                        fontWeight = FontWeight.Bold,
+                        textDecoration = TextDecoration.Underline,
+                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    Text(
+                        "Maandag ${uiState.selectedDate?.toString() ?: "14/08/2025"}",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Spacer(Modifier.weight(1f))
+                Button(
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                    shape = RoundedCornerShape(4.dp),
+                    modifier = Modifier.height(32.dp),
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)
+                ) {
+                    Text("Edit", fontSize = 13.sp)
                 }
             }
+            Spacer(Modifier.height(12.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                displayTrainings.take(2).forEach { training ->
+                    Column(modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp)) {
+                        listOf(
+                            "TYPE :" to training.type,
+                            "DUUR :" to "${training.startTime} - ${training.endTime}",
+                            "BLESSURES :" to training.injuries,
+                            "SENSEI :" to training.sensei
+                        )
+                            .forEach { (label, value) ->
+                                Row(modifier = Modifier.padding(vertical = 3.dp)) {
+                                    Text(
+                                        label,
+                                        fontWeight = FontWeight.Bold,
+                                        textDecoration = TextDecoration.Underline,
+                                        fontSize = 12.sp,
+                                        modifier = Modifier.padding(end = 4.dp),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        value,
+                                        fontSize = 12.sp,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+                    }
+                }
+            }
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(16.dp))
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Preview(showBackground = true, showSystemUi = true)

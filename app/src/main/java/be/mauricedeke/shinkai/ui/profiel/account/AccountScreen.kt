@@ -51,45 +51,104 @@ fun AccountScreen(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.fillMaxSize()) {
-    Column(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(horizontal = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(24.dp))
-        Box(contentAlignment = Alignment.BottomEnd) {
-            Box(modifier = Modifier.size(96.dp).clip(CircleShape).background(ShinkaiRed), contentAlignment = Alignment.Center) {
-                Icon(Icons.Default.Person, null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(60.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(24.dp))
+            Box(contentAlignment = Alignment.BottomEnd) {
+                Box(
+                    modifier = Modifier
+                        .size(96.dp)
+                        .clip(CircleShape)
+                        .background(ShinkaiRed),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Person,
+                        null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.surface),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Default.Edit,
+                        "Edit avatar",
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
-            Box(modifier = Modifier.size(28.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surface), contentAlignment = Alignment.Center) {
-                Icon(Icons.Default.Edit, "Edit avatar", modifier = Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurface)
+            Spacer(Modifier.height(24.dp))
+            FormField("NAAM:", uiState.naam, onNaamChanged)
+            Spacer(Modifier.height(12.dp))
+            FormField("EMAIL:", uiState.email, onEmailChanged, keyboardType = KeyboardType.Email)
+            Spacer(Modifier.height(16.dp))
+            FormField("New Password:", uiState.newPassword, onNewPasswordChanged, password = true)
+            Spacer(Modifier.height(12.dp))
+            FormField(
+                "Confirm Password:",
+                uiState.confirmPassword,
+                onConfirmPasswordChanged,
+                password = true
+            )
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = onSavePassword,
+                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier.fillMaxWidth(0.7f)
+            ) {
+                Text("Save Password", fontSize = 15.sp)
             }
+            Spacer(Modifier.height(32.dp))
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .fillMaxWidth(0.5f)
+                    .padding(bottom = 8.dp)
+            ) {
+                Text("Save", fontSize = 16.sp)
+            }
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(24.dp))
-        FormField("NAAM:", uiState.naam, onNaamChanged)
-        Spacer(Modifier.height(12.dp))
-        FormField("EMAIL:", uiState.email, onEmailChanged, keyboardType = KeyboardType.Email)
-        Spacer(Modifier.height(16.dp))
-        FormField("New Password:", uiState.newPassword, onNewPasswordChanged, password = true)
-        Spacer(Modifier.height(12.dp))
-        FormField("Confirm Password:", uiState.confirmPassword, onConfirmPasswordChanged, password = true)
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = onSavePassword, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50), modifier = Modifier.fillMaxWidth(0.7f)) {
-            Text("Save Password", fontSize = 15.sp)
-        }
-        Spacer(Modifier.height(32.dp))
-        Button(onClick = onSave, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50), modifier = Modifier.fillMaxWidth(0.5f).padding(bottom = 8.dp)) {
-            Text("Save", fontSize = 16.sp)
-        }
-        Spacer(Modifier.height(16.dp))
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Composable
-private fun FormField(label: String, value: String, onValueChange: (String) -> Unit, keyboardType: KeyboardType = KeyboardType.Text, password: Boolean = false) {
+private fun FormField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    password: Boolean = false
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(label, fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            label,
+            fontWeight = FontWeight.Bold,
+            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
             value = value,

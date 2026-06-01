@@ -39,35 +39,102 @@ fun NotificationsScreen(
 ) {
     val s = uiState.settings
     Box(modifier = modifier.fillMaxSize()) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Text("Manage Notifications", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), color = MaterialTheme.colorScheme.onSurface)
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        NotifRow("Event Notifications", s.eventNotifications) { onSettingsChanged(s.copy(eventNotifications = it)) }
-        NotifRow("Training Notifications", s.trainingNotifications) { onSettingsChanged(s.copy(trainingNotifications = it)) }
-        NotifRow("Change Notifications", s.changeNotifications, "Notifies you of changes to the techniques") { onSettingsChanged(s.copy(changeNotifications = it)) }
-        NotifRow("Exam Notifications", s.examNotifications) { onSettingsChanged(s.copy(examNotifications = it)) }
-        NotifRow("Update Notifications", s.updateNotifications) { onSettingsChanged(s.copy(updateNotifications = it)) }
-        Spacer(Modifier.weight(1f))
-        Button(onClick = onSave, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50), modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp).width(160.dp)) {
-            Text("Save", fontSize = 16.sp)
+        Column(modifier = Modifier.fillMaxSize()) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Text(
+                "Manage Notifications",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            NotifRow("Event Notifications", s.eventNotifications) {
+                onSettingsChanged(
+                    s.copy(
+                        eventNotifications = it
+                    )
+                )
+            }
+            NotifRow("Training Notifications", s.trainingNotifications) {
+                onSettingsChanged(
+                    s.copy(
+                        trainingNotifications = it
+                    )
+                )
+            }
+            NotifRow(
+                "Change Notifications",
+                s.changeNotifications,
+                "Notifies you of changes to the techniques"
+            ) { onSettingsChanged(s.copy(changeNotifications = it)) }
+            NotifRow("Exam Notifications", s.examNotifications) {
+                onSettingsChanged(
+                    s.copy(
+                        examNotifications = it
+                    )
+                )
+            }
+            NotifRow("Update Notifications", s.updateNotifications) {
+                onSettingsChanged(
+                    s.copy(
+                        updateNotifications = it
+                    )
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp)
+                    .width(160.dp)
+            ) {
+                Text("Save", fontSize = 16.sp)
+            }
         }
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Composable
-private fun NotifRow(label: String, checked: Boolean, subtitle: String? = null, onCheckedChange: (Boolean) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun NotifRow(
+    label: String,
+    checked: Boolean,
+    subtitle: String? = null,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (subtitle != null) Text(subtitle, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (subtitle != null) Text(
+                subtitle,
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
-        Switch(checked = checked, onCheckedChange = onCheckedChange, colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.onPrimary, checkedTrackColor = ShinkaiRed, uncheckedThumbColor = MaterialTheme.colorScheme.onSurface, uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant))
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                checkedTrackColor = ShinkaiRed,
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        )
     }
     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }

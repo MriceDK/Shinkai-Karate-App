@@ -91,19 +91,35 @@ fun EventsScreen(
         }
     }
 
-    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)) {
 
         // Scrollable background content
-        Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())) {
+            Text("Toekomstige Events", modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 32.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(16.dp))
-            Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface).padding(horizontal = 32.dp, vertical = 8.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(horizontal = 32.dp, vertical = 8.dp)) {
                 events.forEach { event ->
-                    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp).clickable { onEventClick(event.id) }, verticalAlignment = Alignment.CenterVertically) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                        .clickable { onEventClick(event.id) }, verticalAlignment = Alignment.CenterVertically) {
                         Column(modifier = Modifier.width(110.dp)) {
                             Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                             Text(event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
                         }
-                        Box(modifier = Modifier.width(1.dp).height(36.dp).background(MaterialTheme.colorScheme.outlineVariant))
+                        Box(modifier = Modifier
+                            .width(1.dp)
+                            .height(36.dp)
+                            .background(MaterialTheme.colorScheme.outlineVariant))
                         Spacer(Modifier.width(12.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
@@ -114,12 +130,19 @@ fun EventsScreen(
                 }
             }
             Spacer(Modifier.height(16.dp))
-            Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)) {
                 Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 Spacer(Modifier.height(8.dp))
                 inboxEvents.firstOrNull()?.let { event ->
                     Column(
-                        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(ShinkaiRed).clickable { onEventClick(event.id) }.padding(16.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(ShinkaiRed)
+                            .clickable { onEventClick(event.id) }
+                            .padding(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(event.title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
@@ -129,7 +152,11 @@ fun EventsScreen(
                                 Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
                                 Text(event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
                             }
-                            Box(modifier = Modifier.padding(horizontal = 12.dp).width(1.dp).height(36.dp).background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)))
+                            Box(modifier = Modifier
+                                .padding(horizontal = 12.dp)
+                                .width(1.dp)
+                                .height(36.dp)
+                                .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)))
                             Column {
                                 if (event.location.isNotBlank()) Text(event.location, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
                                 if (event.city.isNotBlank()) Text(event.city, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
@@ -165,14 +192,25 @@ fun EventsScreen(
                         val minimized = (calendarHeightPx - headerHeightPx).coerceAtLeast(0f)
                         val target = if (animatable.value < minimized / 2f) 0f else minimized
                         scope.launch {
-                            animatable.animateTo(target, spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium))
+                            animatable.animateTo(
+                                target,
+                                spring(
+                                    dampingRatio = Spring.DampingRatioNoBouncy,
+                                    stiffness = Spring.StiffnessMedium
+                                )
+                            )
                         }
                     }
                 )
         ) {
             // Drag handle pill
-            Box(modifier = Modifier.fillMaxWidth().padding(vertical = 1.dp), contentAlignment = Alignment.Center) {
-                Box(modifier = Modifier.size(width = 40.dp, height = 4.dp).clip(CircleShape).background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 1.dp), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier
+                    .size(width = 40.dp, height = 4.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
             }
             Column(
                 modifier = Modifier
@@ -181,7 +219,9 @@ fun EventsScreen(
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(MaterialTheme.colorScheme.primary)
             ) {
-                Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp)) {
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)) {
                     Text("Mon, Aug 17", color = MaterialTheme.colorScheme.onPrimary, fontSize = 22.sp, fontWeight = FontWeight.Bold)
                 }
                 ShinkaiCalendar(

@@ -57,88 +57,213 @@ fun TechniekDetailScreen(
             Techniek("Gekruis vastnemen 1 hand", belt),
             Techniek("Parallel vastnemen 1 hand", belt),
             Techniek("Vastnemen 2 handen op 1", belt),
-            Techniek("Wurging met 1 hand en hoekstoot", belt,
+            Techniek(
+                "Wurging met 1 hand en hoekstoot", belt,
                 "Kin naar beneden doen en met de rechter hand de linkse hoekstoot blokkeren " +
-                "en met de linkerhand controle uitoefenen op de rechtse hand van de aanvaller."),
+                        "en met de linkerhand controle uitoefenen op de rechtse hand van de aanvaller."
+            ),
         )
     }
-    val expandedStates = remember(technieken) { technieken.map { mutableStateOf(it == technieken.last()) } }
+    val expandedStates =
+        remember(technieken) { technieken.map { mutableStateOf(it == technieken.last()) } }
     var programmaExpanded by remember { mutableStateOf(true) }
 
     Box(modifier = modifier.fillMaxSize()) {
-    Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(vertical = 58.dp, horizontal = 16.dp)
-    ) {
-        AccordionHeader("Programma", programmaExpanded) { programmaExpanded = !programmaExpanded }
-        if (programmaExpanded) {
-            Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface, RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)).padding(16.dp)) {
-                ProgrammaContent()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 58.dp, horizontal = 16.dp)
+        ) {
+            AccordionHeader("Programma", programmaExpanded) {
+                programmaExpanded = !programmaExpanded
             }
-        }
-        Spacer(Modifier.height(16.dp))
-        technieken.forEachIndexed { i, t ->
-            AccordionHeader(t.name, expandedStates[i].value) { expandedStates[i].value = !expandedStates[i].value }
-            if (expandedStates[i].value && t.description.isNotEmpty()) {
-                Column(modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface, RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)).padding(16.dp)) {
-                    Text(t.description, fontSize = 14.sp, lineHeight = 20.sp, color = MaterialTheme.colorScheme.onSurface)
-                    Spacer(Modifier.height(8.dp))
-                    Text("Alle technieken dienen links en rechts uitgevoerd te worden", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, fontStyle = FontStyle.Italic)
+            if (programmaExpanded) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            MaterialTheme.colorScheme.surface,
+                            RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                        )
+                        .padding(16.dp)
+                ) {
+                    ProgrammaContent()
                 }
             }
-            Spacer(Modifier.height(8.dp))
-        }
-        Spacer(Modifier.height(8.dp))
-        Box(modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)).padding(2.dp)) {
-            Column {
-                Text("Notes", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 12.dp, top = 8.dp))
-                OutlinedTextField(
-                    value = uiState.notes,
-                    onValueChange = onNotesChanged,
-                    modifier = Modifier.fillMaxWidth().height(120.dp),
-                    minLines = 4,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        disabledBorderColor = Color.Transparent
-                    )
-                )
+            Spacer(Modifier.height(16.dp))
+            technieken.forEachIndexed { i, t ->
+                AccordionHeader(t.name, expandedStates[i].value) {
+                    expandedStates[i].value = !expandedStates[i].value
+                }
+                if (expandedStates[i].value && t.description.isNotEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                MaterialTheme.colorScheme.surface,
+                                RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                            )
+                            .padding(16.dp)
+                    ) {
+                        Text(
+                            t.description,
+                            fontSize = 14.sp,
+                            lineHeight = 20.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            "Alle technieken dienen links en rechts uitgevoerd te worden",
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontStyle = FontStyle.Italic
+                        )
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
             }
+            Spacer(Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                    .padding(2.dp)
+            ) {
+                Column {
+                    Text(
+                        "Notes",
+                        fontSize = 12.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 12.dp, top = 8.dp)
+                    )
+                    OutlinedTextField(
+                        value = uiState.notes,
+                        onValueChange = onNotesChanged,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp),
+                        minLines = 4,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent,
+                            disabledBorderColor = Color.Transparent
+                        )
+                    )
+                }
+            }
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(16.dp))
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Composable
 private fun AccordionHeader(title: String, expanded: Boolean, onClick: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().clip(if (expanded) RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp) else RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.primary).clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 14.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(
+                if (expanded) RoundedCornerShape(
+                    topStart = 8.dp,
+                    topEnd = 8.dp
+                ) else RoundedCornerShape(8.dp)
+            )
+            .background(MaterialTheme.colorScheme.primary)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
-        Icon(if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore, null, tint = MaterialTheme.colorScheme.onPrimary, modifier = Modifier.size(20.dp))
+        Text(
+            title,
+            color = MaterialTheme.colorScheme.onPrimary,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.weight(1f)
+        )
+        Icon(
+            if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+            null,
+            tint = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
 
 @Composable
 private fun ProgrammaContent() {
-    Text("10 bevrijdingstechnieken :", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
-    listOf("Tegen gekruist vastnemen hand", "Tegen parallel vastnemen hand", "Tegen vastnemen aan beide handen", "Tegen vastnemen twee handen op één", "Tegen wurging met één hand en hoekstoot")
-        .forEach { Text("- $it", fontSize = 13.sp, modifier = Modifier.padding(start = 8.dp), color = MaterialTheme.colorScheme.onSurface) }
+    Text(
+        "10 bevrijdingstechnieken :",
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.sp,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+    listOf(
+        "Tegen gekruist vastnemen hand",
+        "Tegen parallel vastnemen hand",
+        "Tegen vastnemen aan beide handen",
+        "Tegen vastnemen twee handen op één",
+        "Tegen wurging met één hand en hoekstoot"
+    )
+        .forEach {
+            Text(
+                "- $it",
+                fontSize = 13.sp,
+                modifier = Modifier.padding(start = 8.dp),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     Spacer(Modifier.height(6.dp))
-    Text("2 Technieken vrije keuze self defense", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
+    Text(
+        "2 Technieken vrije keuze self defense",
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.sp,
+        color = MaterialTheme.colorScheme.onSurface
+    )
     Spacer(Modifier.height(6.dp))
-    Text(buildAnnotatedString { withStyle(SpanStyle(fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold)) { append("Traptechnieken / geri waza") } }, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
-    listOf("Mae Geri (voorwaartse trap)", "Mawashi Geri (cirkelvormige trap)", "Yoko Geri (zijwaartse trap)", "Ushiro Geri (achterwaartse trap)")
-        .forEach { Text("- $it", fontSize = 12.sp, modifier = Modifier.padding(start = 8.dp), fontStyle = FontStyle.Italic, color = MaterialTheme.colorScheme.onSurface) }
+    Text(buildAnnotatedString {
+        withStyle(
+            SpanStyle(
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Bold
+            )
+        ) { append("Traptechnieken / geri waza") }
+    }, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
+    listOf(
+        "Mae Geri (voorwaartse trap)",
+        "Mawashi Geri (cirkelvormige trap)",
+        "Yoko Geri (zijwaartse trap)",
+        "Ushiro Geri (achterwaartse trap)"
+    )
+        .forEach {
+            Text(
+                "- $it",
+                fontSize = 12.sp,
+                modifier = Modifier.padding(start = 8.dp),
+                fontStyle = FontStyle.Italic,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     Spacer(Modifier.height(6.dp))
-    Text("Kata", fontWeight = FontWeight.Bold, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurface)
-    listOf("Shodan Kata", "Blokkingset 1").forEach { Text("- $it", fontSize = 12.sp, modifier = Modifier.padding(start = 8.dp), color = MaterialTheme.colorScheme.onSurface) }
+    Text(
+        "Kata",
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.sp,
+        color = MaterialTheme.colorScheme.onSurface
+    )
+    listOf("Shodan Kata", "Blokkingset 1").forEach {
+        Text(
+            "- $it",
+            fontSize = 12.sp,
+            modifier = Modifier.padding(start = 8.dp),
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)

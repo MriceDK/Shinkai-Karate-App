@@ -42,42 +42,106 @@ fun EventDetailScreen(
     modifier: Modifier = Modifier
 ) {
     val event = if (uiState.event.title.isBlank())
-        Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai  内外流武術会\nSchool for traditional Japanese martial arts recognized by the Dai Nippon Butoku Kai Japan (DNBK).\nFor more information or a personal meeting you can contact the honbu dojo.")
+        Event(
+            "1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
+            "Naigairyu Bujutsu Kai  内外流武術会\nSchool for traditional Japanese martial arts recognized by the Dai Nippon Butoku Kai Japan (DNBK).\nFor more information or a personal meeting you can contact the honbu dojo."
+        )
     else uiState.event
 
     Column(
-        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(24.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(8.dp))
-        Text(event.title, fontSize = 24.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            event.title,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(Modifier.height(8.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.End) {
-                Text("${event.startTime} - ${event.endTime}", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(event.date, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    "${event.startTime} - ${event.endTime}",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    event.date,
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-            Box(modifier = Modifier.padding(horizontal = 12.dp).width(1.dp).height(36.dp).background(MaterialTheme.colorScheme.outlineVariant))
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 12.dp)
+                    .width(1.dp)
+                    .height(36.dp)
+                    .background(MaterialTheme.colorScheme.outlineVariant)
+            )
             Column {
-                Text(event.location, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text(event.city, fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    event.location,
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    event.city,
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
         Spacer(Modifier.height(16.dp))
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50)) {
+        Button(
+            onClick = {},
+            colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+            shape = RoundedCornerShape(50)
+        ) {
             Text("+ Add to calendar", fontSize = 15.sp)
         }
         Spacer(Modifier.height(24.dp))
-        Box(modifier = Modifier.size(160.dp).clip(CircleShape).background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)), contentAlignment = Alignment.Center) {
-            Icon(Icons.Default.FitnessCenter, null, modifier = Modifier.size(80.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Box(
+            modifier = Modifier
+                .size(160.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                Icons.Default.FitnessCenter,
+                null,
+                modifier = Modifier.size(80.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
         Spacer(Modifier.height(24.dp))
-        Text("About Evenement", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.fillMaxWidth())
+        Text(
+            "About Evenement",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth()
+        )
         Spacer(Modifier.height(8.dp))
-        Text(event.description.ifBlank { "Informatie over het evenement." }, fontSize = 14.sp, lineHeight = 22.sp, color = MaterialTheme.colorScheme.onBackground)
+        Text(
+            event.description.ifBlank { "Informatie over het evenement." },
+            fontSize = 14.sp,
+            lineHeight = 22.sp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Spacer(Modifier.height(32.dp))
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50), modifier = Modifier.fillMaxWidth(0.85f)) {
+        Button(
+            onClick = {},
+            colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+            shape = RoundedCornerShape(50),
+            modifier = Modifier.fillMaxWidth(0.85f)
+        ) {
             Text("Verwijder Evenement", fontSize = 15.sp)
         }
         Spacer(Modifier.height(16.dp))

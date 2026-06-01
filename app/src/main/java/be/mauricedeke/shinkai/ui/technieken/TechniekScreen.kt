@@ -56,7 +56,9 @@ fun TechniekScreen(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 8.dp, vertical = 24.dp),
         contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -82,7 +84,12 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(0.9f)
-            .shadow(8.dp, RoundedCornerShape(8.dp), ambientColor = MaterialTheme.colorScheme.outline, spotColor = MaterialTheme.colorScheme.outline)
+            .shadow(
+                8.dp,
+                RoundedCornerShape(8.dp),
+                ambientColor = MaterialTheme.colorScheme.outline,
+                spotColor = MaterialTheme.colorScheme.outline
+            )
             .clickable(onClick = onClick),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -90,8 +97,19 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
     ) {
         Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Box(contentAlignment = Alignment.Center) {
-                Box(modifier = Modifier.size(width = 80.dp, height = 26.dp).clip(RoundedCornerShape(50)).background(beltColor))
-                Box(modifier = Modifier.size(26.dp).clip(RoundedCornerShape(4.dp)).background(beltColor.copy(alpha = 0.7f)).border(2.dp, MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f), RoundedCornerShape(4.dp)))
+                Box(modifier = Modifier
+                    .size(width = 80.dp, height = 26.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(beltColor))
+                Box(modifier = Modifier
+                    .size(26.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(beltColor.copy(alpha = 0.7f))
+                    .border(
+                        2.dp,
+                        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                        RoundedCornerShape(4.dp)
+                    ))
             }
             Spacer(Modifier.height(12.dp))
             Text(belt.name, fontSize = 15.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)

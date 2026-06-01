@@ -36,18 +36,34 @@ fun LexiconScreen(
     onSearchQueryChanged: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(16.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
+    ) {
         OutlinedTextField(
             value = uiState.searchQuery,
             onValueChange = onSearchQueryChanged,
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("search", color = MaterialTheme.colorScheme.onSurfaceVariant) },
-            trailingIcon = { Icon(Icons.Default.Search, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant) },
+            trailingIcon = {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
             shape = RoundedCornerShape(50),
-            colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = ShinkaiRed, unfocusedBorderColor = ShinkaiRed),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = ShinkaiRed,
+                unfocusedBorderColor = ShinkaiRed
+            ),
             singleLine = true
         )
-        LazyColumn(modifier = Modifier.fillMaxSize().padding(top = 12.dp)) {
+        LazyColumn(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 12.dp)) {
             items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
         }
     }
@@ -56,12 +72,30 @@ fun LexiconScreen(
 @Composable
 private fun LexiconRow(entry: LexiconEntry) {
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).border(1.dp, ShinkaiRed, RoundedCornerShape(8.dp)),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+            .border(1.dp, ShinkaiRed, RoundedCornerShape(8.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(entry.japaneseWord, modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 12.dp), fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            entry.japaneseWord,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
         Text("|", color = ShinkaiRed, fontSize = 18.sp)
-        Text(entry.translation, modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 12.dp), fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            entry.translation,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
@@ -69,6 +103,13 @@ private fun LexiconRow(entry: LexiconEntry) {
 @Composable
 fun LexiconScreenPreview() {
     ShinkaikarateappTheme {
-        LexiconScreen(uiState = LexiconUiState(entries = listOf(LexiconEntry("Rei", "Buiging"), LexiconEntry("Dojo", "Trainingsplaats"))))
+        LexiconScreen(
+            uiState = LexiconUiState(
+                entries = listOf(
+                    LexiconEntry("Rei", "Buiging"),
+                    LexiconEntry("Dojo", "Trainingsplaats")
+                )
+            )
+        )
     }
 }

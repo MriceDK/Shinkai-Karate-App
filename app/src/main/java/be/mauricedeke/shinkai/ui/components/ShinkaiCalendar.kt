@@ -51,7 +51,8 @@ fun ShinkaiCalendar(
     onClear: () -> Unit = {}
 ) {
     var currentMonth by remember { mutableStateOf(initialMonth) }
-    val containerColor = if (backgroundColor == Color.Unspecified) MaterialTheme.colorScheme.primary else backgroundColor
+    val containerColor =
+        if (backgroundColor == Color.Unspecified) MaterialTheme.colorScheme.primary else backgroundColor
     val daysInMonth = currentMonth.lengthOfMonth()
     val firstDayOfWeek = currentMonth.dayOfWeek.value % 7
 
@@ -65,18 +66,41 @@ fun ShinkaiCalendar(
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                 Text(
-                    text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)),
+                    text = currentMonth.format(
+                        DateTimeFormatter.ofPattern(
+                            "MMMM yyyy",
+                            Locale.ENGLISH
+                        )
+                    ),
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
-                Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(
+                    Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
-            IconButton(onClick = { currentMonth = currentMonth.minusMonths(1) }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.ChevronLeft, contentDescription = "Previous", tint = MaterialTheme.colorScheme.onPrimary)
+            IconButton(
+                onClick = { currentMonth = currentMonth.minusMonths(1) },
+                modifier = Modifier.size(32.dp)
+            ) {
+                Icon(
+                    Icons.Default.ChevronLeft,
+                    contentDescription = "Previous",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
-            IconButton(onClick = { currentMonth = currentMonth.plusMonths(1) }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.ChevronRight, contentDescription = "Next", tint = MaterialTheme.colorScheme.onPrimary)
+            IconButton(
+                onClick = { currentMonth = currentMonth.plusMonths(1) },
+                modifier = Modifier.size(32.dp)
+            ) {
+                Icon(
+                    Icons.Default.ChevronRight,
+                    contentDescription = "Next",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 
@@ -85,7 +109,12 @@ fun ShinkaiCalendar(
         Row(modifier = Modifier.fillMaxWidth()) {
             listOf("S", "M", "T", "W", "T", "F", "S").forEach { day ->
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    Text(day, color = MaterialTheme.colorScheme.onPrimary, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        day,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
@@ -100,7 +129,10 @@ fun ShinkaiCalendar(
                 for (col in 0 until 7) {
                     val day = row * 7 + col - firstDayOfWeek + 1
                     Box(
-                        modifier = Modifier.weight(1f).aspectRatio(1f).padding(2.dp),
+                        modifier = Modifier
+                            .weight(1f)
+                            .aspectRatio(1f)
+                            .padding(2.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         if (day in 1..daysInMonth) {
@@ -113,7 +145,13 @@ fun ShinkaiCalendar(
                                     .aspectRatio(1f)
                                     .clip(CircleShape)
                                     .background(if (isSelected) MaterialTheme.colorScheme.onPrimary else Color.Transparent)
-                                    .then(if (isToday && !isSelected) Modifier.border(1.dp, MaterialTheme.colorScheme.onPrimary, CircleShape) else Modifier)
+                                    .then(
+                                        if (isToday && !isSelected) Modifier.border(
+                                            1.dp,
+                                            MaterialTheme.colorScheme.onPrimary,
+                                            CircleShape
+                                        ) else Modifier
+                                    )
                                     .clickable { onDateSelected(date) },
                                 contentAlignment = Alignment.Center
                             ) {

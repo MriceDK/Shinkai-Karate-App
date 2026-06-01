@@ -39,33 +39,82 @@ fun LocationScreen(
 ) {
     val s = uiState.settings
     Box(modifier = modifier.fillMaxSize()) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        Text("Manage Location Data Usage", fontWeight = FontWeight.Bold, fontSize = 14.sp, modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp), color = MaterialTheme.colorScheme.onSurface)
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-        LocationRow("Use Location for training locations", s.useForTrainingLocations) { onSettingsChanged(s.copy(useForTrainingLocations = it)) }
-        LocationRow("Use Location for improvements", s.useForImprovements) { onSettingsChanged(s.copy(useForImprovements = it)) }
-        LocationRow("Use Location for tracking trainings", s.useForTrackingTrainings, "Automatically logs when you go to the dojo on a training day") { onSettingsChanged(s.copy(useForTrackingTrainings = it)) }
-        Spacer(Modifier.weight(1f))
-        Button(onClick = onSave, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(50), modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 24.dp).width(160.dp)) {
-            Text("Save", fontSize = 16.sp)
+        Column(modifier = Modifier.fillMaxSize()) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Text(
+                "Manage Location Data Usage",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            LocationRow(
+                "Use Location for training locations",
+                s.useForTrainingLocations
+            ) { onSettingsChanged(s.copy(useForTrainingLocations = it)) }
+            LocationRow(
+                "Use Location for improvements",
+                s.useForImprovements
+            ) { onSettingsChanged(s.copy(useForImprovements = it)) }
+            LocationRow(
+                "Use Location for tracking trainings",
+                s.useForTrackingTrainings,
+                "Automatically logs when you go to the dojo on a training day"
+            ) { onSettingsChanged(s.copy(useForTrackingTrainings = it)) }
+            Spacer(Modifier.weight(1f))
+            Button(
+                onClick = onSave,
+                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp)
+                    .width(160.dp)
+            ) {
+                Text("Save", fontSize = 16.sp)
+            }
         }
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Composable
-private fun LocationRow(label: String, checked: Boolean, subtitle: String? = null, onCheckedChange: (Boolean) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun LocationRow(
+    label: String,
+    checked: Boolean,
+    subtitle: String? = null,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (subtitle != null) Text(subtitle, fontSize = 11.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (subtitle != null) Text(
+                subtitle,
+                fontSize = 11.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
-        Switch(checked = checked, onCheckedChange = onCheckedChange, colors = SwitchDefaults.colors(checkedThumbColor = MaterialTheme.colorScheme.onPrimary, checkedTrackColor = ShinkaiRed, uncheckedThumbColor = MaterialTheme.colorScheme.onSurface, uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant))
+        Switch(
+            checked = checked,
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                checkedTrackColor = ShinkaiRed,
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
+        )
     }
     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }

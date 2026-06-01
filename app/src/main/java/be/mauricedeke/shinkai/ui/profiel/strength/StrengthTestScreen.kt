@@ -40,39 +40,78 @@ fun StrengthTestScreen(
     modifier: Modifier = Modifier
 ) {
     val results = uiState.results.ifEmpty {
-        listOf(StrengthResult("Punching Strength", 659, "#1B5E20"), StrengthResult("Kiai Strength", 250, "#FF8C00"))
+        listOf(
+            StrengthResult("Punching Strength", 659, "#1B5E20"),
+            StrengthResult("Kiai Strength", 250, "#FF8C00")
+        )
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-    Column(
-        modifier = Modifier.fillMaxSize().background(ShinkaiGray),
-        verticalArrangement = Arrangement.SpaceEvenly,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        results.forEachIndexed { i, result ->
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(24.dp)) {
-                Text(result.type, fontWeight = FontWeight.Bold, fontSize = 20.sp, textDecoration = TextDecoration.Underline)
-                Spacer(Modifier.size(16.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Box(modifier = Modifier.size(width = 56.dp, height = 18.dp).clip(RoundedCornerShape(50)).background(if (i == 0) BeltGreen else BeltOrange))
-                        Box(modifier = Modifier.size(18.dp).clip(RoundedCornerShape(3.dp)).background(if (i == 0) BeltGreen.copy(alpha = 0.7f) else BeltOrange.copy(alpha = 0.7f)))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ShinkaiGray),
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            results.forEachIndexed { i, result ->
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(24.dp)
+                ) {
+                    Text(
+                        result.type,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Spacer(Modifier.size(16.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Box(
+                                modifier = Modifier
+                                    .size(width = 56.dp, height = 18.dp)
+                                    .clip(RoundedCornerShape(50))
+                                    .background(if (i == 0) BeltGreen else BeltOrange)
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .clip(RoundedCornerShape(3.dp))
+                                    .background(
+                                        if (i == 0) BeltGreen.copy(alpha = 0.7f) else BeltOrange.copy(
+                                            alpha = 0.7f
+                                        )
+                                    )
+                            )
+                        }
+                        Spacer(Modifier.width(12.dp))
+                        Text(
+                            result.score.toString(),
+                            color = ShinkaiRed,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 56.sp
+                        )
                     }
-                    Spacer(Modifier.width(12.dp))
-                    Text(result.score.toString(), color = ShinkaiRed, fontWeight = FontWeight.Bold, fontSize = 56.sp)
-                }
-                Spacer(Modifier.size(16.dp))
-                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed), shape = RoundedCornerShape(8.dp), modifier = Modifier.width(120.dp)) {
-                    Text("Start", fontSize = 16.sp)
+                    Spacer(Modifier.size(16.dp))
+                    Button(
+                        onClick = {},
+                        colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                        shape = RoundedCornerShape(8.dp),
+                        modifier = Modifier.width(120.dp)
+                    ) {
+                        Text("Start", fontSize = 16.sp)
+                    }
                 }
             }
         }
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
+        )
     }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier.align(Alignment.TopStart).padding(start = 16.dp, top = 8.dp)
-    )
-}
 }
 
 @Preview(showBackground = true, showSystemUi = true)
