@@ -36,5 +36,16 @@ val BeltBruin3 = Color(0xFF8B4513)
 
 val BeltZwart = Color(0xFF000000)
 
-
+fun be.mauricedeke.shinkai.domain.model.BeltColor.toColor(): Color = when (this) {
+    be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW   -> BeltYellow
+    be.mauricedeke.shinkai.domain.model.BeltColor.ORANGE   -> BeltOrange
+    be.mauricedeke.shinkai.domain.model.BeltColor.RED      -> BeltRed
+    be.mauricedeke.shinkai.domain.model.BeltColor.GREEN    -> BeltGreen
+    be.mauricedeke.shinkai.domain.model.BeltColor.BLUE     -> BeltBlue
+    be.mauricedeke.shinkai.domain.model.BeltColor.PURPLE   -> BeltPaars
+    be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_I  -> BeltBruin1
+    be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_II -> BeltBruin2
+    be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_III -> BeltBruin3
+    be.mauricedeke.shinkai.domain.model.BeltColor.BLACK    -> BeltZwart
+}
 

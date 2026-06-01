@@ -2,7 +2,7 @@ package be.mauricedeke.shinkai.domain.model
 
 data class Belt(
     val name: String = "",
-    val colorHex: String = "#FFD700",
+    val beltColor: BeltColor = BeltColor.YELLOW,
     val pogramma: BeltProgram = BeltProgram(),
     val technieken: List<Techniek> = emptyList(),
     val lexiconEntries: List<LexiconEntry> = emptyList(),

@@ -33,17 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Belt
-import be.mauricedeke.shinkai.ui.theme.BeltBlue
-import be.mauricedeke.shinkai.ui.theme.BeltBruin1
-import be.mauricedeke.shinkai.ui.theme.BeltBruin2
-import be.mauricedeke.shinkai.ui.theme.BeltBruin3
-import be.mauricedeke.shinkai.ui.theme.BeltGreen
-import be.mauricedeke.shinkai.ui.theme.BeltOrange
-import be.mauricedeke.shinkai.ui.theme.BeltPaars
-import be.mauricedeke.shinkai.ui.theme.BeltRed
-import be.mauricedeke.shinkai.ui.theme.BeltYellow
-import be.mauricedeke.shinkai.ui.theme.BeltZwart
+import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import be.mauricedeke.shinkai.ui.theme.toColor
 
 @Composable
 fun TechniekScreen(
@@ -53,9 +45,9 @@ fun TechniekScreen(
 ) {
     val belts = uiState.belts.ifEmpty {
         listOf(
-            Belt("Geel", "#FFD700"), Belt("Oranje", "#FF8C00"),
-            Belt("Rood", "#CC0000"), Belt("Groen", "#1B5E20"),
-            Belt("Blauw", "#1565C0"),
+            Belt("Geel", BeltColor.YELLOW), Belt("Oranje", BeltColor.ORANGE),
+            Belt("Rood", BeltColor.RED), Belt("Groen", BeltColor.GREEN),
+            Belt("Blauw", BeltColor.BLUE),
         )
     }
 
@@ -77,19 +69,7 @@ fun TechniekScreen(
 
 @Composable
 private fun BeltCard(belt: Belt, onClick: () -> Unit) {
-    val beltColor = when (belt.name) {
-        "Geel" -> BeltYellow
-        "Oranje" -> BeltOrange
-        "Rood" -> BeltRed
-        "Groen" -> BeltGreen
-        "Blauw" -> BeltBlue
-        "Paars" -> BeltPaars
-        "Bruin - I" -> BeltBruin1
-        "Bruin - II" -> BeltBruin2
-        "Bruin - III" -> BeltBruin3
-        "Zwart" -> BeltZwart
-        else -> BeltYellow
-    }
+    val beltColor = belt.beltColor.toColor()
     Card(
         modifier = Modifier
             .fillMaxWidth()

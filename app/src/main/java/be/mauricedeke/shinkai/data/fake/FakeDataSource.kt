@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.data.fake
 
 import be.mauricedeke.shinkai.domain.model.Belt
+import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.domain.model.BeltProgram
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
@@ -49,21 +50,37 @@ object FakeDataSource {
     val belts = listOf(
         Belt(
             name = "Geel",
-            colorHex = "#FFD700",
+            beltColor = BeltColor.YELLOW,
             pogramma = BeltProgram(
                 sections = listOf(
-                    ProgramSection("Vereisten om te mogen deelnemen"),
-                    ProgramSection("Standen / Dachi waza"),
-                    ProgramSection("Slag/Stoot technieken"),
-                    ProgramSection("Afweertechnieken / Uke waza"),
-                    ProgramSection("Traptechnieken / Geri waza"),
-                    ProgramSection("Kata"),
-                    ProgramSection("Conditie"),
-                    ProgramSection("Algemene kennis en geschiedenis"),
+                    ProgramSection(
+                        title = "10 bevrijdingstechnieken",
+                        items = listOf(
+                            "Tegen gekruist vastnemen hand",
+                            "Tegen parallel vastnemen hand",
+                            "Tegen vastnemen aan beide handen",
+                            "Tegen vastnemen twee handen op één",
+                            "Tegen wurging met één hand en hoekstoot"
+                        )
+                    ),
+                    ProgramSection(title = "2 Technieken vrije keuze self defense"),
+                    ProgramSection(
+                        title = "Traptechnieken / Geri waza",
+                        items = listOf(
+                            "Mae Geri (voorwaartse trap)",
+                            "Mawashi Geri (cirkelvormige trap)",
+                            "Yoko Geri (zijwaartse trap)",
+                            "Ushiro Geri (achterwaartse trap)"
+                        )
+                    ),
+                    ProgramSection(
+                        title = "Kata",
+                        items = listOf("Shodan Kata", "Blokkingset 1")
+                    ),
                 )
             ),
             technieken = listOf(
-                Techniek("Gekruis vastnemen 1 hand", "Geel", ""),
+                Techniek("Gekruis vastnemen 1 hand", "Geel", "Testing123"),
                 Techniek("Parallel vastnemen 1 hand", "Geel", ""),
                 Techniek("Vastnemen 2 handen op 1", "Geel", ""),
                 Techniek(
@@ -75,7 +92,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Oranje",
-            colorHex = "#FF8C00",
+            beltColor = BeltColor.ORANGE,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -95,7 +112,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Rood",
-            colorHex = "#CC0000",
+            beltColor = BeltColor.RED,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -110,7 +127,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Groen",
-            colorHex = "#1B5E20",
+            beltColor = BeltColor.GREEN,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -125,7 +142,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Blauw",
-            colorHex = "#1565C0",
+            beltColor = BeltColor.BLUE,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -139,7 +156,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Paars",
-            colorHex = "#6A1B9A",
+            beltColor = BeltColor.PURPLE,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -153,7 +170,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Bruin - I",
-            colorHex = "#8B4513",
+            beltColor = BeltColor.BROWN_I,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -167,7 +184,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Bruin - II",
-            colorHex = "#8B4513",
+            beltColor = BeltColor.BROWN_II,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -181,7 +198,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Bruin - III",
-            colorHex = "#8B4513",
+            beltColor = BeltColor.BROWN_III,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -195,7 +212,7 @@ object FakeDataSource {
         ),
         Belt(
             name = "Zwart",
-            colorHex = "#000000",
+            beltColor = BeltColor.BLACK,
             pogramma = BeltProgram(
                 sections = listOf(
                     ProgramSection("Vereisten om te mogen deelnemen"),
@@ -210,13 +227,13 @@ object FakeDataSource {
     )
 
     val lexiconEntries = listOf(
-        LexiconEntry("Rei", "Buiging / Groet"),
-        LexiconEntry("Dojo", "Trainingsplaats"),
-        LexiconEntry("Sensei", "Leraar / Meester"),
-        LexiconEntry("Karate", "Lege hand"),
+        LexiconEntry("Rei", "Buiging / Groet", "Rei is de formele buiging die respect uitdrukt tegenover de sensei, de dojo en de trainingspartner."),
+        LexiconEntry("Dojo", "Trainingsplaats", "De dojo is de ruimte waar karate beoefend wordt. Het woord betekent letterlijk 'plaats van de weg'."),
+        LexiconEntry("Sensei", "Leraar / Meester", "Sensei betekent letterlijk 'degene die voor is gegaan'. Het is de titel voor een karate-instructeur."),
+        LexiconEntry("Karate", "Lege hand", "Karate is een Japanse vechtkunst waarbij gevochten wordt zonder wapens, enkel met de lege hand."),
         LexiconEntry("Kiai", "Strijdkreet"),
-        LexiconEntry("Kata", "Patroon / Vorm"),
-        LexiconEntry("Kumite", "Gevecht / Sparring"),
+        LexiconEntry("Kata", "Patroon / Vorm", "Een kata is een vaste reeks van technieken die solo uitgevoerd wordt en een gesimuleerde gevechtsscenario voorstelt."),
+        LexiconEntry("Kumite", "Gevecht / Sparring", "Kumite is het vrije of vaste sparren met een partner, waarbij aanvals- en afweertechnieken worden gecombineerd."),
         LexiconEntry("Mawashi", "Cirkelbeweging"),
         LexiconEntry("Tsuki", "Stoot"),
         LexiconEntry("Geri", "Trap"),
