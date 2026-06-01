@@ -14,6 +14,8 @@ import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailScreen
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailViewModel
+import be.mauricedeke.shinkai.ui.events.manage.ManageEventsScreen
+import be.mauricedeke.shinkai.ui.events.manage.ManageEventsViewModel
 import be.mauricedeke.shinkai.ui.home.HomeScreen
 import be.mauricedeke.shinkai.ui.home.HomeViewModel
 import be.mauricedeke.shinkai.ui.kaart.KaartScreen
@@ -48,13 +50,12 @@ fun ShinkaiNavGraph(
     techniekDetailViewModel: TechniekDetailViewModel = hiltViewModel(),
     eventsViewModel: EventsViewModel = hiltViewModel(),
     eventDetailViewModel: EventDetailViewModel = hiltViewModel(),
+    manageEventsViewModel: ManageEventsViewModel = hiltViewModel(),
     lexiconViewModel: LexiconViewModel = hiltViewModel(),
     kaartViewModel: KaartViewModel = hiltViewModel(),
     profielViewModel: ProfielViewModel = hiltViewModel(),
     strengthTestViewModel: StrengthTestViewModel = hiltViewModel(),
     trainingHistoryViewModel: TrainingHistoryViewModel = hiltViewModel(),
-    notificationsViewModel: NotificationsViewModel = hiltViewModel(),
-    locationViewModel: LocationViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel()
 ) {
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
@@ -62,13 +63,12 @@ fun ShinkaiNavGraph(
     val techniekDetailUiState by techniekDetailViewModel.uiState.collectAsStateWithLifecycle()
     val eventsUiState by eventsViewModel.uiState.collectAsStateWithLifecycle()
     val eventDetailUiState by eventDetailViewModel.uiState.collectAsStateWithLifecycle()
+    val manageEventsUiState by manageEventsViewModel.uiState.collectAsStateWithLifecycle()
     val lexiconUiState by lexiconViewModel.uiState.collectAsStateWithLifecycle()
     val kaartUiState by kaartViewModel.uiState.collectAsStateWithLifecycle()
     val profielUiState by profielViewModel.uiState.collectAsStateWithLifecycle()
     val strengthTestUiState by strengthTestViewModel.uiState.collectAsStateWithLifecycle()
     val trainingHistoryUiState by trainingHistoryViewModel.uiState.collectAsStateWithLifecycle()
-    val notificationsUiState by notificationsViewModel.uiState.collectAsStateWithLifecycle()
-    val locationUiState by locationViewModel.uiState.collectAsStateWithLifecycle()
     val accountUiState by accountViewModel.uiState.collectAsStateWithLifecycle()
 
     NavHost(
@@ -113,11 +113,22 @@ fun ShinkaiNavGraph(
 
         composable(Screen.Events.route) {
             EventsScreen(
-                uiState = eventsUiState, onDateSelected = eventsViewModel::onDateSelected,
+                uiState = eventsUiState,
+                onDateSelected = eventsViewModel::onDateSelected,
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id))
-                })
+                },
+                onManageEventsClick = { navController.navigate(Screen.ManageEvents.route) }
+            )
+        }
+
+        composable(Screen.ManageEvents.route) {
+            ManageEventsScreen(
+                uiState = manageEventsUiState,
+                onRsvp = manageEventsViewModel::setRsvp,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(
@@ -181,19 +192,23 @@ fun ShinkaiNavGraph(
         }
 
         composable(Screen.Notifications.route) {
+            val vm: NotificationsViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
             NotificationsScreen(
-                uiState = notificationsUiState,
-                onSettingsChanged = notificationsViewModel::onSettingsChanged,
-                onSave = notificationsViewModel::onSave,
+                uiState = uiState,
+                onSettingsChanged = vm::onSettingsChanged,
+                onSave = vm::onSave,
                 onBackClick = { navController.popBackStack() }
             )
         }
 
         composable(Screen.Location.route) {
+            val vm: LocationViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
             LocationScreen(
-                uiState = locationUiState,
-                onSettingsChanged = locationViewModel::onSettingsChanged,
-                onSave = locationViewModel::onSave,
+                uiState = uiState,
+                onSettingsChanged = vm::onSettingsChanged,
+                onSave = vm::onSave,
                 onBackClick = { navController.popBackStack() }
             )
         }
