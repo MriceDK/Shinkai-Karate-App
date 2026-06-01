@@ -32,13 +32,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Event
+import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
 fun EventDetailScreen(
     uiState: EventDetailUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit = {}
 ) {
     val event = if (uiState.event.title.isBlank())
         Event(
@@ -47,15 +49,16 @@ fun EventDetailScreen(
         )
     else uiState.event
 
+    Box(modifier = modifier.fillMaxSize()) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(40.dp))
         Text(
             event.title,
             fontSize = 24.sp,
@@ -144,6 +147,13 @@ fun EventDetailScreen(
             Text("Verwijder Evenement", fontSize = 15.sp)
         }
         Spacer(Modifier.height(16.dp))
+    }
+    RoundBackButton(
+        onClick = onBackClick,
+        modifier = Modifier
+            .align(Alignment.TopStart)
+            .padding(start = 16.dp, top = 8.dp)
+    )
     }
 }
 

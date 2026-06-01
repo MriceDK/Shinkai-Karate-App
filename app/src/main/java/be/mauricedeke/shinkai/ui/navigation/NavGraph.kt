@@ -126,7 +126,10 @@ fun ShinkaiNavGraph(
         ) { backStack ->
             val id = backStack.arguments?.getString("eventId") ?: ""
             eventDetailViewModel.loadEvent(id)
-            EventDetailScreen(uiState = eventDetailUiState)
+            EventDetailScreen(
+                uiState = eventDetailUiState,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(Screen.Lexicon.route) {
