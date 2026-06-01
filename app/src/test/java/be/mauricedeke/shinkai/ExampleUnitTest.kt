@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkaikarateapp
+package be.mauricedeke.shinkai
 
 import org.junit.Test
 

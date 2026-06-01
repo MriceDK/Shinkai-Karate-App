@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkaikarateapp
+package be.mauricedeke.shinkai
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
