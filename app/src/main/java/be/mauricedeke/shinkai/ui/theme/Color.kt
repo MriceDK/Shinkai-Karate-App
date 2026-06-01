@@ -26,3 +26,15 @@ val BeltRed = Color(0xFFCC0000)
 val BeltGreen = Color(0xFF1B5E20)
 val BeltBlue = Color(0xFF1565C0)
 
+val BeltPaars = Color(0xFF800080)
+
+val BeltBruin1 = Color(0xFF8B4513)
+
+val BeltBruin2 = Color(0xFF8B4513)
+
+val BeltBruin3 = Color(0xFF8B4513)
+
+val BeltZwart = Color(0xFF000000)
+
+
+

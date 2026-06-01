@@ -16,15 +16,21 @@ import java.time.LocalDate
 object FakeDataSource {
 
     val events = listOf(
-        Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."),
-        Event("2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
-            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."),
+        Event(
+            "1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
+            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."
+        ),
+        Event(
+            "2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem",
+            "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts."
+        ),
     )
 
     val inboxEvents = listOf(
-        Event("3", "Stage test1234", "9:00", "12:00", "16 maart 2026", "", "Limburg",
-            "", isInbox = true),
+        Event(
+            "3", "Stage test1234", "9:00", "12:00", "16 maart 2026", "", "Limburg",
+            "", isInbox = true
+        ),
     )
 
     val nextTraining = Training(
@@ -44,38 +50,44 @@ object FakeDataSource {
         Belt(
             name = "Geel",
             colorHex = "#FFD700",
-            pogramma = BeltProgram(sections = listOf(
-                ProgramSection("Vereisten om te mogen deelnemen"),
-                ProgramSection("Standen / Dachi waza"),
-                ProgramSection("Slag/Stoot technieken"),
-                ProgramSection("Afweertechnieken / Uke waza"),
-                ProgramSection("Traptechnieken / Geri waza"),
-                ProgramSection("Kata"),
-                ProgramSection("Conditie"),
-                ProgramSection("Algemene kennis en geschiedenis"),
-            )),
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Standen / Dachi waza"),
+                    ProgramSection("Slag/Stoot technieken"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
             technieken = listOf(
                 Techniek("Gekruis vastnemen 1 hand", "Geel", ""),
                 Techniek("Parallel vastnemen 1 hand", "Geel", ""),
                 Techniek("Vastnemen 2 handen op 1", "Geel", ""),
-                Techniek("Wurging met 1 hand en hoekstoot", "Geel",
+                Techniek(
+                    "Wurging met 1 hand en hoekstoot", "Geel",
                     "Kin naar beneden doen en met de rechter hand de linkse hoekstoot blokkeren " +
-                    "en met de linkerhand controle uitoefenen op de rechtse hand van de aanvaller."),
+                            "en met de linkerhand controle uitoefenen op de rechtse hand van de aanvaller."
+                ),
             )
         ),
         Belt(
             name = "Oranje",
             colorHex = "#FF8C00",
-            pogramma = BeltProgram(sections = listOf(
-                ProgramSection("Vereisten om te mogen deelnemen"),
-                ProgramSection("Standen / Dachi waza"),
-                ProgramSection("Slag/Stoot technieken"),
-                ProgramSection("Afweertechnieken / Uke waza"),
-                ProgramSection("Traptechnieken / Geri waza"),
-                ProgramSection("Kata"),
-                ProgramSection("Conditie"),
-                ProgramSection("Algemene kennis en geschiedenis"),
-            )),
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Standen / Dachi waza"),
+                    ProgramSection("Slag/Stoot technieken"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
             technieken = listOf(
                 Techniek("Techniek 1", "Oranje", ""),
                 Techniek("Techniek 2", "Oranje", ""),
@@ -84,40 +96,116 @@ object FakeDataSource {
         Belt(
             name = "Rood",
             colorHex = "#CC0000",
-            pogramma = BeltProgram(sections = listOf(
-                ProgramSection("Vereisten om te mogen deelnemen"),
-                ProgramSection("Standen / Dachi waza"),
-                ProgramSection("Slag/Stoot technieken"),
-                ProgramSection("Traptechnieken / Geri waza"),
-                ProgramSection("Kata"),
-                ProgramSection("Conditie"),
-                ProgramSection("Algemene kennis en geschiedenis"),
-            )),
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Standen / Dachi waza"),
+                    ProgramSection("Slag/Stoot technieken"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
         ),
         Belt(
             name = "Groen",
             colorHex = "#1B5E20",
-            pogramma = BeltProgram(sections = listOf(
-                ProgramSection("Vereisten om te mogen deelnemen"),
-                ProgramSection("Standen / Dachi waza"),
-                ProgramSection("Slag/Stoot technieken"),
-                ProgramSection("Traptechnieken / Geri waza"),
-                ProgramSection("Kata"),
-                ProgramSection("Conditie"),
-                ProgramSection("Algemene kennis en geschiedenis"),
-            )),
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Standen / Dachi waza"),
+                    ProgramSection("Slag/Stoot technieken"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
         ),
         Belt(
             name = "Blauw",
             colorHex = "#1565C0",
-            pogramma = BeltProgram(sections = listOf(
-                ProgramSection("Vereisten om te mogen deelnemen"),
-                ProgramSection("Afweertechnieken / Uke waza"),
-                ProgramSection("Traptechnieken / Geri waza"),
-                ProgramSection("Kata"),
-                ProgramSection("Conditie"),
-                ProgramSection("Algemene kennis en geschiedenis"),
-            )),
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
+        ),
+        Belt(
+            name = "Paars",
+            colorHex = "#6A1B9A",
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
+        ),
+        Belt(
+            name = "Bruin - I",
+            colorHex = "#8B4513",
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
+        ),
+        Belt(
+            name = "Bruin - II",
+            colorHex = "#8B4513",
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
+        ),
+        Belt(
+            name = "Bruin - III",
+            colorHex = "#8B4513",
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
+        ),
+        Belt(
+            name = "Zwart",
+            colorHex = "#000000",
+            pogramma = BeltProgram(
+                sections = listOf(
+                    ProgramSection("Vereisten om te mogen deelnemen"),
+                    ProgramSection("Afweertechnieken / Uke waza"),
+                    ProgramSection("Traptechnieken / Geri waza"),
+                    ProgramSection("Kata"),
+                    ProgramSection("Conditie"),
+                    ProgramSection("Algemene kennis en geschiedenis"),
+                )
+            ),
         ),
     )
 

@@ -34,10 +34,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Belt
 import be.mauricedeke.shinkai.ui.theme.BeltBlue
+import be.mauricedeke.shinkai.ui.theme.BeltBruin1
+import be.mauricedeke.shinkai.ui.theme.BeltBruin2
+import be.mauricedeke.shinkai.ui.theme.BeltBruin3
 import be.mauricedeke.shinkai.ui.theme.BeltGreen
 import be.mauricedeke.shinkai.ui.theme.BeltOrange
+import be.mauricedeke.shinkai.ui.theme.BeltPaars
 import be.mauricedeke.shinkai.ui.theme.BeltRed
 import be.mauricedeke.shinkai.ui.theme.BeltYellow
+import be.mauricedeke.shinkai.ui.theme.BeltZwart
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -78,6 +83,11 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
         "Rood" -> BeltRed
         "Groen" -> BeltGreen
         "Blauw" -> BeltBlue
+        "Paars" -> BeltPaars
+        "Bruin - I" -> BeltBruin1
+        "Bruin - II" -> BeltBruin2
+        "Bruin - III" -> BeltBruin3
+        "Zwart" -> BeltZwart
         else -> BeltYellow
     }
     Card(

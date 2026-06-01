@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -161,7 +162,7 @@ fun HomeScreen(
 private fun EventSection(title: String, content: @Composable () -> Unit) {
     Column(modifier = Modifier
         .background(MaterialTheme.colorScheme.background)
-        .padding(16.dp)) {
+        .padding(horizontal = 16.dp, vertical = 8.dp)) {
         Text(
             title,
             fontWeight = FontWeight.Bold,
@@ -211,8 +212,10 @@ private fun EventRow(
                 name,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+                color = MaterialTheme.colorScheme.onSurface,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.height(32.dp)
+                )
             if (location.isNotBlank()) Text(
                 location,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
