@@ -74,7 +74,14 @@ fun ShinkaiNavGraph(
     NavHost(navController = navController, startDestination = Screen.Home.route, modifier = modifier) {
 
         composable(Screen.Home.route) {
-            HomeScreen(uiState = homeUiState, onNavigate = { navController.navigate(it) })
+            HomeScreen(
+                uiState = homeUiState,
+                onNavigate = { navController.navigate(it) },
+                onEventClick = { id ->
+                    eventDetailViewModel.loadEvent(id)
+                    navController.navigate(Screen.EventDetail.createRoute(id))
+                }
+            )
         }
 
         composable(Screen.Technieken.route) {
@@ -136,23 +143,32 @@ fun ShinkaiNavGraph(
                 onNewPasswordChanged = accountViewModel::onNewPasswordChanged,
                 onConfirmPasswordChanged = accountViewModel::onConfirmPasswordChanged,
                 onSavePassword = accountViewModel::onSave,
-                onSave = accountViewModel::onSave
+                onSave = accountViewModel::onSave,
+                onBackClick = { navController.popBackStack() }
             )
         }
 
         composable(Screen.TrainingHistory.route) {
-            TrainingHistoryScreen(uiState = trainingHistoryUiState, onDateSelected = trainingHistoryViewModel::onDateSelected)
+            TrainingHistoryScreen(
+                uiState = trainingHistoryUiState,
+                onDateSelected = trainingHistoryViewModel::onDateSelected,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(Screen.StrengthTest.route) {
-            StrengthTestScreen(uiState = strengthTestUiState)
+            StrengthTestScreen(
+                uiState = strengthTestUiState,
+                onBackClick = { navController.popBackStack() }
+            )
         }
 
         composable(Screen.Notifications.route) {
             NotificationsScreen(
                 uiState = notificationsUiState,
                 onSettingsChanged = notificationsViewModel::onSettingsChanged,
-                onSave = notificationsViewModel::onSave
+                onSave = notificationsViewModel::onSave,
+                onBackClick = { navController.popBackStack() }
             )
         }
 
@@ -160,7 +176,8 @@ fun ShinkaiNavGraph(
             LocationScreen(
                 uiState = locationUiState,
                 onSettingsChanged = locationViewModel::onSettingsChanged,
-                onSave = locationViewModel::onSave
+                onSave = locationViewModel::onSave,
+                onBackClick = { navController.popBackStack() }
             )
         }
 

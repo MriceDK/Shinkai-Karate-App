@@ -51,11 +51,12 @@ fun HomeScreen(
     uiState: HomeUiState,
     modifier: Modifier = Modifier,
     onNavigate: (String) -> Unit = {},
+    onEventClick: (String) -> Unit = {},
 ) {
     val fallbackEvents = if (uiState.upcomingEvents.isEmpty())
         listOf(
-            Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Gent"),
-            Event("2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Gent"),
+            Event("1", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem"),
+            Event("2", "Stage Naigairyu", "10:00", "16:00", "14/03", "Kapellestraat 79", "Evergem"),
         )
     else uiState.upcomingEvents
 
@@ -75,7 +76,7 @@ fun HomeScreen(
 
         EventSection(title = "UPCOMING EVENTS") {
             fallbackEvents.forEach { event ->
-                EventRow("${event.startTime} - ${event.endTime}", event.date, event.title, event.location)
+                EventRow("${event.startTime} - ${event.endTime}", event.date, event.title, event.location, onClick = { onEventClick(event.id) })
             }
         }
 
@@ -137,8 +138,8 @@ private fun EventSection(title: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun EventRow(time: String, date: String, name: String, location: String) {
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun EventRow(time: String, date: String, name: String, location: String, onClick: (() -> Unit)? = null) {
+    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).then(if (onClick != null) Modifier.clickable { onClick() } else Modifier), verticalAlignment = Alignment.CenterVertically) {
         Column(modifier = Modifier.width(110.dp)) {
             Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
             Text(date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
