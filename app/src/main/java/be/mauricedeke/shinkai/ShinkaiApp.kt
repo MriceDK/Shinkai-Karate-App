@@ -1,24 +1,24 @@
 package be.mauricedeke.shinkai
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import be.mauricedeke.shinkai.ui.navigation.Screen
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiBottomBar
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiNavGraph
-import be.mauricedeke.shinkai.ui.theme.ThemeViewModel
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import be.mauricedeke.shinkai.ui.theme.ThemeViewModel
 
 @Composable
 fun ShinkaiApp() {

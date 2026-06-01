@@ -3,10 +3,10 @@ package be.mauricedeke.shinkai.di
 import android.content.Context
 import androidx.room.Room
 import androidx.room.migration.Migration
-import be.mauricedeke.shinkai.data.local.NoteDao
-import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
-import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import be.mauricedeke.shinkai.data.local.NoteDao
+import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
+import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
