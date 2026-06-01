@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -66,7 +67,7 @@ fun TechniekDetailScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
     Column(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 16.dp)
+        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).verticalScroll(rememberScrollState()).padding(vertical = 58.dp, horizontal = 16.dp)
     ) {
         AccordionHeader("Programma", programmaExpanded) { programmaExpanded = !programmaExpanded }
         if (programmaExpanded) {
@@ -90,7 +91,17 @@ fun TechniekDetailScreen(
         Box(modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)).padding(2.dp)) {
             Column {
                 Text("Notes", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 12.dp, top = 8.dp))
-                OutlinedTextField(value = uiState.notes, onValueChange = onNotesChanged, modifier = Modifier.fillMaxWidth().height(120.dp), minLines = 4)
+                OutlinedTextField(
+                    value = uiState.notes,
+                    onValueChange = onNotesChanged,
+                    modifier = Modifier.fillMaxWidth().height(120.dp),
+                    minLines = 4,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        disabledBorderColor = Color.Transparent
+                    )
+                )
             }
         }
         Spacer(Modifier.height(16.dp))

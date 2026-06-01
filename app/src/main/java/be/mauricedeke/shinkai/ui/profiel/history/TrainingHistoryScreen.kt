@@ -50,6 +50,7 @@ fun TrainingHistoryScreen(
         Text("TRAINING LOG", fontWeight = FontWeight.Bold, textDecoration = TextDecoration.Underline, fontSize = 18.sp, modifier = Modifier.align(Alignment.CenterHorizontally), color = MaterialTheme.colorScheme.onBackground)
         Spacer(Modifier.height(12.dp))
         ShinkaiCalendar(
+            modifier = Modifier.padding(horizontal = 4.dp),
             initialMonth = LocalDate.of(2025, 8, 1),
             selectedDate = uiState.selectedDate,
             today = LocalDate.of(2025, 8, 5),
