@@ -171,7 +171,7 @@ fun ShinkaiNavGraph(
                 onNewPasswordChanged = accountViewModel::onNewPasswordChanged,
                 onConfirmPasswordChanged = accountViewModel::onConfirmPasswordChanged,
                 onSavePassword = accountViewModel::onSave,
-                onSave = accountViewModel::onSave,
+                onSave = { accountViewModel::onSave; navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -197,7 +197,7 @@ fun ShinkaiNavGraph(
             NotificationsScreen(
                 uiState = uiState,
                 onSettingsChanged = vm::onSettingsChanged,
-                onSave = vm::onSave,
+                onSave = { vm.onSave(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -208,7 +208,7 @@ fun ShinkaiNavGraph(
             LocationScreen(
                 uiState = uiState,
                 onSettingsChanged = vm::onSettingsChanged,
-                onSave = vm::onSave,
+                onSave = { vm.onSave(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
             )
         }
