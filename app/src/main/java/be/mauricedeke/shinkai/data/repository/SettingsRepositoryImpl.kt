@@ -23,7 +23,10 @@ class SettingsRepositoryImpl @Inject constructor(
             trainingNotifications = entity.trainingNotifications,
             changeNotifications = entity.changeNotifications,
             examNotifications = entity.examNotifications,
-            updateNotifications = entity.updateNotifications
+            updateNotifications = entity.updateNotifications,
+            reminderMinutesBefore = entity.reminderMinutesBefore,
+            trainingReminderMinutesBefore = entity.trainingReminderMinutesBefore,
+            examReminderMinutesBefore = entity.examReminderMinutesBefore
         )
     }
 
@@ -34,7 +37,10 @@ class SettingsRepositoryImpl @Inject constructor(
                 trainingNotifications = settings.trainingNotifications,
                 changeNotifications = settings.changeNotifications,
                 examNotifications = settings.examNotifications,
-                updateNotifications = settings.updateNotifications
+                updateNotifications = settings.updateNotifications,
+                reminderMinutesBefore = settings.reminderMinutesBefore,
+                trainingReminderMinutesBefore = settings.trainingReminderMinutesBefore,
+                examReminderMinutesBefore = settings.examReminderMinutesBefore
             )
         )
     }

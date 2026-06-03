@@ -83,6 +83,19 @@ private val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
+private val MIGRATION_6_7 = object : Migration(6, 7) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `notification_settings` ADD COLUMN `reminderMinutesBefore` INTEGER NOT NULL DEFAULT 30")
+    }
+}
+
+private val MIGRATION_7_8 = object : Migration(7, 8) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE `notification_settings` ADD COLUMN `trainingReminderMinutesBefore` INTEGER NOT NULL DEFAULT 30")
+        db.execSQL("ALTER TABLE `notification_settings` ADD COLUMN `examReminderMinutesBefore` INTEGER NOT NULL DEFAULT 1440")
+    }
+}
+
 private val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -105,7 +118,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ShinkaiDatabase =
         Room.databaseBuilder(context, ShinkaiDatabase::class.java, "shinkai_db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
             .build()
 
     @Provides
