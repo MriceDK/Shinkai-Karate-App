@@ -9,6 +9,7 @@ import be.mauricedeke.shinkai.data.local.NoteDao
 import be.mauricedeke.shinkai.data.local.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
 import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
+import be.mauricedeke.shinkai.data.local.UserProfileDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,6 +65,23 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
+private val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `user_profile` (
+                `id` INTEGER NOT NULL,
+                `name` TEXT NOT NULL,
+                `email` TEXT NOT NULL,
+                `belt` TEXT NOT NULL,
+                `profilePictureUri` TEXT,
+                PRIMARY KEY(`id`)
+            )
+            """.trimIndent()
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -72,7 +90,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ShinkaiDatabase =
         Room.databaseBuilder(context, ShinkaiDatabase::class.java, "shinkai_db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
             .build()
 
     @Provides
@@ -86,4 +104,7 @@ object DatabaseModule {
 
     @Provides
     fun provideLocationSettingsDao(db: ShinkaiDatabase): LocationSettingsDao = db.locationSettingsDao()
+
+    @Provides
+    fun provideUserProfileDao(db: ShinkaiDatabase): UserProfileDao = db.userProfileDao()
 }

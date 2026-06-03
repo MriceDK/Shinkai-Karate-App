@@ -4,5 +4,6 @@ data class AccountUiState(
     val naam: String = "Maurice De Kegel",
     val email: String = "maurice.de.kegel@student.howest.be",
     val newPassword: String = "",
-    val confirmPassword: String = ""
+    val confirmPassword: String = "",
+    val profilePictureUri: String? = null
 )

@@ -171,8 +171,9 @@ fun ShinkaiNavGraph(
                 onNewPasswordChanged = accountViewModel::onNewPasswordChanged,
                 onConfirmPasswordChanged = accountViewModel::onConfirmPasswordChanged,
                 onSavePassword = accountViewModel::onSave,
-                onSave = { accountViewModel::onSave; navController.popBackStack() },
-                onBackClick = { navController.popBackStack() }
+                onSave = { accountViewModel.onSave(); navController.popBackStack() },
+                onBackClick = { navController.popBackStack() },
+                onProfilePictureSelected = accountViewModel::onProfilePictureSelected
             )
         }
 

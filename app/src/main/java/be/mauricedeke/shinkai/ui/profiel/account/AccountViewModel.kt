@@ -25,7 +25,9 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             val profile = getUserProfile()
             if (profile != null) {
-                _uiState.update { it.copy(naam = profile.name, email = profile.email) }
+                _uiState.update {
+                    it.copy(naam = profile.name, email = profile.email, profilePictureUri = profile.profilePictureUri)
+                }
             }
         }
     }
@@ -34,10 +36,12 @@ class AccountViewModel @Inject constructor(
     fun onEmailChanged(email: String) = _uiState.update { it.copy(email = email) }
     fun onNewPasswordChanged(pw: String) = _uiState.update { it.copy(newPassword = pw) }
     fun onConfirmPasswordChanged(pw: String) = _uiState.update { it.copy(confirmPassword = pw) }
+    fun onProfilePictureSelected(uri: String) = _uiState.update { it.copy(profilePictureUri = uri) }
 
     fun onSave() {
         viewModelScope.launch {
-            updateUserProfile(UserProfile(name = _uiState.value.naam, email = _uiState.value.email))
+            val s = _uiState.value
+            updateUserProfile(UserProfile(name = s.naam, email = s.email, profilePictureUri = s.profilePictureUri))
         }
     }
 }
