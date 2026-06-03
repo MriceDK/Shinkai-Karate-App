@@ -20,8 +20,9 @@ class StrengthTestViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val results = getStrengthResults()
-            _uiState.update { it.copy(results = results ?: emptyList(), isError = results == null) }
+            getStrengthResults().collect { results ->
+                _uiState.update { it.copy(results = results) }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import be.mauricedeke.shinkai.data.local.NoteDao
 import be.mauricedeke.shinkai.data.local.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
 import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
+import be.mauricedeke.shinkai.data.local.StrengthResultDao
 import be.mauricedeke.shinkai.data.local.UserProfileDao
 import dagger.Module
 import dagger.Provides
@@ -82,6 +83,20 @@ private val MIGRATION_4_5 = object : Migration(4, 5) {
     }
 }
 
+private val MIGRATION_5_6 = object : Migration(5, 6) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `strength_results` (
+                `type` TEXT NOT NULL,
+                `bestScore` INTEGER NOT NULL,
+                PRIMARY KEY(`type`)
+            )
+            """.trimIndent()
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -90,7 +105,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ShinkaiDatabase =
         Room.databaseBuilder(context, ShinkaiDatabase::class.java, "shinkai_db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
             .build()
 
     @Provides
@@ -107,4 +122,7 @@ object DatabaseModule {
 
     @Provides
     fun provideUserProfileDao(db: ShinkaiDatabase): UserProfileDao = db.userProfileDao()
+
+    @Provides
+    fun provideStrengthResultDao(db: ShinkaiDatabase): StrengthResultDao = db.strengthResultDao()
 }

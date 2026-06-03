@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [BeltNoteEntity::class, ThemePreferenceEntity::class, NotificationSettingsEntity::class, LocationSettingsEntity::class, UserProfileEntity::class],
-    version = 5,
+    entities = [BeltNoteEntity::class, ThemePreferenceEntity::class, NotificationSettingsEntity::class, LocationSettingsEntity::class, UserProfileEntity::class, StrengthResultEntity::class],
+    version = 6,
     exportSchema = false
 )
 abstract class ShinkaiDatabase : RoomDatabase() {
@@ -14,4 +14,5 @@ abstract class ShinkaiDatabase : RoomDatabase() {
     abstract fun notificationSettingsDao(): NotificationSettingsDao
     abstract fun locationSettingsDao(): LocationSettingsDao
     abstract fun userProfileDao(): UserProfileDao
+    abstract fun strengthResultDao(): StrengthResultDao
 }

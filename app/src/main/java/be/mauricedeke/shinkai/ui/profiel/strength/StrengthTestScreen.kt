@@ -23,16 +23,17 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.BeltGreen
-import be.mauricedeke.shinkai.ui.theme.BeltOrange
 import be.mauricedeke.shinkai.ui.theme.ShinkaiGray
 import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import be.mauricedeke.shinkai.ui.theme.toColor
 
 @Composable
 fun StrengthTestScreen(
     uiState: StrengthTestUiState,
+    onStartTest: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -65,36 +66,42 @@ fun StrengthTestScreen(
                         textDecoration = TextDecoration.Underline
                     )
                     Spacer(Modifier.size(16.dp))
+                    val beltColor = result.beltColor?.toColor() ?: ShinkaiRed
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(contentAlignment = Alignment.Center) {
                             Box(
                                 modifier = Modifier
                                     .size(width = 56.dp, height = 18.dp)
                                     .clip(RoundedCornerShape(50))
-                                    .background(if (i == 0) BeltGreen else BeltOrange)
+                                    .background(beltColor)
                             )
                             Box(
                                 modifier = Modifier
                                     .size(18.dp)
                                     .clip(RoundedCornerShape(3.dp))
-                                    .background(
-                                        if (i == 0) BeltGreen.copy(alpha = 0.7f) else BeltOrange.copy(
-                                            alpha = 0.7f
-                                        )
-                                    )
+                                    .background(beltColor.copy(alpha = 0.7f))
                             )
                         }
                         Spacer(Modifier.width(12.dp))
                         Text(
-                            result.score.toString(),
-                            color = ShinkaiRed,
+                            "${result.score} ${result.unit}",
+                            color = beltColor,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 56.sp
+                            fontSize = 48.sp
+                        )
+                    }
+                    if (result.beltColor != null) {
+                        Spacer(Modifier.size(4.dp))
+                        Text(
+                            result.beltColor.displayName(),
+                            fontWeight = FontWeight.Medium,
+                            fontSize = 13.sp,
+                            color = beltColor
                         )
                     }
                     Spacer(Modifier.size(16.dp))
                     Button(
-                        onClick = {},
+                        onClick = { onStartTest(result.type) },
                         colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.width(120.dp)

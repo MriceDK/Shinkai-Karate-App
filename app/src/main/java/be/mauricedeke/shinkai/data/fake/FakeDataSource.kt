@@ -295,8 +295,8 @@ object FakeDataSource {
     )
 
     val strengthResults = listOf(
-        StrengthResult("Punching Strength", 659, "#1B5E20"),
-        StrengthResult("Kiai Strength", 250, "#FF8C00"),
+        StrengthResult("Punching Strength", 659),
+        StrengthResult("Kiai Strength", 0),
     )
 
     // Lege lijsten voor testing van schermen zonder data
