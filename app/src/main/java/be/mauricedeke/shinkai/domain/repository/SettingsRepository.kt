@@ -8,4 +8,6 @@ interface SettingsRepository {
     suspend fun updateNotificationSettings(settings: NotificationSettings)
     suspend fun getLocationSettings(): LocationSettings
     suspend fun updateLocationSettings(settings: LocationSettings)
+    suspend fun getShortcuts(): List<String>
+    suspend fun updateShortcuts(ids: List<String>)
 }

@@ -8,6 +8,7 @@ import be.mauricedeke.shinkai.data.local.LocationSettingsDao
 import be.mauricedeke.shinkai.data.local.NoteDao
 import be.mauricedeke.shinkai.data.local.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
+import be.mauricedeke.shinkai.data.local.ShortcutsDao
 import be.mauricedeke.shinkai.data.local.StrengthResultDao
 import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
 import be.mauricedeke.shinkai.data.local.UserProfileDao
@@ -102,6 +103,20 @@ private val MIGRATION_8_9 = object : Migration(8, 9) {
     }
 }
 
+private val MIGRATION_9_10 = object : Migration(9, 10) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            """
+            CREATE TABLE IF NOT EXISTS `shortcuts` (
+                `id` INTEGER NOT NULL,
+                `shortcuts` TEXT NOT NULL,
+                PRIMARY KEY(`id`)
+            )
+            """.trimIndent()
+        )
+    }
+}
+
 private val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -124,7 +139,7 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ShinkaiDatabase =
         Room.databaseBuilder(context, ShinkaiDatabase::class.java, "shinkai_db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
             .build()
 
     @Provides
@@ -144,4 +159,7 @@ object DatabaseModule {
 
     @Provides
     fun provideStrengthResultDao(db: ShinkaiDatabase): StrengthResultDao = db.strengthResultDao()
+
+    @Provides
+    fun provideShortcutsDao(db: ShinkaiDatabase): ShortcutsDao = db.shortcutsDao()
 }

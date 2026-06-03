@@ -16,11 +16,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.Map
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -40,17 +40,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Training
-import be.mauricedeke.shinkai.ui.navigation.Screen
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     uiState: HomeUiState,
     modifier: Modifier = Modifier,
     onNavigate: (String) -> Unit = {},
     onEventClick: (String) -> Unit = {},
+    onShortcutToggle: (ShortcutId) -> Unit = {},
 ) {
+    var showEditSheet by remember { mutableStateOf(false) }
+
+    if (showEditSheet) {
+        EditShortcutsSheet(
+            selected = uiState.shortcuts,
+            onToggle = onShortcutToggle,
+            onDismiss = { showEditSheet = false }
+        )
+    }
     val upcomingEvents = uiState.upcomingEvents
 
     val fallbackTraining = uiState.nextTraining ?: Training(
@@ -126,7 +136,7 @@ fun HomeScreen(
             )
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = {},
+                onClick = { showEditSheet = true },
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier.height(32.dp)
@@ -136,32 +146,23 @@ fun HomeScreen(
         Spacer(Modifier.height(8.dp))
 
         Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                ShortcutCard(
-                    "Events",
-                    Icons.Default.Event,
-                    Modifier.weight(1f)
-                ) { onNavigate(Screen.Events.route) }
-                Spacer(Modifier.width(8.dp))
-                ShortcutCard(
-                    "Kaart",
-                    Icons.Default.Map,
-                    Modifier.weight(1f)
-                ) { onNavigate(Screen.Kaart.route) }
-            }
-            Spacer(Modifier.height(8.dp))
-            Row(modifier = Modifier.fillMaxWidth()) {
-                ShortcutCard(
-                    "Lexicon",
-                    Icons.AutoMirrored.Filled.MenuBook,
-                    Modifier.weight(1f)
-                ) { onNavigate(Screen.Lexicon.route) }
-                Spacer(Modifier.width(8.dp))
-                ShortcutCard(
-                    "Technieken",
-                    Icons.AutoMirrored.Filled.DirectionsWalk,
-                    Modifier.weight(1f)
-                ) { onNavigate(Screen.Technieken.route) }
+            val shortcuts = uiState.shortcuts
+            shortcuts.chunked(2).forEach { rowItems ->
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    rowItems.forEachIndexed { index, shortcut ->
+                        if (index > 0) Spacer(Modifier.width(8.dp))
+                        ShortcutCard(
+                            shortcut.label,
+                            shortcut.icon,
+                            Modifier.weight(1f)
+                        ) { onNavigate(shortcut.route) }
+                    }
+                    if (rowItems.size == 1) {
+                        Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.weight(1f))
+                    }
+                }
+                if (shortcuts.chunked(2).last() != rowItems) Spacer(Modifier.height(8.dp))
             }
         }
 

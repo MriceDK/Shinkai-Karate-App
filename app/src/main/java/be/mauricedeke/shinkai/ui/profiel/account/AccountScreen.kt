@@ -46,6 +46,7 @@ import coil.compose.AsyncImage
 
 @Composable
 fun AccountScreen(
+    modifier: Modifier = Modifier,
     uiState: AccountUiState,
     onNaamChanged: (String) -> Unit = {},
     onEmailChanged: (String) -> Unit = {},
@@ -54,8 +55,7 @@ fun AccountScreen(
     onSavePassword: () -> Unit = {},
     onSave: () -> Unit = {},
     onBackClick: () -> Unit = {},
-    onProfilePictureSelected: (String) -> Unit = {},
-    modifier: Modifier = Modifier
+    onProfilePictureSelected: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val photoPicker = rememberLauncherForActivityResult(
