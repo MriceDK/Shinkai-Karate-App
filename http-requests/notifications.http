@@ -1,0 +1,71 @@
+### Reminder — works while app is closed
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "reminder|Training Reminder|Your training starts in 30 minutes",
+  "payload_encoding": "string"
+}
+
+### Event notification — only while app is open
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "event|New Event|Stage Naigairyu has been added to the calendar",
+  "payload_encoding": "string"
+}
+
+### Training notification — only while app is open
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "training|Training Update|Tonight's training has been moved to 20:30",
+  "payload_encoding": "string"
+}
+
+### Change notification — only while app is open
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "change|Technique Updated|Gekruist vastnemen 1 hand has been updated",
+  "payload_encoding": "string"
+}
+
+### Exam notification — only while app is open
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "exam|Exam Scheduled|Your belt exam has been scheduled for next Saturday",
+  "payload_encoding": "string"
+}
+
+### Update notification — only while app is open
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "{{userId}}",
+  "payload": "update|App Update|New techniques have been added to your belt program",
+  "payload_encoding": "string"
+}

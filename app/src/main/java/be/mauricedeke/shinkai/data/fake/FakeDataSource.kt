@@ -14,6 +14,7 @@ import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.domain.model.UserProfile
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 object FakeDataSource {
 
@@ -289,6 +290,7 @@ object FakeDataSource {
     )
 
     val userProfile = UserProfile(
+        userId = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890"),
         name = "Maurice De Kegel",
         email = "maurice.de.kegel@student.howest.be",
         belt = "Yellow belt"
