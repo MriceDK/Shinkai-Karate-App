@@ -38,7 +38,7 @@ fun LocationScreen(
 ) {
     val s = uiState.settings
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize().padding(top = 64.dp)) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Text(
                 "Manage Location Data Usage",
