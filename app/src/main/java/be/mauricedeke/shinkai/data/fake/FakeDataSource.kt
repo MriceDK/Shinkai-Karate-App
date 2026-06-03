@@ -5,8 +5,6 @@ import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.domain.model.BeltProgram
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
-import be.mauricedeke.shinkai.domain.model.LocationSettings
-import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import be.mauricedeke.shinkai.domain.model.ProgramSection
 import be.mauricedeke.shinkai.domain.model.StrengthResult
 import be.mauricedeke.shinkai.domain.model.Techniek

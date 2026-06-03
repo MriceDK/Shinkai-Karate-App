@@ -32,12 +32,12 @@ import be.mauricedeke.shinkai.ui.profiel.location.LocationScreen
 import be.mauricedeke.shinkai.ui.profiel.location.LocationViewModel
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsScreen
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsViewModel
+import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestScreen
+import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestViewModel
-import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestScreen
-import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestViewModel
 import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
 import be.mauricedeke.shinkai.ui.technieken.TechniekViewModel
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailScreen

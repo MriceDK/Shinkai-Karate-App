@@ -8,8 +8,8 @@ import be.mauricedeke.shinkai.data.local.LocationSettingsDao
 import be.mauricedeke.shinkai.data.local.NoteDao
 import be.mauricedeke.shinkai.data.local.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
-import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
 import be.mauricedeke.shinkai.data.local.StrengthResultDao
+import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
 import be.mauricedeke.shinkai.data.local.UserProfileDao
 import dagger.Module
 import dagger.Provides
