@@ -26,7 +26,6 @@ class EventsViewModel @Inject constructor(
 
     private var cachedRegularEvents: List<Event> = emptyList()
     private var cachedInboxEvents: List<Event> = emptyList()
-    private val promotedInboxIds = mutableSetOf<String>()
 
     init {
         refresh()
@@ -45,7 +44,6 @@ class EventsViewModel @Inject constructor(
 
             cachedRegularEvents = events
             cachedInboxEvents = inbox
-            inbox.filter { it.rsvp != null }.forEach { promotedInboxIds.add(it.id) }
 
             val rsvp = (events + inbox).associate { it.id to it.rsvp }
             _uiState.update { it.copy(rsvp = rsvp, selectedDate = today) }
@@ -58,7 +56,6 @@ class EventsViewModel @Inject constructor(
     }
 
     fun setRsvp(eventId: String, attending: Boolean) {
-        if (cachedInboxEvents.any { it.id == eventId }) promotedInboxIds.add(eventId)
         val current = _uiState.value.rsvp[eventId]
         val next = if (current == attending) null else attending
         val newRsvp = _uiState.value.rsvp + (eventId to next)
@@ -71,10 +68,11 @@ class EventsViewModel @Inject constructor(
         val today = LocalDate.now()
         fun isUpcoming(date: LocalDate?) = date == null || !date.isBefore(today)
 
-        val rsvpedInbox = cachedInboxEvents.filter { (rsvp[it.id] != null || it.id in promotedInboxIds) && isUpcoming(it.localDate) }
-        val pendingInbox = cachedInboxEvents.filter { rsvp[it.id] == null && it.id !in promotedInboxIds && isUpcoming(it.localDate) }
-        val allUpcoming = (cachedRegularEvents.filter { isUpcoming(it.localDate) } + rsvpedInbox)
+        val upcomingInbox = cachedInboxEvents.filter { isUpcoming(it.localDate) }
+        val upcomingRegular = cachedRegularEvents.filter { isUpcoming(it.localDate) }
+        val allUpcoming = (upcomingRegular + upcomingInbox)
             .sortedWith(compareBy(nullsLast()) { it.localDate })
+        val pendingInbox = allUpcoming.filter { rsvp[it.id] == null }
 
         _uiState.update { state ->
             state.copy(

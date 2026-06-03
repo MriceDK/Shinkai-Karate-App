@@ -152,7 +152,7 @@ fun EventsScreen(
             .verticalScroll(rememberScrollState())) {
             Text("Toekomstige Events", modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 32.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primaryContainer)
+                .padding(top = 16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primaryContainer)
             if (uiState.isError) {
                 Text(
                     "Kon events niet laden. Probeer opnieuw.",
@@ -161,11 +161,11 @@ fun EventsScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
                 )
             }
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 32.dp, vertical = 8.dp)) {
+                .padding(horizontal = 24.dp, vertical = 4.dp)) {
                 if (events.isEmpty()) {
                     Text(
                         "Geen aankomende events.",
@@ -179,7 +179,7 @@ fun EventsScreen(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = 8.dp)
+                                .padding(vertical = 5.dp)
                                 .clickable { onEventClick(event.id) },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -241,12 +241,12 @@ fun EventsScreen(
                     }
                 }
             }
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)) {
                 Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primaryContainer)
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(6.dp))
                 if (inboxEvents.isEmpty()) {
                     Text(
                         "Geen inbox events.",
@@ -266,7 +266,7 @@ fun EventsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(event.title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                            Spacer(Modifier.height(8.dp))
+                            Spacer(Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
@@ -282,7 +282,7 @@ fun EventsScreen(
                                     if (event.city.isNotBlank()) Text(event.city, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
                                 }
                             }
-                            Spacer(Modifier.height(12.dp))
+                            Spacer(Modifier.height(8.dp))
                             val inboxRsvp = uiState.rsvp[event.id]
                             SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth(0.85f)) {
                                 SegmentedButton(
@@ -329,7 +329,7 @@ fun EventsScreen(
                     }
                 }
             }
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
             Button(
                 onClick = onManageEventsClick,
                 modifier = Modifier
