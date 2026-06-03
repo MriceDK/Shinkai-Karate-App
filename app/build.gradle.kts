@@ -20,7 +20,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "WEATHER_API_BASE_URL", "\"${project.findProperty("WEATHER_API_BASE_URL")}\"")
         buildConfigField("String", "AMQP_USERNAME", "\"${project.findProperty("AMQPusername")}\"")
         buildConfigField("String", "AMQP_PASSWORD", "\"${project.findProperty("AMQPpassword")}\"")
         buildConfigField("String", "AMQP_URL", "\"${project.findProperty("AMQPurl")}\"")
