@@ -11,22 +11,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
+import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
 @Composable
@@ -111,7 +117,15 @@ private fun EventManageRow(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .then(
+                if (!isUpcoming) Modifier.background(Color(MaterialTheme.colorScheme.primary.value).copy(alpha = 0.20f), RoundedCornerShape(12.dp))
+                else Modifier
+            )
             .padding(vertical = 12.dp)
+            .then(
+                if (!isUpcoming) Modifier.padding(horizontal = 12.dp)
+                else Modifier
+            )
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -123,56 +137,151 @@ private fun EventManageRow(
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     color = if (isUpcoming) MaterialTheme.colorScheme.onSurface
-                            else MaterialTheme.colorScheme.onSurfaceVariant
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     "${event.date}  •  ${event.startTime} – ${event.endTime}",
                     fontSize = 12.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = if (isUpcoming) MaterialTheme.colorScheme.onSurfaceVariant
+                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
                 )
                 if (event.city.isNotBlank()) {
-                    Text(event.city, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        event.city,
+                        fontSize = 12.sp,
+                        color = if (isUpcoming) MaterialTheme.colorScheme.onSurfaceVariant
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                    )
                 }
             }
             if (!isUpcoming) {
                 Text(
                     "Voorbij",
                     fontSize = 11.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.White,
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(50))
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.65f), RoundedCornerShape(50))
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
         }
-        Spacer(Modifier.height(8.dp))
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            SegmentedButton(
-                selected = rsvp == false,
-                onClick = { onRsvp(false) },
-                enabled = isUpcoming,
-                shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                colors = SegmentedButtonDefaults.colors(
-                    activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                    activeContentColor = MaterialTheme.colorScheme.primary,
-                    activeBorderColor = MaterialTheme.colorScheme.primary,
-                )
-            ) {
-                Text("Ik kan niet", fontSize = 13.sp)
-            }
-            SegmentedButton(
-                selected = rsvp == true,
-                onClick = { onRsvp(true) },
-                enabled = isUpcoming,
-                shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                colors = SegmentedButtonDefaults.colors(
-                    activeContainerColor = MaterialTheme.colorScheme.primary,
-                    activeContentColor = Color.White,
-                    activeBorderColor = MaterialTheme.colorScheme.primary,
-                )
-            ) {
-                Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+        if (isUpcoming) {
+            Spacer(Modifier.height(8.dp))
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                SegmentedButton(
+                    selected = rsvp == false,
+                    onClick = { onRsvp(false) },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    icon = {
+                        if (rsvp == false) {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = null,
+                                modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
+                            )
+                        }
+                    },
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        activeContentColor = MaterialTheme.colorScheme.primary,
+                        activeBorderColor = MaterialTheme.colorScheme.primary,
+                    )
+                ) {
+                    Text("Ik kan niet", fontSize = 13.sp)
+                }
+                SegmentedButton(
+                    selected = rsvp == true,
+                    onClick = { onRsvp(true) },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primary,
+                        activeContentColor = Color.White,
+                        activeBorderColor = MaterialTheme.colorScheme.primary,
+                    )
+                ) {
+                    Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
             }
         }
+    }
+}
+
+private val previewEvents = listOf(
+    Event(
+        id = "1",
+        title = "Kumite training",
+        date = "15 jun 2026",
+        startTime = "19:00",
+        endTime = "21:00",
+        city = "Gent",
+        localDate = LocalDate.now().plusDays(12)
+    ),
+    Event(
+        id = "2",
+        title = "Kata competitie",
+        date = "22 jun 2026",
+        startTime = "10:00",
+        endTime = "17:00",
+        city = "Brugge",
+        localDate = LocalDate.now().plusDays(19)
+    ),
+    Event(
+        id = "3",
+        title = "Zomerstage",
+        date = "1 jul 2026",
+        startTime = "09:00",
+        endTime = "18:00",
+        city = "Kortrijk",
+        localDate = LocalDate.now().plusDays(28)
+    ),
+    Event(
+        id = "4",
+        title = "Voorjaarsexamen",
+        date = "4 mei 2026",
+        startTime = "13:00",
+        endTime = "16:00",
+        city = "Gent",
+        localDate = LocalDate.now().minusDays(24)
+    )
+)
+
+@Preview(showBackground = true, showSystemUi = true, name = "With events")
+@Composable
+private fun ManageEventsScreenPreview() {
+    ShinkaikarateappTheme {
+        ManageEventsScreen(
+            uiState = ManageEventsUiState(
+                events = previewEvents,
+                rsvp = mapOf("1" to true, "2" to false, "4" to true),
+                isError = false
+            ),
+            onRsvp = { _, _ -> },
+            onBackClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, name = "Empty")
+@Composable
+private fun ManageEventsScreenEmptyPreview() {
+    ShinkaikarateappTheme {
+        ManageEventsScreen(
+            uiState = ManageEventsUiState(events = emptyList(), rsvp = emptyMap(), isError = false),
+            onRsvp = { _, _ -> },
+            onBackClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true, name = "Error")
+@Composable
+private fun ManageEventsScreenErrorPreview() {
+    ShinkaikarateappTheme {
+        ManageEventsScreen(
+            uiState = ManageEventsUiState(events = emptyList(), rsvp = emptyMap(), isError = true),
+            onRsvp = { _, _ -> },
+            onBackClick = {}
+        )
     }
 }

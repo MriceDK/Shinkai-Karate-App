@@ -59,6 +59,14 @@ object FakeDataSource {
             localDate = LocalDate.now().plusDays(30),
             rsvp = null
         ),
+        Event(
+            "7", "Voorbij examen", "10:00", "14:00",
+            LocalDate.now().minusDays(30).format(DateTimeFormatter.ofPattern("dd/MM")),
+            "Hoofddojo", "Antwerpen",
+            "Officieel voorbij examen voor de volgende bandkleur.",
+            localDate = LocalDate.now().minusDays(30),
+            rsvp = null
+        ),
     )
 
     val inboxEvents = listOf(

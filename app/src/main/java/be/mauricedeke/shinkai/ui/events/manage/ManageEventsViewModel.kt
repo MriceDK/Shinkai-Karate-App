@@ -29,9 +29,15 @@ class ManageEventsViewModel @Inject constructor(
                 _uiState.update { it.copy(isError = true) }
                 return@launch
             }
-            val all = events + inboxEvents
-            val initialRsvp = all.associate { it.id to it.rsvp }
-            _uiState.update { it.copy(events = all, rsvp = initialRsvp) }
+            val today = LocalDate.now()
+            val cutoff = today.minusMonths(1)
+            val filtered = (events + inboxEvents)
+                .filter { it.localDate == null || !it.localDate.isBefore(cutoff) }
+            val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
+            val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
+                         past.sortedByDescending { it.localDate }
+            val initialRsvp = sorted.associate { it.id to it.rsvp }
+            _uiState.update { it.copy(events = sorted, rsvp = initialRsvp) }
         }
     }
 
