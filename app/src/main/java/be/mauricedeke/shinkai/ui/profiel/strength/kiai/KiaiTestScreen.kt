@@ -39,8 +39,6 @@ import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.profiel.strength.MeasurementPhase
-import be.mauricedeke.shinkai.ui.theme.ShinkaiGray
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -63,7 +61,7 @@ fun KiaiTestScreen(
         ActivityResultContracts.RequestPermission()
     ) { granted -> if (granted) onStart() }
 
-    Box(modifier = modifier.fillMaxSize().background(ShinkaiGray)) {
+    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,7 +85,7 @@ fun KiaiTestScreen(
                     MeasurementPhase.DONE -> "Your result"
                 },
                 fontSize = 14.sp,
-                color = if (uiState.phase == MeasurementPhase.MEASURING) ShinkaiRed
+                color = if (uiState.phase == MeasurementPhase.MEASURING) MaterialTheme.colorScheme.primary
                         else MaterialTheme.colorScheme.onSurfaceVariant,
                 fontWeight = if (uiState.phase == MeasurementPhase.MEASURING) FontWeight.Bold else FontWeight.Normal,
                 textAlign = TextAlign.Center
@@ -100,7 +98,7 @@ fun KiaiTestScreen(
                     progress = { progressAnim },
                     modifier = Modifier.fillMaxSize(),
                     strokeWidth = 10.dp,
-                    color = uiState.resultBelt?.toColor() ?: ShinkaiRed,
+                    color = uiState.resultBelt?.toColor() ?: MaterialTheme.colorScheme.primary,
                     trackColor = MaterialTheme.colorScheme.outlineVariant
                 )
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -109,7 +107,7 @@ fun KiaiTestScreen(
                         else uiState.peakDb.toString(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 64.sp,
-                        color = uiState.resultBelt?.toColor() ?: ShinkaiRed
+                        color = uiState.resultBelt?.toColor() ?: MaterialTheme.colorScheme.primary
                     )
                     Text(
                         "dB",
@@ -180,7 +178,7 @@ fun KiaiTestScreen(
                             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(50),
                     modifier = Modifier.width(160.dp)
                 ) { Text("Start", fontSize = 16.sp) }
@@ -199,7 +197,7 @@ fun KiaiTestScreen(
                             permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                         }
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(50),
                     modifier = Modifier.width(160.dp)
                 ) { Text("Try Again", fontSize = 16.sp) }

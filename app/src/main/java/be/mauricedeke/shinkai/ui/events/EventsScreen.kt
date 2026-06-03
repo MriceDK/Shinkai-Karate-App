@@ -57,7 +57,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -149,11 +148,11 @@ fun EventsScreen(
             .verticalScroll(rememberScrollState())) {
             Text("Toekomstige Events", modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 32.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                .padding(top = 32.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primaryContainer)
             if (uiState.isError) {
                 Text(
                     "Kon events niet laden. Probeer opnieuw.",
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
                 )
@@ -198,7 +197,7 @@ fun EventsScreen(
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)) {
-                Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primaryContainer)
                 Spacer(Modifier.height(8.dp))
                 if (inboxEvents.isEmpty()) {
                     Text(
@@ -213,7 +212,7 @@ fun EventsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(16.dp))
-                                .background(ShinkaiRed)
+                                .background(MaterialTheme.colorScheme.primary)
                                 .clickable { onEventClick(event.id) }
                                 .padding(16.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
@@ -238,7 +237,7 @@ fun EventsScreen(
                             Spacer(Modifier.height(12.dp))
                             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                                 OutlinedButton(onClick = {}, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text("Ik kan niet") }
-                                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary, contentColor = ShinkaiRed)) { Text("Ik kan", fontWeight = FontWeight.Bold) }
+                                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary, contentColor = MaterialTheme.colorScheme.primary)) { Text("Ik kan", fontWeight = FontWeight.Bold) }
                             }
                         }
                     }
@@ -250,7 +249,7 @@ fun EventsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(50)
             ) {
                 Text("Beheer alle events", fontWeight = FontWeight.Bold)

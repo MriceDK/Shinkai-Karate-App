@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -59,7 +58,7 @@ fun KaartScreen(
             Icon(
                 Icons.Default.LocationOn,
                 null,
-                tint = ShinkaiRed,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .height(40.dp)
@@ -104,7 +103,7 @@ fun KaartScreen(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 32.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(50)
             ) { Text("Navigeer Naar Event", fontSize = 16.sp, fontWeight = FontWeight.Medium) }
         }

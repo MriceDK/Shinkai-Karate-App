@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.LocationSettings
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -64,7 +63,7 @@ fun LocationScreen(
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -109,7 +108,7 @@ private fun LocationRow(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedTrackColor = ShinkaiRed,
+                checkedTrackColor = MaterialTheme.colorScheme.primary,
                 uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
                 uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )

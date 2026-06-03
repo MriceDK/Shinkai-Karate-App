@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -97,7 +96,7 @@ fun EventDetailScreen(
         Spacer(Modifier.height(16.dp))
         Button(
             onClick = {},
-            colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(50)
         ) {
             Text("+ Add to calendar", fontSize = 15.sp)
@@ -134,7 +133,7 @@ fun EventDetailScreen(
         Spacer(Modifier.height(32.dp))
         Button(
             onClick = {},
-            colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(50),
             modifier = Modifier.fillMaxWidth(0.85f)
         ) {

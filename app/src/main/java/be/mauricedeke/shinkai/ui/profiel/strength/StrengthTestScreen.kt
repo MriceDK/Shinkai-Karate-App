@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.ShinkaiGray
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -37,12 +36,12 @@ fun StrengthTestScreen(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         if (uiState.isError) {
-            Box(modifier = Modifier.fillMaxSize().background(ShinkaiGray), contentAlignment = Alignment.Center) {
+            Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
                 Text(
                     "Kon resultaten niet laden. Probeer opnieuw.",
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 14.sp
                 )
             }
@@ -50,7 +49,7 @@ fun StrengthTestScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(ShinkaiGray),
+                .background(MaterialTheme.colorScheme.background),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -66,7 +65,7 @@ fun StrengthTestScreen(
                         textDecoration = TextDecoration.Underline
                     )
                     Spacer(Modifier.size(16.dp))
-                    val beltColor = result.beltColor?.toColor() ?: ShinkaiRed
+                    val beltColor = result.beltColor?.toColor() ?: MaterialTheme.colorScheme.primary
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(contentAlignment = Alignment.Center) {
                             Box(
@@ -102,7 +101,7 @@ fun StrengthTestScreen(
                     Spacer(Modifier.size(16.dp))
                     Button(
                         onClick = { onStartTest(result.type) },
-                        colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(8.dp),
                         modifier = Modifier.width(120.dp)
                     ) {

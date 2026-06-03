@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.ui.navigation.Screen
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
@@ -74,7 +73,7 @@ fun HomeScreen(
                 Text(
                     "Kon events niet laden. Probeer opnieuw.",
                     fontSize = 13.sp,
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
                 )
@@ -128,7 +127,7 @@ fun HomeScreen(
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = {},
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier.height(32.dp)
             ) { Text("Edit", fontSize = 13.sp) }

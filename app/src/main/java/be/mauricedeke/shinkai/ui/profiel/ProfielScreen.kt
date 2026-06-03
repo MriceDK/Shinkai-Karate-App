@@ -53,9 +53,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.UserProfile
-import be.mauricedeke.shinkai.ui.theme.BeltYellow
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import coil.compose.AsyncImage
 
@@ -121,7 +118,7 @@ fun ProfielScreen(
                             modifier = Modifier
                                 .size(72.dp)
                                 .clip(CircleShape)
-                                .background(if (loggedIn) ShinkaiRed else MaterialTheme.colorScheme.surfaceVariant),
+                                .background(if (loggedIn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
@@ -163,7 +160,7 @@ fun ProfielScreen(
                     Spacer(Modifier.height(4.dp))
                     Button(
                         onClick = onEditClick,
-                        colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         modifier = Modifier.height(28.dp),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)
@@ -253,7 +250,7 @@ fun ProfielScreen(
             ProfileListItem(
                 Icons.Default.Delete,
                 "Delete Account",
-                labelColor = ShinkaiRed,
+                labelColor = MaterialTheme.colorScheme.primary,
                 onClick = {})
         }
         Spacer(Modifier.height(16.dp))
@@ -322,7 +319,7 @@ private fun ProfileToggleItem(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedTrackColor = ShinkaiRed,
+                checkedTrackColor = MaterialTheme.colorScheme.primary,
                 uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
                 uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )

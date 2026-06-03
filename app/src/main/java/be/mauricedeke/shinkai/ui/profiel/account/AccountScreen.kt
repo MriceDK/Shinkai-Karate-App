@@ -41,7 +41,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import coil.compose.AsyncImage
 
@@ -101,7 +100,7 @@ fun AccountScreen(
                         modifier = Modifier
                             .size(96.dp)
                             .clip(CircleShape)
-                            .background(ShinkaiRed),
+                            .background(MaterialTheme.colorScheme.primary),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -143,7 +142,7 @@ fun AccountScreen(
             Spacer(Modifier.height(16.dp))
             Button(
                 onClick = onSavePassword,
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier.fillMaxWidth(0.7f)
             ) {
@@ -152,7 +151,7 @@ fun AccountScreen(
             Spacer(Modifier.height(32.dp))
             Button(
                 onClick = onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 shape = RoundedCornerShape(50),
                 modifier = Modifier
                     .fillMaxWidth(0.5f)

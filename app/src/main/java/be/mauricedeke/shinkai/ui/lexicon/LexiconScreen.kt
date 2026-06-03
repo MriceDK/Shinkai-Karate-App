@@ -38,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -67,8 +66,8 @@ fun LexiconScreen(
             },
             shape = RoundedCornerShape(50),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = ShinkaiRed,
-                unfocusedBorderColor = ShinkaiRed
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.primary
             ),
             singleLine = true
         )
@@ -76,7 +75,7 @@ fun LexiconScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
                     "Kon lexicon niet laden. Probeer opnieuw.",
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 14.sp
                 )
             }
@@ -99,7 +98,7 @@ private fun LexiconRow(entry: LexiconEntry) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 6.dp)
-            .border(1.dp, ShinkaiRed, RoundedCornerShape(8.dp))
+            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(8.dp))
             .clickable { expanded = !expanded }
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -112,7 +111,7 @@ private fun LexiconRow(entry: LexiconEntry) {
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Text("|", color = ShinkaiRed, fontSize = 18.sp)
+            Text("|", color = MaterialTheme.colorScheme.primary, fontSize = 18.sp)
             Text(
                 entry.translation,
                 modifier = Modifier
@@ -124,14 +123,14 @@ private fun LexiconRow(entry: LexiconEntry) {
             Icon(
                 if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
                 contentDescription = null,
-                tint = ShinkaiRed,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(Modifier.size(8.dp))
         }
         AnimatedVisibility(visible = expanded) {
             Column {
-                HorizontalDivider(color = ShinkaiRed.copy(alpha = 0.3f))
+                HorizontalDivider(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
                 Text(
                     expandedText,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),

@@ -1,8 +1,6 @@
 package be.mauricedeke.shinkai.ui.events.manage
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,25 +8,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import java.time.LocalDate
 
 @Composable
@@ -38,7 +36,7 @@ fun ManageEventsScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
+    androidx.compose.foundation.layout.Box(modifier = modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,7 +65,7 @@ fun ManageEventsScreen(
                 Text(
                     "Kon events niet laden. Probeer opnieuw.",
                     fontSize = 14.sp,
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             } else if (uiState.events.isEmpty()) {
@@ -101,6 +99,7 @@ fun ManageEventsScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EventManageRow(
     event: Event,
@@ -147,32 +146,30 @@ private fun EventManageRow(
             }
         }
         Spacer(Modifier.height(8.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(
+        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+            SegmentedButton(
+                selected = rsvp == false,
                 onClick = { onRsvp(false) },
                 enabled = isUpcoming,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = if (rsvp == false) ShinkaiRed.copy(alpha = 0.1f) else MaterialTheme.colorScheme.surface,
-                    contentColor = if (rsvp == false) ShinkaiRed else MaterialTheme.colorScheme.onSurface,
-                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                ),
-                modifier = Modifier.weight(1f)
+                shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                colors = SegmentedButtonDefaults.colors(
+                    activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                    activeContentColor = MaterialTheme.colorScheme.primary,
+                    activeBorderColor = MaterialTheme.colorScheme.primary,
+                )
             ) {
                 Text("Ik kan niet", fontSize = 13.sp)
             }
-            Button(
+            SegmentedButton(
+                selected = rsvp == true,
                 onClick = { onRsvp(true) },
                 enabled = isUpcoming,
-                shape = RoundedCornerShape(50),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (rsvp == true) ShinkaiRed else MaterialTheme.colorScheme.surfaceVariant,
-                    contentColor = if (rsvp == true) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
-                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                ),
-                modifier = Modifier.weight(1f)
+                shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                colors = SegmentedButtonDefaults.colors(
+                    activeContainerColor = MaterialTheme.colorScheme.primary,
+                    activeContentColor = Color.White,
+                    activeBorderColor = MaterialTheme.colorScheme.primary,
+                )
             ) {
                 Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
             }

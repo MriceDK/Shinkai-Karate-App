@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
-import be.mauricedeke.shinkai.ui.theme.ShinkaiRed
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
@@ -85,7 +84,7 @@ fun TrainingHistoryScreen(
                 Spacer(Modifier.weight(1f))
                 Button(
                     onClick = {},
-                    colors = ButtonDefaults.buttonColors(containerColor = ShinkaiRed),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(4.dp),
                     modifier = Modifier.height(32.dp),
                     contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)
@@ -97,7 +96,7 @@ fun TrainingHistoryScreen(
             if (uiState.isError) {
                 Text(
                     "Kon trainingen niet laden. Probeer opnieuw.",
-                    color = ShinkaiRed,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
