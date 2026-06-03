@@ -16,6 +16,12 @@ import java.util.UUID
 
 object FakeDataSource {
 
+    // Shared RSVP state across all screens, seeded from initial event values
+    val rsvpMap: MutableMap<String, Boolean?> = mutableMapOf(
+        "1" to true,
+        "3" to false,
+    )
+
     val events = listOf(
         Event(
             "1", "Stage Naigairyu", "10:00", "16:00",

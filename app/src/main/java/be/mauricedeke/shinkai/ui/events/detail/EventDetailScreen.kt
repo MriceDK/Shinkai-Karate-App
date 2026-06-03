@@ -1,6 +1,9 @@
 package be.mauricedeke.shinkai.ui.events.detail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,31 +19,51 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailScreen(
     uiState: EventDetailUiState,
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onRsvp: (Boolean) -> Unit = {}
 ) {
     val event = uiState.event
+    val context = LocalContext.current
+    val isUpcoming = event.localDate == null || !event.localDate.isBefore(LocalDate.now())
+
+    fun openNavigation() {
+        val query = Uri.encode("${event.location}, ${event.city}")
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$query"))
+        context.startActivity(intent)
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
     Column(
@@ -80,17 +103,36 @@ fun EventDetailScreen(
                     .height(36.dp)
                     .background(MaterialTheme.colorScheme.outlineVariant)
             )
-            Column {
-                Text(
-                    event.location,
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable(
+                    enabled = event.location.isNotBlank(),
+                    onClick = ::openNavigation
                 )
-                Text(
-                    event.city,
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+            ) {
+                Column {
+                    Text(
+                        event.location,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Text(
+                        event.city,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
+                if (event.location.isNotBlank()) {
+                    Spacer(Modifier.width(4.dp))
+                    Icon(
+                        Icons.Default.Navigation,
+                        contentDescription = "Navigeer",
+                        modifier = Modifier.size(14.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -100,6 +142,44 @@ fun EventDetailScreen(
             shape = RoundedCornerShape(50)
         ) {
             Text("+ Add to calendar", fontSize = 15.sp)
+        }
+        if (isUpcoming) {
+            Spacer(Modifier.height(12.dp))
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth(0.85f)) {
+                SegmentedButton(
+                    selected = uiState.rsvp == false,
+                    onClick = { onRsvp(false) },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    icon = {
+                        if (uiState.rsvp == false) {
+                            Icon(
+                                Icons.Default.Close,
+                                contentDescription = null,
+                                modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
+                            )
+                        }
+                    },
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                        activeContentColor = MaterialTheme.colorScheme.primary,
+                        activeBorderColor = MaterialTheme.colorScheme.primary,
+                    )
+                ) {
+                    Text("Ik kan niet", fontSize = 13.sp)
+                }
+                SegmentedButton(
+                    selected = uiState.rsvp == true,
+                    onClick = { onRsvp(true) },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primary,
+                        activeContentColor = Color.White,
+                        activeBorderColor = MaterialTheme.colorScheme.primary,
+                    )
+                ) {
+                    Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                }
+            }
         }
         Spacer(Modifier.height(24.dp))
         Box(

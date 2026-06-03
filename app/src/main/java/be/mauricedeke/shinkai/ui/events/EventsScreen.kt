@@ -25,16 +25,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -71,6 +74,7 @@ fun EventsScreen(
     onDateSelected: (LocalDate) -> Unit = {},
     onEventClick: (String) -> Unit = {},
     onManageEventsClick: () -> Unit = {},
+    onRsvp: (eventId: String, attending: Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val events = uiState.upcomingEvents
@@ -171,10 +175,14 @@ fun EventsScreen(
                     )
                 } else {
                     events.forEach { event ->
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                            .clickable { onEventClick(event.id) }, verticalAlignment = Alignment.CenterVertically) {
+                        val rsvp = uiState.rsvp[event.id]
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp)
+                                .clickable { onEventClick(event.id) },
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Column(modifier = Modifier.width(110.dp)) {
                                 Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                                 Text(event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
@@ -188,7 +196,47 @@ fun EventsScreen(
                                 Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                                 Text(event.location, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
                             }
-                            IconButton(onClick = {}) { Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                            Row {
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            if (rsvp == false) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                            else Color.Transparent
+                                        )
+                                        .clickable { onRsvp(event.id, false) },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.Close,
+                                        contentDescription = "Ik kan niet",
+                                        modifier = Modifier.size(16.dp),
+                                        tint = if (rsvp == false) MaterialTheme.colorScheme.primary
+                                               else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Spacer(Modifier.width(4.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(
+                                            if (rsvp == true) MaterialTheme.colorScheme.primary
+                                            else Color.Transparent
+                                        )
+                                        .clickable { onRsvp(event.id, true) },
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.Check,
+                                        contentDescription = "Ik kan",
+                                        modifier = Modifier.size(16.dp),
+                                        tint = if (rsvp == true) Color.White
+                                               else MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -235,9 +283,47 @@ fun EventsScreen(
                                 }
                             }
                             Spacer(Modifier.height(12.dp))
-                            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                                OutlinedButton(onClick = {}, colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary)) { Text("Ik kan niet") }
-                                Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.onPrimary, contentColor = MaterialTheme.colorScheme.primary)) { Text("Ik kan", fontWeight = FontWeight.Bold) }
+                            val inboxRsvp = uiState.rsvp[event.id]
+                            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth(0.85f)) {
+                                SegmentedButton(
+                                    selected = inboxRsvp == false,
+                                    onClick = { onRsvp(event.id, false) },
+                                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                                    icon = {
+                                        if (inboxRsvp == false) {
+                                            Icon(
+                                                Icons.Default.Close,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
+                                            )
+                                        }
+                                    },
+                                    colors = SegmentedButtonDefaults.colors(
+                                        activeContainerColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.15f),
+                                        activeContentColor = MaterialTheme.colorScheme.onPrimary,
+                                        activeBorderColor = MaterialTheme.colorScheme.onPrimary,
+                                        inactiveContainerColor = MaterialTheme.colorScheme.primary,
+                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                    )
+                                ) {
+                                    Text("Ik kan niet", fontSize = 13.sp)
+                                }
+                                SegmentedButton(
+                                    selected = inboxRsvp == true,
+                                    onClick = { onRsvp(event.id, true) },
+                                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                                    colors = SegmentedButtonDefaults.colors(
+                                        activeContainerColor = MaterialTheme.colorScheme.onPrimary,
+                                        activeContentColor = MaterialTheme.colorScheme.primary,
+                                        activeBorderColor = MaterialTheme.colorScheme.onPrimary,
+                                        inactiveContainerColor = MaterialTheme.colorScheme.primary,
+                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                    )
+                                ) {
+                                    Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                }
                             }
                         }
                     }

@@ -203,7 +203,11 @@ fun ShinkaiCalendar(
                 modifier = Modifier
                     .clip(RoundedCornerShape(50))
                     .background(Color.White)
-                    .clickable { swipeDirection = if (currentMonth.isAfter(today)) -1 else 1; currentMonth = today.withDayOfMonth(1) }
+                    .clickable {
+                        swipeDirection = if (currentMonth.isAfter(today)) -1 else 1
+                        currentMonth = today.withDayOfMonth(1)
+                        onDateSelected(today)
+                    }
                     .padding(horizontal = 20.dp, vertical = 6.dp)
             )
         }

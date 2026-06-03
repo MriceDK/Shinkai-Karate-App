@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -9,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
@@ -75,6 +77,16 @@ fun ShinkaiNavGraph(
     val trainingHistoryUiState by trainingHistoryViewModel.uiState.collectAsStateWithLifecycle()
     val accountUiState by accountViewModel.uiState.collectAsStateWithLifecycle()
 
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+    LaunchedEffect(currentRoute) {
+        when (currentRoute) {
+            Screen.Events.route -> eventsViewModel.refresh()
+            Screen.ManageEvents.route -> manageEventsViewModel.refresh()
+            Screen.TrainingHistory.route -> trainingHistoryViewModel.resetToToday()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.Home.route,
@@ -124,7 +136,8 @@ fun ShinkaiNavGraph(
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id))
                 },
-                onManageEventsClick = { navController.navigate(Screen.ManageEvents.route) }
+                onManageEventsClick = { navController.navigate(Screen.ManageEvents.route) },
+                onRsvp = eventsViewModel::setRsvp
             )
         }
 
@@ -144,7 +157,8 @@ fun ShinkaiNavGraph(
             eventDetailViewModel.loadEvent(id)
             EventDetailScreen(
                 uiState = eventDetailUiState,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onRsvp = eventDetailViewModel::setRsvp
             )
         }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.usecase.GetEventsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetInboxEventsUseCase
+import be.mauricedeke.shinkai.domain.usecase.SetRsvpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,13 +16,18 @@ import javax.inject.Inject
 @HiltViewModel
 class ManageEventsViewModel @Inject constructor(
     private val getEvents: GetEventsUseCase,
-    private val getInboxEvents: GetInboxEventsUseCase
+    private val getInboxEvents: GetInboxEventsUseCase,
+    private val setRsvpUseCase: SetRsvpUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ManageEventsUiState())
     val uiState: StateFlow<ManageEventsUiState> = _uiState
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             val events = getEvents()
             val inboxEvents = getInboxEvents()
@@ -36,8 +42,7 @@ class ManageEventsViewModel @Inject constructor(
             val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
             val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
                          past.sortedByDescending { it.localDate }
-            val initialRsvp = sorted.associate { it.id to it.rsvp }
-            _uiState.update { it.copy(events = sorted, rsvp = initialRsvp) }
+            _uiState.update { it.copy(events = sorted, rsvp = sorted.associate { e -> e.id to e.rsvp }) }
         }
     }
 
@@ -46,10 +51,9 @@ class ManageEventsViewModel @Inject constructor(
         val isUpcoming = event.localDate == null || !event.localDate.isBefore(LocalDate.now())
         if (!isUpcoming) return
 
-        _uiState.update { state ->
-            val current = state.rsvp[eventId]
-            val next = if (current == attending) null else attending
-            state.copy(rsvp = state.rsvp + (eventId to next))
-        }
+        val current = _uiState.value.rsvp[eventId]
+        val next = if (current == attending) null else attending
+        _uiState.update { state -> state.copy(rsvp = state.rsvp + (eventId to next)) }
+        viewModelScope.launch { setRsvpUseCase(eventId, next) }
     }
 }

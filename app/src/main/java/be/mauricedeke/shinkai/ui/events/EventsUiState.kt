@@ -7,6 +7,7 @@ data class EventsUiState(
     val upcomingEvents: List<Event> = emptyList(),
     val allUpcomingEvents: List<Event> = emptyList(),
     val inboxEvents: List<Event> = emptyList(),
+    val rsvp: Map<String, Boolean?> = emptyMap(),
     val selectedDate: LocalDate? = null,
     val isError: Boolean = false
 )

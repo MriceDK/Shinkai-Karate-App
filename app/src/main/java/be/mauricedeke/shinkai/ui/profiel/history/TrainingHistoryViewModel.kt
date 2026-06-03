@@ -46,6 +46,22 @@ class TrainingHistoryViewModel @Inject constructor(
         }
     }
 
+    fun resetToToday() {
+        viewModelScope.launch {
+            val today = LocalDate.now()
+            val trainings = getTrainingsByDate(today)
+            _uiState.update {
+                it.copy(
+                    selectedDate = today,
+                    selectedTrainings = trainings ?: emptyList(),
+                    selectedTrainingId = null,
+                    notes = "",
+                    isError = trainings == null
+                )
+            }
+        }
+    }
+
     fun onDateSelected(date: LocalDate) {
         viewModelScope.launch {
             val trainings = getTrainingsByDate(date)
