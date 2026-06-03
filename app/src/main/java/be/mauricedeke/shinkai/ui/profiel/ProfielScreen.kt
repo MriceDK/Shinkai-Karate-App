@@ -1,5 +1,9 @@
 package be.mauricedeke.shinkai.ui.profiel
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,6 +30,7 @@ import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Button
@@ -37,6 +42,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,11 +68,24 @@ fun ProfielScreen(
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
     onLocationClick: () -> Unit = {},
+    onProfilePictureSelected: (String) -> Unit = {},
     isDarkTheme: Boolean = false,
     onDarkThemeToggle: (Boolean) -> Unit = {},
 ) {
     val profile = uiState.userProfile
     val loggedIn = profile != null
+    val context = LocalContext.current
+    val photoPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            context.contentResolver.takePersistableUriPermission(
+                uri,
+                android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+            onProfilePictureSelected(uri.toString())
+        }
+    }
 
     Column(
         modifier = modifier
@@ -82,28 +101,49 @@ fun ProfielScreen(
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (profile?.profilePictureUri != null) {
-                    AsyncImage(
-                        model = profile.profilePictureUri,
-                        contentDescription = "Profile picture",
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .size(72.dp)
-                            .clip(CircleShape)
-                    )
-                } else {
+                Box(
+                    contentAlignment = Alignment.BottomEnd,
+                    modifier = Modifier.clickable {
+                        photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
+                ) {
+                    if (profile?.profilePictureUri != null) {
+                        AsyncImage(
+                            model = profile.profilePictureUri,
+                            contentDescription = "Profile picture",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .size(72.dp)
+                                .clip(CircleShape)
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .size(72.dp)
+                                .clip(CircleShape)
+                                .background(if (loggedIn) ShinkaiRed else MaterialTheme.colorScheme.surfaceVariant),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Person,
+                                null,
+                                tint = if (loggedIn) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(44.dp)
+                            )
+                        }
+                    }
                     Box(
                         modifier = Modifier
-                            .size(72.dp)
+                            .size(22.dp)
                             .clip(CircleShape)
-                            .background(if (loggedIn) ShinkaiRed else MaterialTheme.colorScheme.surfaceVariant),
+                            .background(MaterialTheme.colorScheme.surface),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            Icons.Default.Person,
+                            Icons.Default.Edit,
                             null,
-                            tint = if (loggedIn) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.size(44.dp)
+                            modifier = Modifier.size(12.dp),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }

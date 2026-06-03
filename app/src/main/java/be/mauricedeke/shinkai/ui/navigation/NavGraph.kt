@@ -158,6 +158,7 @@ fun ShinkaiNavGraph(
                 onTrainingHistoryClick = { navController.navigate(Screen.TrainingHistory.route) },
                 onNotificationsClick = { navController.navigate(Screen.Notifications.route) },
                 onLocationClick = { navController.navigate(Screen.Location.route) },
+                onProfilePictureSelected = profielViewModel::onProfilePictureSelected,
                 isDarkTheme = darkThemeEnabled,
                 onDarkThemeToggle = onDarkThemeToggle
             )
