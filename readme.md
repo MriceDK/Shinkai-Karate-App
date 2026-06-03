@@ -20,9 +20,22 @@ The app also contains extra features that improve the cinema experience for visi
 
 ## Monday, June 1st, 2026
 
+- Made the events and calendar work dynamically with the current date
+- Added functionality for opening events from the calendar (also works for past events)
+- Added swipe left/right on the calendar to switch between months
+
 ## Tuesday, June 2nd, 2026
 
+- Added `localDate` and `rsvp` fields to the Event model and updated FakeDataSource with future-dated events
+- Wired events and home screen to FakeDataSource, limited displayed events and added placeholders
+- Added manage events screen with per-event RSVP and upcoming-only restriction
+- Made repositories and use cases return nullable types to support API failure handling
+- Added `isError` states and error UI across all features for graceful API failure handling
+- Persisted notification and location settings in Room instead of in-memory storage
+- Wired manage events to the nav graph and scoped settings ViewModels to backstack entry for save-on-click behavior
+
 ## Wednesday, June 3rd, 2026
+- worked on other project
 
 ## Thursday, June 4th, 2026
 

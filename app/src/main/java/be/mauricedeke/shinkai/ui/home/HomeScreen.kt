@@ -122,7 +122,8 @@ fun HomeScreen(
                 "SHORTCUTS",
                 fontWeight = FontWeight.Bold,
                 textDecoration = TextDecoration.Underline,
-                fontSize = 16.sp
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.primaryContainer
             )
             Spacer(Modifier.weight(1f))
             Button(
@@ -180,7 +181,7 @@ private fun EventSection(title: String, content: @Composable () -> Unit) {
             textDecoration = TextDecoration.Underline,
             modifier = Modifier.align(Alignment.CenterHorizontally),
             fontSize = 15.sp,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.primaryContainer
         )
         Spacer(Modifier.height(8.dp))
         content()
