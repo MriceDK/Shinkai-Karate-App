@@ -30,6 +30,7 @@ class EventsViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     upcomingEvents = events?.filter { e -> isUpcoming(e.localDate) }?.take(4) ?: emptyList(),
+                    allUpcomingEvents = events?.filter { e -> isUpcoming(e.localDate) } ?: emptyList(),
                     inboxEvents = inboxEvents?.filter { e -> isUpcoming(e.localDate) } ?: emptyList(),
                     selectedDate = today,
                     isError = events == null || inboxEvents == null

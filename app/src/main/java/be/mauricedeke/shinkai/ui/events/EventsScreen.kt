@@ -76,7 +76,7 @@ fun EventsScreen(
 ) {
     val events = uiState.upcomingEvents
     val inboxEvents = uiState.inboxEvents
-    val dateToEvents: Map<LocalDate, List<Event>> = (events + inboxEvents)
+    val dateToEvents: Map<LocalDate, List<Event>> = (uiState.allUpcomingEvents + inboxEvents)
         .filter { it.localDate != null }
         .groupBy { it.localDate!! }
     val eventDates = dateToEvents.keys
