@@ -21,9 +21,12 @@ private const val KIAI_TYPE = "Kiai Strength"
 class TrainingRepositoryImpl @Inject constructor(
     private val strengthResultDao: StrengthResultDao
 ) : TrainingRepository {
-    override suspend fun getTrainings(): List<Training>? = FakeDataSource.trainings
-    override suspend fun getTrainingsByDate(date: LocalDate): List<Training>? =
-        FakeDataSource.trainings?.filter { it.date == date }
+    override suspend fun getTrainings(): List<Training> = FakeDataSource.trainings
+    override suspend fun getTrainingsByDate(date: LocalDate): List<Training> =
+        FakeDataSource.trainings.filter { it.date == date }
+    override suspend fun addTraining(training: Training) {
+        FakeDataSource.trainings.add(training)
+    }
 
     override fun observeStrengthResults(): Flow<List<StrengthResult>> =
         strengthResultDao.observeAll().map { entities ->

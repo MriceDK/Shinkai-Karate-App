@@ -87,16 +87,38 @@ object FakeDataSource {
     )
 
     val nextTraining = Training(
-        id = "1", type = "Technieken",
+        id = "t1", type = "Technieken",
         startTime = "20:00", endTime = "22:00",
-        date = LocalDate.of(2025, 3, 18),
-        injuries = "Geen", sensei = "Geen"
+        date = LocalDate.now().plusDays(2),
+        injuries = "Geen", sensei = "Sensei Ludo"
     )
 
-    val trainings = listOf(
-        Training("1", "Technieken", "20:00", "22:00", LocalDate.of(2025, 8, 14), "Geen", "Geen"),
-        Training("2", "Technieken", "20:00", "22:00", LocalDate.of(2025, 8, 14), "Geen", "Geen"),
-        Training("3", "Kata", "19:00", "21:00", LocalDate.of(2025, 8, 7), "Geen", "Sensei Ludo"),
+    val trainings: MutableList<Training> = mutableListOf(
+        // June 2026
+        Training("t1",  "Technieken",  "20:00", "22:00", LocalDate.now().plusDays(2),   "Geen",              "Sensei Ludo"),
+        Training("t22",  "Technieken",  "20:00", "22:00", LocalDate.now().plusDays(2),   "Geen",              "Sensei Ludo"),
+        Training("t2",  "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(2),  "Geen",              "Sensei Ludo",  note = "Goede sessie vandaag. Gyaku-zuki combinaties zijn verbeterd."),
+        Training("t3",  "Kata",        "20:00", "22:00", LocalDate.now().minusDays(4),  "Geen",              "Sensei Yuki"),
+        Training("t4",  "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(7),  "Geen",              "Sensei Ludo"),
+        Training("t5",  "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(9),  "Pols — licht",      "Sensei Yuki",  note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."),
+        Training("t21",  "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(9),  "Pols — licht",      "Sensei Yuki",  note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."),
+        // May 2026
+        Training("t6",  "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(12), "Geen",              "Sensei Ludo"),
+        Training("t7",  "Kata",        "20:00", "22:00", LocalDate.now().minusDays(14), "Geen",              "Sensei Yuki"),
+        Training("t8",  "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(16), "Schouder — licht",  "Sensei Ludo",  note = "Schouder blessure tijdens uke-waza. Volgende training voorzichtig zijn."),
+        Training("t9",  "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(19), "Geen",              "Sensei Ludo"),
+        Training("t10", "Kata",        "19:00", "21:00", LocalDate.now().minusDays(21), "Geen",              "Sensei Yuki"),
+        Training("t11", "Kumite",      "20:00", "22:00", LocalDate.now().minusDays(23), "Geen",              "Sensei Ludo"),
+        Training("t12", "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(26), "Geen",              "Sensei Yuki"),
+        Training("t13", "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(28), "Knie — licht",      "Sensei Ludo",  note = "Kniepijn bij laag gedeelte kata. Vraag naar aanpassingen."),
+        // April 2026
+        Training("t14", "Kata",        "19:00", "21:00", LocalDate.now().minusDays(33), "Geen",              "Sensei Yuki"),
+        Training("t15", "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(35), "Geen",              "Sensei Ludo"),
+        Training("t16", "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(38), "Geen",              "Sensei Yuki"),
+        Training("t17", "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(40), "Geen",              "Sensei Ludo"),
+        Training("t18", "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(42), "Rug — licht",       "Sensei Yuki",  note = "Rug pijn na conditietraining. Ibuprofen genomen."),
+        Training("t19", "Kata",        "19:00", "21:00", LocalDate.now().minusDays(47), "Geen",              "Sensei Ludo"),
+        Training("t20", "Kumite",      "20:00", "22:00", LocalDate.now().minusDays(49), "Geen",              "Sensei Yuki"),
     )
 
     val belts = listOf(

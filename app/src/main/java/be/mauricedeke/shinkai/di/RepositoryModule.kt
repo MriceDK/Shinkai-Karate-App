@@ -6,6 +6,7 @@ import be.mauricedeke.shinkai.data.repository.NoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.SettingsRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TechniekRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.ThemeRepositoryImpl
+import be.mauricedeke.shinkai.data.repository.TrainingNoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TrainingRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.UserRepositoryImpl
 import be.mauricedeke.shinkai.domain.repository.EventRepository
@@ -14,6 +15,7 @@ import be.mauricedeke.shinkai.domain.repository.NoteRepository
 import be.mauricedeke.shinkai.domain.repository.SettingsRepository
 import be.mauricedeke.shinkai.domain.repository.TechniekRepository
 import be.mauricedeke.shinkai.domain.repository.ThemeRepository
+import be.mauricedeke.shinkai.domain.repository.TrainingNoteRepository
 import be.mauricedeke.shinkai.domain.repository.TrainingRepository
 import be.mauricedeke.shinkai.domain.repository.UserRepository
 import dagger.Binds
@@ -48,4 +50,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindNoteRepository(impl: NoteRepositoryImpl): NoteRepository
+
+    @Binds
+    abstract fun bindTrainingNoteRepository(impl: TrainingNoteRepositoryImpl): TrainingNoteRepository
 }

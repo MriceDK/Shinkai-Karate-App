@@ -1,6 +1,8 @@
 package be.mauricedeke.shinkai.ui.profiel.history
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,18 +11,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.MedicalServices
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,8 +53,21 @@ fun TrainingHistoryScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onDateSelected: (LocalDate) -> Unit = {},
+    onTrainingSelected: (String) -> Unit = {},
+    onNotesChanged: (String) -> Unit = {},
+    onLogClick: () -> Unit = {},
+    onLogSave: (type: String, startTime: String, endTime: String, sensei: String, injuries: String) -> Unit = { _, _, _, _, _ -> },
+    onLogDismiss: () -> Unit = {},
 ) {
     val displayTrainings = uiState.selectedTrainings
+
+    if (uiState.showLogSheet) {
+        LogTrainingSheet(
+            date = uiState.selectedDate,
+            onSave = onLogSave,
+            onDismiss = onLogDismiss
+        )
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -57,9 +88,10 @@ fun TrainingHistoryScreen(
             Spacer(Modifier.height(12.dp))
             ShinkaiCalendar(
                 modifier = Modifier.padding(horizontal = 4.dp),
-                initialMonth = LocalDate.of(2025, 8, 1),
+                initialMonth = uiState.selectedDate.withDayOfMonth(1),
                 selectedDate = uiState.selectedDate,
-                today = LocalDate.of(2025, 8, 5),
+                today = LocalDate.now(),
+                eventDates = uiState.trainingDates,
                 onDateSelected = onDateSelected
             )
             Spacer(Modifier.height(16.dp))
@@ -76,20 +108,20 @@ fun TrainingHistoryScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        "Maandag ${uiState.selectedDate?.toString() ?: "14/08/2025"}",
+                        uiState.selectedDate.format(java.time.format.DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", java.util.Locale("nl"))),
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
                 Spacer(Modifier.weight(1f))
                 Button(
-                    onClick = {},
+                    onClick = onLogClick,
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     shape = RoundedCornerShape(4.dp),
                     modifier = Modifier.height(32.dp),
                     contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)
                 ) {
-                    Text("Edit", fontSize = 13.sp)
+                    Text("+ Log", fontSize = 13.sp)
                 }
             }
             Spacer(Modifier.height(12.dp))
@@ -108,35 +140,55 @@ fun TrainingHistoryScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth()) {
-                displayTrainings.take(2).forEach { training ->
-                    Column(modifier = Modifier
-                        .weight(1f)
-                        .padding(4.dp)) {
-                        listOf(
-                            "TYPE :" to training.type,
-                            "DUUR :" to "${training.startTime} - ${training.endTime}",
-                            "BLESSURES :" to training.injuries,
-                            "SENSEI :" to training.sensei
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                items(displayTrainings) { training ->
+                    TrainingCard(
+                        training = training,
+                        isSelected = uiState.selectedTrainingId == training.id,
+                        onClick = { onTrainingSelected(training.id) },
+                        modifier = Modifier.padding(end = 12.dp)
+                    )
+                }
+            }
+            Spacer(Modifier.height(16.dp))
+            val selectedTraining = displayTrainings.firstOrNull { it.id == uiState.selectedTrainingId }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(
+                        width = if (selectedTraining != null) 2.dp else 1.dp,
+                        color = if (selectedTraining != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .padding(2.dp)
+            ) {
+                Column {
+                    Text(
+                        if (selectedTraining != null) "Notes — ${selectedTraining.type}" else "Notes",
+                        fontSize = 12.sp,
+                        color = if (selectedTraining != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontWeight = if (selectedTraining != null) FontWeight.Medium else FontWeight.Normal,
+                        modifier = Modifier.padding(start = 12.dp, top = 8.dp)
+                    )
+                    OutlinedTextField(
+                        value = uiState.notes,
+                        onValueChange = onNotesChanged,
+                        enabled = selectedTraining != null,
+                        placeholder = if (selectedTraining != null) null else {
+                            { Text("Tik op een training om notes te bewerken", fontSize = 12.sp) }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp),
+                        minLines = 4,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Color.Transparent,
+                            unfocusedBorderColor = Color.Transparent,
+                            disabledBorderColor = Color.Transparent,
+                            disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                         )
-                            .forEach { (label, value) ->
-                                Row(modifier = Modifier.padding(vertical = 3.dp)) {
-                                    Text(
-                                        label,
-                                        fontWeight = FontWeight.Bold,
-                                        textDecoration = TextDecoration.Underline,
-                                        fontSize = 12.sp,
-                                        modifier = Modifier.padding(end = 4.dp),
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        value,
-                                        fontSize = 12.sp,
-                                        color = MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
-                            }
-                    }
+                    )
                 }
             }
             Spacer(Modifier.height(16.dp))
@@ -146,6 +198,75 @@ fun TrainingHistoryScreen(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(start = 16.dp, top = 8.dp)
+        )
+    }
+}
+
+@Composable
+private fun TrainingCard(
+    training: be.mauricedeke.shinkai.domain.model.Training,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .width(172.dp)
+            .clickable(onClick = onClick)
+            .then(
+                if (isSelected) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                else Modifier
+            ),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (isSelected) 6.dp else 3.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        if (isSelected) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.primary.copy(alpha = 0.75f)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 10.dp)
+            ) {
+                Text(
+                    training.type,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
+                TrainingCardRow(Icons.Default.AccessTime, "${training.startTime} – ${training.endTime}")
+                Spacer(Modifier.height(6.dp))
+                TrainingCardRow(Icons.Default.Person, training.sensei)
+                Spacer(Modifier.height(6.dp))
+                TrainingCardRow(Icons.Default.MedicalServices, training.injuries)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TrainingCardRow(icon: ImageVector, value: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            icon,
+            contentDescription = null,
+            modifier = Modifier.size(14.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(Modifier.width(6.dp))
+        Text(
+            value,
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }

@@ -9,5 +9,6 @@ data class Training(
     val endTime: String = "",
     val date: LocalDate = LocalDate.now(),
     val injuries: String = "Geen",
-    val sensei: String = "Geen"
+    val sensei: String = "Geen",
+    val note: String = ""
 )

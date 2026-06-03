@@ -187,6 +187,11 @@ fun ShinkaiNavGraph(
             TrainingHistoryScreen(
                 uiState = trainingHistoryUiState,
                 onDateSelected = trainingHistoryViewModel::onDateSelected,
+                onTrainingSelected = trainingHistoryViewModel::onTrainingSelected,
+                onNotesChanged = trainingHistoryViewModel::onNotesChanged,
+                onLogClick = trainingHistoryViewModel::showLogSheet,
+                onLogSave = trainingHistoryViewModel::logTraining,
+                onLogDismiss = trainingHistoryViewModel::dismissLogSheet,
                 onBackClick = { navController.popBackStack() }
             )
         }
