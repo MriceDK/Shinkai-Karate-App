@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.media.audiofx.AcousticEchoCanceler
+import android.media.audiofx.AutomaticGainControl
+import android.media.audiofx.NoiseSuppressor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.beltColorFromDb
@@ -19,9 +22,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.math.abs
 import kotlin.math.log10
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
 
 @HiltViewModel
 class KiaiTestViewModel @Inject constructor(
@@ -46,13 +49,17 @@ class KiaiTestViewModel @Inject constructor(
 
         val recorder = try {
             AudioRecord(
-                MediaRecorder.AudioSource.MIC,
+                MediaRecorder.AudioSource.UNPROCESSED,
                 sampleRate,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize
             )
         } catch (e: SecurityException) { return }
+
+        if (NoiseSuppressor.isAvailable()) NoiseSuppressor.create(recorder.audioSessionId)?.enabled = false
+        if (AutomaticGainControl.isAvailable()) AutomaticGainControl.create(recorder.audioSessionId)?.enabled = false
+        if (AcousticEchoCanceler.isAvailable()) AcousticEchoCanceler.create(recorder.audioSessionId)?.enabled = false
 
         if (recorder.state != AudioRecord.STATE_INITIALIZED) {
             recorder.release()
@@ -67,7 +74,7 @@ class KiaiTestViewModel @Inject constructor(
             val buffer = ShortArray(bufferSize)
             val durationMs = 3000L
             val startTime = System.currentTimeMillis()
-            var sessionPeak = 0
+            var sessionPeakRms = 0
 
             while (isActive) {
                 val elapsed = System.currentTimeMillis() - startTime
@@ -75,10 +82,15 @@ class KiaiTestViewModel @Inject constructor(
 
                 val read = recorder.read(buffer, 0, bufferSize)
                 if (read > 0) {
-                    val peakSample = (0 until read).maxOf { abs(buffer[it].toInt()) }
-                    val db = amplitudeToDb(peakSample)
-                    if (peakSample > sessionPeak) sessionPeak = peakSample
-                    val peakDb = amplitudeToDb(sessionPeak)
+                    val rms = sqrt(buffer.take(read)
+                        .map { it.toDouble() * it.toDouble() }
+                        .average()
+                    ).toInt()
+
+                    val db = amplitudeToDb(rms).roundToInt()
+                    if (rms > sessionPeakRms) sessionPeakRms = rms
+                    val peakDb = amplitudeToDb(sessionPeakRms).roundToInt()
+
                     withContext(Dispatchers.Main) {
                         _uiState.update { it.copy(currentDb = db, peakDb = peakDb, progress = progress) }
                     }
@@ -91,9 +103,10 @@ class KiaiTestViewModel @Inject constructor(
             recorder.release()
             audioRecord = null
 
-            val finalPeakDb = amplitudeToDb(sessionPeak)
+            val finalPeakDb = amplitudeToDb(sessionPeakRms).roundToInt()
             val newBestDb = maxOf(_uiState.value.bestDb, finalPeakDb)
             val resultBelt = beltColorFromDb(finalPeakDb)
+
             withContext(Dispatchers.Main) {
                 _uiState.update {
                     it.copy(
@@ -125,8 +138,8 @@ class KiaiTestViewModel @Inject constructor(
         audioRecord?.release()
     }
 
-    private fun amplitudeToDb(amplitude: Int): Int {
-        if (amplitude <= 0) return 0
-        return (94.0 + 20.0 * log10(amplitude / 32767.0)).roundToInt().coerceIn(0, 120)
+    private fun amplitudeToDb(rms: Int): Double {
+        if (rms < 1) return 0.0
+        return (120.0 + 20.0 * log10(rms / 32767.0)).coerceIn(0.0, 130.0)
     }
 }
