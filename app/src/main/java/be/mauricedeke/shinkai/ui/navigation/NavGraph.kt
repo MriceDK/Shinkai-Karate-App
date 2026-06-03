@@ -32,6 +32,10 @@ import be.mauricedeke.shinkai.ui.profiel.location.LocationScreen
 import be.mauricedeke.shinkai.ui.profiel.location.LocationViewModel
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsScreen
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsViewModel
+import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
+import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestViewModel
+import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestScreen
+import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestViewModel
 import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
@@ -189,6 +193,34 @@ fun ShinkaiNavGraph(
         composable(Screen.StrengthTest.route) {
             StrengthTestScreen(
                 uiState = strengthTestUiState,
+                onStartTest = { type ->
+                    when {
+                        type.contains("Punch", ignoreCase = true) -> navController.navigate(Screen.PunchTest.route)
+                        type.contains("Kiai", ignoreCase = true) -> navController.navigate(Screen.KiaiTest.route)
+                    }
+                },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.PunchTest.route) {
+            val vm: PunchTestViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
+            PunchTestScreen(
+                uiState = uiState,
+                onStart = vm::onStart,
+                onReset = vm::onReset,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.KiaiTest.route) {
+            val vm: KiaiTestViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
+            KiaiTestScreen(
+                uiState = uiState,
+                onStart = vm::onStart,
+                onReset = vm::onReset,
                 onBackClick = { navController.popBackStack() }
             )
         }

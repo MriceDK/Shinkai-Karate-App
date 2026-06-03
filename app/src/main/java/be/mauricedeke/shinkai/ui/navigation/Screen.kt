@@ -30,6 +30,8 @@ sealed class Screen(
     data object Account : Screen("account")
     data object TrainingHistory : Screen("training_history")
     data object StrengthTest : Screen("strength_test")
+    data object PunchTest : Screen("punch_test")
+    data object KiaiTest : Screen("kiai_test")
     data object Notifications : Screen("notifications")
     data object Location : Screen("location")
     data object Kaart : Screen("kaart")
