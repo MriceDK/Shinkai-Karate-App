@@ -10,7 +10,6 @@ import be.mauricedeke.shinkai.data.local.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
 import be.mauricedeke.shinkai.data.local.ShortcutsDao
 import be.mauricedeke.shinkai.data.local.StrengthResultDao
-import be.mauricedeke.shinkai.data.local.ThemePreferenceDao
 import be.mauricedeke.shinkai.data.local.UserProfileDao
 import dagger.Module
 import dagger.Provides
@@ -125,6 +124,12 @@ private val MIGRATION_10_11 = object : Migration(10, 11) {
     }
 }
 
+private val MIGRATION_11_12 = object : Migration(11, 12) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS `theme_preferences`")
+    }
+}
+
 private val MIGRATION_5_6 = object : Migration(5, 6) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL(
@@ -147,14 +152,11 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): ShinkaiDatabase =
         Room.databaseBuilder(context, ShinkaiDatabase::class.java, "shinkai_db")
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12)
             .build()
 
     @Provides
     fun provideNoteDao(db: ShinkaiDatabase): NoteDao = db.noteDao()
-
-    @Provides
-    fun provideThemePreferenceDao(db: ShinkaiDatabase): ThemePreferenceDao = db.themePreferenceDao()
 
     @Provides
     fun provideNotificationSettingsDao(db: ShinkaiDatabase): NotificationSettingsDao = db.notificationSettingsDao()
