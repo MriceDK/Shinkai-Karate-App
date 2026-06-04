@@ -13,5 +13,7 @@ data class Event(
     val description: String = "",
     val isInbox: Boolean = false,
     val localDate: LocalDate? = null,
-    val rsvp: Boolean? = null
+    val rsvp: Boolean? = null,
+    val lat: Double? = null,
+    val lng: Double? = null
 )

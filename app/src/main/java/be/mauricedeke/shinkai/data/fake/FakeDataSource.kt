@@ -2,6 +2,10 @@ package be.mauricedeke.shinkai.data.fake
 
 import be.mauricedeke.shinkai.domain.model.Belt
 import be.mauricedeke.shinkai.domain.model.BeltColor
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.LineString
+import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import be.mauricedeke.shinkai.domain.model.BeltProgram
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
@@ -29,7 +33,8 @@ object FakeDataSource {
             "Kapellestraat 79", "Evergem",
             "Naigairyu Bujutsu Kai — School for traditional Japanese martial arts.",
             localDate = LocalDate.now().plusDays(7),
-            rsvp = true
+            rsvp = true,
+            lat = 51.1019, lng = 3.7177
         ),
         Event(
             "2", "Kata Training", "19:00", "21:00",
@@ -37,7 +42,8 @@ object FakeDataSource {
             "Sporthal De Kuip", "Gent",
             "Gezamenlijke kata training voor alle graden.",
             localDate = LocalDate.now().plusDays(14),
-            rsvp = null
+            rsvp = null,
+            lat = 51.0427, lng = 3.7228
         ),
         Event(
             "4", "Kumite Stage", "09:00", "17:00",
@@ -45,7 +51,8 @@ object FakeDataSource {
             "Martial Arts Center", "Brugge",
             "Intensieve kumite stage voor gevorderde leerlingen.",
             localDate = LocalDate.now().plusDays(21),
-            rsvp = null
+            rsvp = null,
+            lat = 51.2093, lng = 3.2247
         ),
         Event(
             "5", "Grading Examen", "10:00", "14:00",
@@ -53,7 +60,8 @@ object FakeDataSource {
             "Hoofddojo", "Antwerpen",
             "Officieel grading examen voor de volgende bandkleur.",
             localDate = LocalDate.now().plusDays(30),
-            rsvp = null
+            rsvp = null,
+            lat = 51.2194, lng = 4.4025
         ),
         Event(
             "6", "Grading Examen 2", "10:00", "14:00",
@@ -61,7 +69,8 @@ object FakeDataSource {
             "Hoofddojo", "Antwerpen",
             "Officieel grading examen voor de volgende bandkleur.",
             localDate = LocalDate.now().plusDays(30),
-            rsvp = null
+            rsvp = null,
+            lat = 51.2194, lng = 4.4025
         ),
         Event(
             "7", "Voorbij examen", "10:00", "14:00",
@@ -69,7 +78,8 @@ object FakeDataSource {
             "Hoofddojo", "Antwerpen",
             "Officieel voorbij examen voor de volgende bandkleur.",
             localDate = LocalDate.now().minusDays(30),
-            rsvp = null
+            rsvp = null,
+            lat = 51.2194, lng = 4.4025
         ),
     )
 
@@ -333,6 +343,55 @@ object FakeDataSource {
     val strengthResults = listOf(
         StrengthResult("Punching Strength", 659),
         StrengthResult("Kiai Strength", 0),
+    )
+
+    // GeoJSON: polygons roughly covering each event city
+    val dojoZones: List<Feature> = listOf(
+        Feature.fromGeometry(
+            Polygon.fromLngLats(listOf(listOf(
+                Point.fromLngLat(3.7077, 51.0919), Point.fromLngLat(3.7277, 51.0919),
+                Point.fromLngLat(3.7277, 51.1119), Point.fromLngLat(3.7077, 51.1119),
+                Point.fromLngLat(3.7077, 51.0919)
+            )))
+        ),
+        Feature.fromGeometry(
+            Polygon.fromLngLats(listOf(listOf(
+                Point.fromLngLat(3.7128, 51.0327), Point.fromLngLat(3.7328, 51.0327),
+                Point.fromLngLat(3.7328, 51.0527), Point.fromLngLat(3.7128, 51.0527),
+                Point.fromLngLat(3.7128, 51.0327)
+            )))
+        ),
+        Feature.fromGeometry(
+            Polygon.fromLngLats(listOf(listOf(
+                Point.fromLngLat(3.2147, 51.1993), Point.fromLngLat(3.2347, 51.1993),
+                Point.fromLngLat(3.2347, 51.2193), Point.fromLngLat(3.2147, 51.2193),
+                Point.fromLngLat(3.2147, 51.1993)
+            )))
+        ),
+        Feature.fromGeometry(
+            Polygon.fromLngLats(listOf(listOf(
+                Point.fromLngLat(4.3925, 51.2094), Point.fromLngLat(4.4125, 51.2094),
+                Point.fromLngLat(4.4125, 51.2294), Point.fromLngLat(4.3925, 51.2294),
+                Point.fromLngLat(4.3925, 51.2094)
+            )))
+        ),
+        Feature.fromGeometry(
+            Polygon.fromLngLats(listOf(listOf(
+                Point.fromLngLat(3.3324235, 51.1675755),
+                Point.fromLngLat(3.3327296, 51.1675733),
+                Point.fromLngLat(3.3327332, 51.1677083),
+                Point.fromLngLat(3.3331852, 51.1676971),
+                Point.fromLngLat(3.3331763, 51.1675621),
+                Point.fromLngLat(3.3331176, 51.1675554),
+                Point.fromLngLat(3.3331034, 51.1672987),
+                Point.fromLngLat(3.3330304, 51.1672999),
+                Point.fromLngLat(3.3330339, 51.1671425),
+                Point.fromLngLat(3.3322082, 51.1671503),
+                Point.fromLngLat(3.3322171, 51.1672485),
+                Point.fromLngLat(3.3324182, 51.1672363),
+                Point.fromLngLat(3.3324235, 51.1675755)
+            )))
+        )
     )
 
     // Lege lijsten voor testing van schermen zonder data
