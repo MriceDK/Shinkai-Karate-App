@@ -1,9 +1,14 @@
 package be.mauricedeke.shinkai.ui.navigation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -12,6 +17,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import be.mauricedeke.shinkai.MainViewModel
+import be.mauricedeke.shinkai.ui.permissions.AppPermission
 import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailScreen
@@ -51,6 +58,7 @@ fun ShinkaiNavGraph(
     modifier: Modifier = Modifier,
     darkThemeEnabled: Boolean,
     onDarkThemeToggle: (Boolean) -> Unit,
+    mainViewModel: MainViewModel = hiltViewModel(),
     homeViewModel: HomeViewModel = hiltViewModel(),
     techniekViewModel: TechniekViewModel = hiltViewModel(),
     techniekDetailViewModel: TechniekDetailViewModel = hiltViewModel(),
@@ -64,6 +72,9 @@ fun ShinkaiNavGraph(
     trainingHistoryViewModel: TrainingHistoryViewModel = hiltViewModel(),
     accountViewModel: AccountViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val permissionRequest by mainViewModel.permissionRequest.collectAsStateWithLifecycle()
+
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val techniekUiState by techniekViewModel.uiState.collectAsStateWithLifecycle()
     val techniekDetailUiState by techniekDetailViewModel.uiState.collectAsStateWithLifecycle()
@@ -241,8 +252,13 @@ fun ShinkaiNavGraph(
         composable(Screen.KiaiTest.route) {
             val vm: KiaiTestViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsStateWithLifecycle()
+            val micGranted = remember(permissionRequest) {
+                ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+            }
             KiaiTestScreen(
                 uiState = uiState,
+                micPermissionGranted = micGranted,
+                onRequestMicPermission = { mainViewModel.requestPermission(AppPermission.RecordAudio) },
                 onStart = vm::onStart,
                 onReset = vm::onReset,
                 onBackClick = { navController.popBackStack() }
@@ -271,7 +287,17 @@ fun ShinkaiNavGraph(
         }
 
         composable(Screen.Kaart.route) {
-            KaartScreen(uiState = kaartUiState)
+            val locationGranted = remember(permissionRequest) {
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            }
+            KaartScreen(
+                uiState = kaartUiState,
+                locationPermissionGranted = locationGranted,
+                onRequestLocationPermission = { mainViewModel.requestPermission(AppPermission.Location) },
+                onLocationStart = kaartViewModel::onLocationStart,
+                onLocationStop = kaartViewModel::onLocationStop
+            )
         }
     }
 }

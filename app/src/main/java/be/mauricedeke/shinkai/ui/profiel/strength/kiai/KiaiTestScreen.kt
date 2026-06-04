@@ -1,9 +1,5 @@
 package be.mauricedeke.shinkai.ui.profiel.strength.kiai
 
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -34,13 +30,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
@@ -51,22 +45,19 @@ import be.mauricedeke.shinkai.ui.theme.toColor
 @Composable
 fun KiaiTestScreen(
     uiState: KiaiTestUiState,
+    micPermissionGranted: Boolean = false,
+    onRequestMicPermission: () -> Unit = {},
     onStart: () -> Unit = {},
     onReset: () -> Unit = {},
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val isDark = isSystemInDarkTheme()
-    val context = LocalContext.current
     val progressAnim by animateFloatAsState(
         targetValue = uiState.progress,
         animationSpec = tween(50),
         label = "progress"
     )
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted -> if (granted) onStart() }
 
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         Card(
@@ -192,11 +183,7 @@ fun KiaiTestScreen(
                 when (uiState.phase) {
                     MeasurementPhase.IDLE -> Button(
                         onClick = {
-                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-                                onStart()
-                            } else {
-                                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                            }
+                            if (micPermissionGranted) onStart() else onRequestMicPermission()
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(50),
@@ -211,11 +198,7 @@ fun KiaiTestScreen(
 
                     MeasurementPhase.DONE -> Button(
                         onClick = {
-                            if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-                                onStart()
-                            } else {
-                                permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
-                            }
+                            if (micPermissionGranted) onStart() else onRequestMicPermission()
                         },
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         shape = RoundedCornerShape(50),

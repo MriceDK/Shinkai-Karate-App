@@ -1,6 +1,9 @@
 package be.mauricedeke.shinkai
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
@@ -15,9 +18,11 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -26,6 +31,8 @@ import androidx.navigation.compose.rememberNavController
 import be.mauricedeke.shinkai.ui.navigation.Screen
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiBottomBar
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiNavGraph
+import be.mauricedeke.shinkai.ui.permissions.AppPermission
+import be.mauricedeke.shinkai.ui.permissions.PermissionManager
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.ThemeViewModel
 
@@ -38,11 +45,28 @@ fun ShinkaiApp() {
 
     val mainViewModel: MainViewModel = hiltViewModel()
     val snackbarHostState = remember { SnackbarHostState() }
+    val permissionRequest by mainViewModel.permissionRequest.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
     LaunchedEffect(Unit) {
         mainViewModel.inAppNotification.collect { notification ->
             snackbarHostState.showSnackbar("${notification.title}: ${notification.body}")
         }
     }
+
+    LaunchedEffect(Unit) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+        ) {
+            mainViewModel.requestPermission(AppPermission.Notifications)
+        }
+    }
+
+    PermissionManager(
+        permissionRequest = permissionRequest,
+        onPermissionResult = mainViewModel::onPermissionResult
+    )
 
     ShinkaiAppContent(
         darkThemeEnabled = darkThemeEnabled,

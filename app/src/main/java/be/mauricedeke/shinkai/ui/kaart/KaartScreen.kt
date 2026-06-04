@@ -1,24 +1,15 @@
 package be.mauricedeke.shinkai.ui.kaart
 
-import android.Manifest
-import android.content.pm.PackageManager
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
 import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.data.fake.FakeDataSource
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -40,46 +31,31 @@ import com.mapbox.maps.plugin.locationcomponent.location
 @Composable
 fun KaartScreen(
     uiState: KaartUiState,
+    locationPermissionGranted: Boolean = false,
+    onRequestLocationPermission: () -> Unit = {},
+    onLocationStart: () -> Unit = {},
+    onLocationStop: () -> Unit = {},
     onNavigateToEvent: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val isPreview = LocalInspectionMode.current
-    val context = LocalContext.current
     val mapViewportState = rememberMapViewportState()
-    var locationGranted by remember { mutableStateOf(false) }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        locationGranted = permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true ||
-                permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true
-    }
 
     LaunchedEffect(Unit) {
-        if (isPreview) return@LaunchedEffect
-        val fineGranted = ContextCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_FINE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        val coarseGranted = ContextCompat.checkSelfPermission(
-            context, Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-
-        if (fineGranted || coarseGranted) {
-            locationGranted = true
-        } else {
-            permissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
+        if (!isPreview && !locationPermissionGranted) {
+            onRequestLocationPermission()
         }
     }
 
-    LaunchedEffect(locationGranted) {
-        if (locationGranted) {
+    LaunchedEffect(locationPermissionGranted) {
+        if (locationPermissionGranted) {
+            onLocationStart()
             mapViewportState.transitionToFollowPuckState()
         }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { onLocationStop() }
     }
 
     val markerIcon = rememberIconImage(
@@ -100,12 +76,14 @@ fun KaartScreen(
             fillOpacity = DoubleValue(0.3)
         }
 
-        MapEffect(Unit) { mapView ->
-            mapView.location.updateSettings {
-                enabled = true
-                locationPuck = createDefault2DPuck(withBearing = true)
-                puckBearing = PuckBearing.COURSE
-                pulsingEnabled = true
+        MapEffect(locationPermissionGranted) { mapView ->
+            if (locationPermissionGranted) {
+                mapView.location.updateSettings {
+                    enabled = true
+                    locationPuck = createDefault2DPuck(withBearing = true)
+                    puckBearing = PuckBearing.COURSE
+                    pulsingEnabled = true
+                }
             }
         }
 
