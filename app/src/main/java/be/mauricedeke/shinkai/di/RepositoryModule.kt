@@ -1,7 +1,10 @@
 package be.mauricedeke.shinkai.di
 
+import be.mauricedeke.shinkai.data.repository.AccelerometerRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.EventRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.LexiconRepositoryImpl
+import be.mauricedeke.shinkai.data.repository.LocationRepositoryImpl
+import be.mauricedeke.shinkai.data.repository.MicrophoneRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.NoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.SettingsRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TechniekRepositoryImpl
@@ -9,8 +12,11 @@ import be.mauricedeke.shinkai.data.repository.ThemeRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TrainingNoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TrainingRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.UserRepositoryImpl
+import be.mauricedeke.shinkai.domain.repository.AccelerometerRepository
 import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LexiconRepository
+import be.mauricedeke.shinkai.domain.repository.LocationRepository
+import be.mauricedeke.shinkai.domain.repository.MicrophoneRepository
 import be.mauricedeke.shinkai.domain.repository.NoteRepository
 import be.mauricedeke.shinkai.domain.repository.SettingsRepository
 import be.mauricedeke.shinkai.domain.repository.TechniekRepository
@@ -53,4 +59,13 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindTrainingNoteRepository(impl: TrainingNoteRepositoryImpl): TrainingNoteRepository
+
+    @Binds
+    abstract fun bindLocationRepository(impl: LocationRepositoryImpl): LocationRepository
+
+    @Binds
+    abstract fun bindAccelerometerRepository(impl: AccelerometerRepositoryImpl): AccelerometerRepository
+
+    @Binds
+    abstract fun bindMicrophoneRepository(impl: MicrophoneRepositoryImpl): MicrophoneRepository
 }
