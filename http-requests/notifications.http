@@ -1,71 +1,105 @@
-### Reminder — works while app is closed
+### Create exchange — run once before publishing
+PUT https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "type": "direct",
+  "durable": true
+}
+
+### Event reminder — works while app is closed
 POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
 Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
   "properties": {},
-  "routing_key": "{{userId}}",
-  "payload": "reminder|Training Reminder|Your training starts in 30 minutes",
+  "routing_key": "user-{{userId}}",
+  "payload": "event-reminder|Event Reminder|Stage Naigairyu starts in 30 minutes",
   "payload_encoding": "string"
 }
 
-### Event notification — only while app is open
+### Training reminder — works while app is closed
 POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
 Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
   "properties": {},
-  "routing_key": "{{userId}}",
+  "routing_key": "user-{{userId}}",
+  "payload": "training-reminder|Training Reminder|Your training starts in 30 minutes",
+  "payload_encoding": "string"
+}
+
+### Exam reminder — works while app is closed
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "user-{{userId}}",
+  "payload": "exam-reminder|Exam Reminder|Your belt exam starts tomorrow",
+  "payload_encoding": "string"
+}
+
+### Event notification — works while app is closed
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "user-{{userId}}",
   "payload": "event|New Event|Stage Naigairyu has been added to the calendar",
   "payload_encoding": "string"
 }
 
-### Training notification — only while app is open
+### Training notification — works while app is closed
 POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
 Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
   "properties": {},
-  "routing_key": "{{userId}}",
+  "routing_key": "user-{{userId}}",
   "payload": "training|Training Update|Tonight's training has been moved to 20:30",
   "payload_encoding": "string"
 }
 
-### Change notification — only while app is open
+### Exam notification — works while app is closed
 POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
 Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
   "properties": {},
-  "routing_key": "{{userId}}",
-  "payload": "change|Technique Updated|Gekruist vastnemen 1 hand has been updated",
-  "payload_encoding": "string"
-}
-
-### Exam notification — only while app is open
-POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
-Authorization: Basic {{auth}}
-Content-Type: application/json
-
-{
-  "properties": {},
-  "routing_key": "{{userId}}",
+  "routing_key": "user-{{userId}}",
   "payload": "exam|Exam Scheduled|Your belt exam has been scheduled for next Saturday",
   "payload_encoding": "string"
 }
 
-### Update notification — only while app is open
+### Change notification — in-app only
 POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
 Authorization: Basic {{auth}}
 Content-Type: application/json
 
 {
   "properties": {},
-  "routing_key": "{{userId}}",
+  "routing_key": "user-{{userId}}",
+  "payload": "change|Technique Updated|Gekruist vastnemen 1 hand has been updated",
+  "payload_encoding": "string"
+}
+
+### Update notification — in-app only
+POST https://{{host}}/api/exchanges/{{vhost}}/{{exchange}}/publish
+Authorization: Basic {{auth}}
+Content-Type: application/json
+
+{
+  "properties": {},
+  "routing_key": "user-{{userId}}",
   "payload": "update|App Update|New techniques have been added to your belt program",
   "payload_encoding": "string"
 }

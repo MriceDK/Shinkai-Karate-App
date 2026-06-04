@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -62,18 +59,17 @@ private val examReminderOptions = listOf(
 fun NotificationsScreen(
     uiState: NotificationsUiState,
     onSettingsChanged: (NotificationSettings) -> Unit = {},
-    onSave: () -> Unit = {},
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val s = uiState.settings
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize().padding(top = 64.dp)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 64.dp)
+                .verticalScroll(rememberScrollState())
+        ) {
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
                 Text(
                     "Manage Notifications",
@@ -87,23 +83,37 @@ fun NotificationsScreen(
                     onSettingsChanged(s.copy(eventNotifications = it))
                 }
                 AnimatedVisibility(visible = s.eventNotifications) {
-                    ReminderPickerRow(
-                        label = "Event Reminder",
-                        subtitle = "Notify before an event starts",
-                        selectedMinutes = s.reminderMinutesBefore,
-                        onSelected = { onSettingsChanged(s.copy(reminderMinutesBefore = it)) }
-                    )
+                    Column {
+                        NotifRow("Event Reminders", s.eventReminderEnabled, "Notify before an event starts") {
+                            onSettingsChanged(s.copy(eventReminderEnabled = it))
+                        }
+                        AnimatedVisibility(visible = s.eventReminderEnabled) {
+                            ReminderPickerRow(
+                                label = "Event Reminder Timing",
+                                subtitle = "How long before the event",
+                                selectedMinutes = s.reminderMinutesBefore,
+                                onSelected = { onSettingsChanged(s.copy(reminderMinutesBefore = it)) }
+                            )
+                        }
+                    }
                 }
                 NotifRow("Training Notifications", s.trainingNotifications) {
                     onSettingsChanged(s.copy(trainingNotifications = it))
                 }
                 AnimatedVisibility(visible = s.trainingNotifications) {
-                    ReminderPickerRow(
-                        label = "Training Reminder",
-                        subtitle = "Notify before a training starts",
-                        selectedMinutes = s.trainingReminderMinutesBefore,
-                        onSelected = { onSettingsChanged(s.copy(trainingReminderMinutesBefore = it)) }
-                    )
+                    Column {
+                        NotifRow("Training Reminders", s.trainingReminderEnabled, "Notify before a training starts") {
+                            onSettingsChanged(s.copy(trainingReminderEnabled = it))
+                        }
+                        AnimatedVisibility(visible = s.trainingReminderEnabled) {
+                            ReminderPickerRow(
+                                label = "Training Reminder Timing",
+                                subtitle = "How long before the training",
+                                selectedMinutes = s.trainingReminderMinutesBefore,
+                                onSelected = { onSettingsChanged(s.copy(trainingReminderMinutesBefore = it)) }
+                            )
+                        }
+                    }
                 }
                 NotifRow(
                     "Change Notifications",
@@ -114,29 +124,24 @@ fun NotificationsScreen(
                     onSettingsChanged(s.copy(examNotifications = it))
                 }
                 AnimatedVisibility(visible = s.examNotifications) {
-                    ReminderPickerRow(
-                        label = "Exam Reminder",
-                        subtitle = "Notify before an exam starts",
-                        selectedMinutes = s.examReminderMinutesBefore,
-                        onSelected = { onSettingsChanged(s.copy(examReminderMinutesBefore = it)) },
-                        options = examReminderOptions
-                    )
+                    Column {
+                        NotifRow("Exam Reminders", s.examReminderEnabled, "Notify before an exam starts") {
+                            onSettingsChanged(s.copy(examReminderEnabled = it))
+                        }
+                        AnimatedVisibility(visible = s.examReminderEnabled) {
+                            ReminderPickerRow(
+                                label = "Exam Reminder Timing",
+                                subtitle = "How long before the exam",
+                                selectedMinutes = s.examReminderMinutesBefore,
+                                onSelected = { onSettingsChanged(s.copy(examReminderMinutesBefore = it)) },
+                                options = examReminderOptions
+                            )
+                        }
+                    }
                 }
                 NotifRow("Update Notifications", s.updateNotifications) {
                     onSettingsChanged(s.copy(updateNotifications = it))
                 }
-            }
-            Button(
-                onClick = onSave,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(50),
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(vertical = 24.dp)
-                    .width(160.dp)
-            ) {
-                Text("Save", fontSize = 16.sp)
-            }
         }
         RoundBackButton(
             onClick = onBackClick,

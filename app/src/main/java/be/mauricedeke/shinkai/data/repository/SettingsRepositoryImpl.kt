@@ -23,13 +23,16 @@ class SettingsRepositoryImpl @Inject constructor(
         val entity = notificationSettingsDao.get() ?: return NotificationSettings()
         return NotificationSettings(
             eventNotifications = entity.eventNotifications,
+            eventReminderEnabled = entity.eventReminderEnabled,
+            reminderMinutesBefore = entity.reminderMinutesBefore,
             trainingNotifications = entity.trainingNotifications,
+            trainingReminderEnabled = entity.trainingReminderEnabled,
+            trainingReminderMinutesBefore = entity.trainingReminderMinutesBefore,
             changeNotifications = entity.changeNotifications,
             examNotifications = entity.examNotifications,
+            examReminderEnabled = entity.examReminderEnabled,
+            examReminderMinutesBefore = entity.examReminderMinutesBefore,
             updateNotifications = entity.updateNotifications,
-            reminderMinutesBefore = entity.reminderMinutesBefore,
-            trainingReminderMinutesBefore = entity.trainingReminderMinutesBefore,
-            examReminderMinutesBefore = entity.examReminderMinutesBefore
         )
     }
 
@@ -37,13 +40,16 @@ class SettingsRepositoryImpl @Inject constructor(
         notificationSettingsDao.upsert(
             NotificationSettingsEntity(
                 eventNotifications = settings.eventNotifications,
+                eventReminderEnabled = settings.eventReminderEnabled,
+                reminderMinutesBefore = settings.reminderMinutesBefore,
                 trainingNotifications = settings.trainingNotifications,
+                trainingReminderEnabled = settings.trainingReminderEnabled,
+                trainingReminderMinutesBefore = settings.trainingReminderMinutesBefore,
                 changeNotifications = settings.changeNotifications,
                 examNotifications = settings.examNotifications,
+                examReminderEnabled = settings.examReminderEnabled,
+                examReminderMinutesBefore = settings.examReminderMinutesBefore,
                 updateNotifications = settings.updateNotifications,
-                reminderMinutesBefore = settings.reminderMinutesBefore,
-                trainingReminderMinutesBefore = settings.trainingReminderMinutesBefore,
-                examReminderMinutesBefore = settings.examReminderMinutesBefore
             )
         )
     }

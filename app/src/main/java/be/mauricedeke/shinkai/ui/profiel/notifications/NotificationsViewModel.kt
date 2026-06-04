@@ -29,11 +29,6 @@ class NotificationsViewModel @Inject constructor(
 
     fun onSettingsChanged(settings: NotificationSettings) {
         _uiState.update { it.copy(settings = settings) }
-    }
-
-    fun onSave() {
-        viewModelScope.launch {
-            updateNotificationSettings(_uiState.value.settings)
-        }
+        viewModelScope.launch { updateNotificationSettings(settings) }
     }
 }

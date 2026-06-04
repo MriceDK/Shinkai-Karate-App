@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Devices
@@ -31,16 +36,26 @@ fun ShinkaiApp() {
     val systemDarkTheme = isSystemInDarkTheme()
     val darkThemeEnabled = themeUiState.darkThemeEnabled ?: systemDarkTheme
 
+    val mainViewModel: MainViewModel = hiltViewModel()
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(Unit) {
+        mainViewModel.inAppNotification.collect { notification ->
+            snackbarHostState.showSnackbar("${notification.title}: ${notification.body}")
+        }
+    }
+
     ShinkaiAppContent(
         darkThemeEnabled = darkThemeEnabled,
-        onDarkThemeToggle = themeViewModel::onDarkThemeToggle
+        onDarkThemeToggle = themeViewModel::onDarkThemeToggle,
+        snackbarHostState = snackbarHostState
     )
 }
 
 @Composable
 private fun ShinkaiAppContent(
     darkThemeEnabled: Boolean,
-    onDarkThemeToggle: (Boolean) -> Unit
+    onDarkThemeToggle: (Boolean) -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     ShinkaikarateappTheme(darkTheme = darkThemeEnabled) {
         val view = LocalView.current
@@ -70,6 +85,11 @@ private fun ShinkaiAppContent(
                     activeRoute = activeTab,
                     onTabClick = { route -> navController.navigate(route) }
                 )
+            },
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(snackbarData = data)
+                }
             }
         ) { innerPadding ->
             ShinkaiNavGraph(

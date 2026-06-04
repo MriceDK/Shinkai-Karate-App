@@ -5,23 +5,22 @@ import com.rabbitmq.client.ConnectionFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.nio.charset.StandardCharsets
-import javax.inject.Inject
 
-class LavinMQMessagePublisher @Inject constructor(
-    private val hostName: String,
-    private val exchange: String
+class LavinMQMessagePublisher(
+    private val exchange: String,
+    private val factory: ConnectionFactory
 ) : MessagePublisher {
-    private val factory = ConnectionFactory()
 
     override suspend fun publishMessage(message: String, userId: String) {
         withContext(Dispatchers.IO) {
             try {
-                val connection = factory.newConnection(hostName)
+                val connection = factory.newConnection()
                 val channel = connection.createChannel()
 
+                channel.exchangeDeclare(exchange, "direct", true)
                 channel.basicPublish(
                     exchange,
-                    userId,
+                    "user-${userId}",
                     null,
                     message.toByteArray(StandardCharsets.UTF_8)
                 )

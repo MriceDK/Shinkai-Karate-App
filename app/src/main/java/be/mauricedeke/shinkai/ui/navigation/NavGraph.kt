@@ -251,7 +251,6 @@ fun ShinkaiNavGraph(
             NotificationsScreen(
                 uiState = uiState,
                 onSettingsChanged = vm::onSettingsChanged,
-                onSave = { vm.onSave(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
             )
         }

@@ -18,7 +18,10 @@ import be.mauricedeke.shinkai.data.worker.NotificationWorker
 import be.mauricedeke.shinkai.data.worker.SERVICE_CHANNEL_ID
 import be.mauricedeke.shinkai.data.worker.SERVICE_CHANNEL_NAME
 import be.mauricedeke.shinkai.data.worker.SERVICE_NOTIFICATION_ID
+import be.mauricedeke.shinkai.domain.usecase.GetNotificationSettingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetUserProfileUseCase
+import android.util.Log
+import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +34,8 @@ class AmqpNotificationService : Service() {
 
     @Inject lateinit var messageConsumer: MessageConsumer
     @Inject lateinit var getUserProfile: GetUserProfileUseCase
+    @Inject lateinit var getNotificationSettings: GetNotificationSettingsUseCase
+    @Inject lateinit var notificationEventBus: NotificationEventBus
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
@@ -40,7 +45,10 @@ class AmqpNotificationService : Service() {
         startForeground(SERVICE_NOTIFICATION_ID, buildForegroundNotification())
         scope.launch {
             val userId = getUserProfile()?.userId?.toString() ?: return@launch
-            messageConsumer.onMessageReceived = { raw -> handleMessage(raw) }
+            Log.d("Messagebroker", "Binding queue for routing key: user-$userId")
+            messageConsumer.onMessageReceived = { raw ->
+                scope.launch { handleMessage(raw) }
+            }
             messageConsumer.startConsuming(userId)
         }
     }
@@ -55,17 +63,34 @@ class AmqpNotificationService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun handleMessage(raw: String) {
+    private suspend fun handleMessage(raw: String) {
+        val settings = getNotificationSettings()
         val parts = raw.split("|", limit = 3)
         if (parts.size < 3) return
         val (type, title, body) = parts
-        if (type != "reminder") return
 
-        WorkManager.getInstance(applicationContext).enqueue(
-            OneTimeWorkRequestBuilder<NotificationWorker>()
-                .setInputData(workDataOf(KEY_TITLE to title, KEY_BODY to body))
-                .build()
-        )
+        if (!isEnabled(type, settings)) return
+
+        when (type) {
+            "change", "update" -> notificationEventBus.emit(InAppNotification(type, title, body))
+            else -> WorkManager.getInstance(applicationContext).enqueue(
+                OneTimeWorkRequestBuilder<NotificationWorker>()
+                    .setInputData(workDataOf(KEY_TITLE to title, KEY_BODY to body))
+                    .build()
+            )
+        }
+    }
+
+    private fun isEnabled(type: String, settings: NotificationSettings): Boolean = when (type) {
+        "event" -> settings.eventNotifications
+        "event-reminder" -> settings.eventNotifications && settings.eventReminderEnabled
+        "training" -> settings.trainingNotifications
+        "training-reminder" -> settings.trainingNotifications && settings.trainingReminderEnabled
+        "exam" -> settings.examNotifications
+        "exam-reminder" -> settings.examNotifications && settings.examReminderEnabled
+        "change" -> settings.changeNotifications
+        "update" -> settings.updateNotifications
+        else -> false
     }
 
     private fun buildForegroundNotification(): Notification {

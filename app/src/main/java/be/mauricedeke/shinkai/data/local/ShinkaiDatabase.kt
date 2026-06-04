@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 @TypeConverters(Converters::class)
 @Database(
     entities = [BeltNoteEntity::class, ThemePreferenceEntity::class, NotificationSettingsEntity::class, LocationSettingsEntity::class, UserProfileEntity::class, StrengthResultEntity::class, ShortcutsEntity::class],
-    version = 10,
+    version = 11,
     exportSchema = false
 )
 abstract class ShinkaiDatabase : RoomDatabase() {

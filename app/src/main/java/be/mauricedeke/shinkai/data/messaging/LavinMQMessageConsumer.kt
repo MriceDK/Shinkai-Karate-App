@@ -13,10 +13,9 @@ import kotlinx.coroutines.launch
 import java.nio.charset.StandardCharsets
 
 class LavinMQMessageConsumer(
-    private val host: String,
-    private val exchange: String
+    private val exchange: String,
+    private val factory: ConnectionFactory
 ) : MessageConsumer {
-    private val factory = ConnectionFactory()
     private var consumerJob: Job? = null
 
     override var onMessageReceived: (String) -> Unit = { Log.w("Messagebroker", "onMessageReceived not set") }
@@ -24,11 +23,13 @@ class LavinMQMessageConsumer(
     override fun startConsuming(userId: String) {
         consumerJob = CoroutineScope(Dispatchers.IO).launch {
             try {
-                val connection = factory.newConnection(host)
+                val connection = factory.newConnection()
                 val channel = connection.createChannel()
 
+                channel.exchangeDeclare(exchange, "direct", true)
+
                 val dynamicQueue = channel.queueDeclare("", false, true, true, null)
-                channel.queueBind(dynamicQueue.queue, exchange, userId)
+                channel.queueBind(dynamicQueue.queue, exchange, "user-${userId}")
 
                 val deliverCallback = DeliverCallback { _, delivery ->
                     val message = String(delivery.body, StandardCharsets.UTF_8)
