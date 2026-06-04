@@ -104,6 +104,7 @@ class AmqpNotificationService : Service() {
             .setSmallIcon(R.drawable.shinkai_logo)
             .setOngoing(true)
             .setSilent(true)
+            .setTimeoutAfter(2_000L)
             .build()
     }
 }

@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
@@ -230,8 +231,49 @@ fun EventDetailScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewEvent = Event(
+    id = "1", title = "Stage Naigairyu",
+    startTime = "09:00", endTime = "12:00",
+    date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
+    description = "Een intensieve stage waarbij alle graden welkom zijn. Breng je eigen drinkwater en een handdoek mee.",
+    localDate = java.time.LocalDate.of(2026, 6, 15)
+)
+
+@Preview(name = "Upcoming — no RSVP", showBackground = true, showSystemUi = true)
 @Composable
 fun EventDetailScreenPreview() {
-    ShinkaikarateappTheme { EventDetailScreen(uiState = EventDetailUiState()) }
+    ShinkaikarateappTheme { EventDetailScreen(uiState = EventDetailUiState(event = previewEvent)) }
+}
+
+@Preview(name = "Attending", showBackground = true, showSystemUi = true)
+@Composable
+fun EventDetailScreenAttendingPreview() {
+    ShinkaikarateappTheme {
+        EventDetailScreen(uiState = EventDetailUiState(event = previewEvent, rsvp = true))
+    }
+}
+
+@Preview(name = "Not attending", showBackground = true, showSystemUi = true)
+@Composable
+fun EventDetailScreenNotAttendingPreview() {
+    ShinkaikarateappTheme {
+        EventDetailScreen(uiState = EventDetailUiState(event = previewEvent, rsvp = false))
+    }
+}
+
+@Preview(name = "Past event — no RSVP", showBackground = true, showSystemUi = true)
+@Composable
+fun EventDetailScreenPastPreview() {
+    ShinkaikarateappTheme {
+        EventDetailScreen(
+            uiState = EventDetailUiState(
+                event = previewEvent.copy(
+                    title = "Najaarsexamen",
+                    date = "2025-11-08",
+                    localDate = java.time.LocalDate.of(2025, 11, 8)
+                ),
+                rsvp = true
+            )
+        )
+    }
 }

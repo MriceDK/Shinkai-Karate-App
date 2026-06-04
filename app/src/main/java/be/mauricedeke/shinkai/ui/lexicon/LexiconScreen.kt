@@ -144,17 +144,52 @@ private fun LexiconRow(entry: LexiconEntry) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewLexiconEntries = listOf(
+    LexiconEntry("Rei", "Buiging", "Teken van respect dat voor en na elke training wordt gebracht."),
+    LexiconEntry("Dojo", "Trainingsplaats", "De ruimte waar karate beoefend wordt."),
+    LexiconEntry("Sensei", "Leraar", "Iemand die al verder staat op het pad."),
+    LexiconEntry("Kiai", "Geestskracht", "Krachtige uitroep bij een techniek om energie te focussen."),
+    LexiconEntry("Kata", "Vormen", "Vaste opeenvolging van technieken die solo worden geoefend."),
+    LexiconEntry("Kumite", "Vrij gevecht", "Oefengevecht met partner.")
+)
+
+@Preview(name = "With entries", showBackground = true, showSystemUi = true)
 @Composable
-fun LexiconScreenPreview() {
+fun LexiconScreenWithEntriesPreview() {
+    ShinkaikarateappTheme {
+        LexiconScreen(uiState = LexiconUiState(entries = previewLexiconEntries))
+    }
+}
+
+@Preview(name = "Empty", showBackground = true, showSystemUi = true)
+@Composable
+fun LexiconScreenEmptyPreview() {
+    ShinkaikarateappTheme { LexiconScreen(uiState = LexiconUiState()) }
+}
+
+@Preview(name = "With search query", showBackground = true, showSystemUi = true)
+@Composable
+fun LexiconScreenSearchPreview() {
     ShinkaikarateappTheme {
         LexiconScreen(
             uiState = LexiconUiState(
-                entries = listOf(
-                    LexiconEntry("Rei", "Buiging"),
-                    LexiconEntry("Dojo", "Trainingsplaats")
-                )
+                entries = previewLexiconEntries,
+                searchQuery = "ka"
             )
         )
+    }
+}
+
+@Preview(name = "Error", showBackground = true, showSystemUi = true)
+@Composable
+fun LexiconScreenErrorPreview() {
+    ShinkaikarateappTheme { LexiconScreen(uiState = LexiconUiState(isError = true)) }
+}
+
+@Preview(name = "Dark — with entries", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun LexiconScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        LexiconScreen(uiState = LexiconUiState(entries = previewLexiconEntries))
     }
 }

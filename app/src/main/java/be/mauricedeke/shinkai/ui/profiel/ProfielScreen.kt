@@ -342,8 +342,41 @@ private fun SectionHeader(title: String) {
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Not logged in", showBackground = true, showSystemUi = true)
 @Composable
-fun ProfielScreenPreview() {
+fun ProfielScreenNotLoggedInPreview() {
     ShinkaikarateappTheme { ProfielScreen(uiState = ProfielUiState()) }
+}
+
+@Preview(name = "With profile data", showBackground = true, showSystemUi = true)
+@Composable
+fun ProfielScreenWithProfilePreview() {
+    ShinkaikarateappTheme {
+        ProfielScreen(
+            uiState = ProfielUiState(
+                userProfile = be.mauricedeke.shinkai.domain.model.UserProfile(
+                    name = "Maurice De Kegel",
+                    email = "maurice@shinkai.be",
+                    belt = "Oranje"
+                )
+            )
+        )
+    }
+}
+
+@Preview(name = "Dark — with profile", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun ProfielScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        ProfielScreen(
+            uiState = ProfielUiState(
+                userProfile = be.mauricedeke.shinkai.domain.model.UserProfile(
+                    name = "Maurice De Kegel",
+                    email = "maurice@shinkai.be",
+                    belt = "Oranje"
+                )
+            ),
+            isDarkTheme = true
+        )
+    }
 }

@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.ProgramSection
+import be.mauricedeke.shinkai.domain.model.Techniek
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
@@ -211,10 +212,57 @@ private fun ProgrammaContent(sections: List<ProgramSection>) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewYellowProgram = listOf(
+    ProgramSection("Basisvaardigheden", listOf("Juiste houding", "Basis blokken", "Basis stoten")),
+    ProgramSection("Kata", listOf("Taikyoku Shodan", "Heian Shodan"))
+)
+
+private val previewYellowTechnieken = listOf(
+    Techniek("Oi-zuki", "Geel", "Stap-stoot: stap naar voren en stoot met de voorste hand."),
+    Techniek("Gedan-barai", "Geel", "Lage blok: zwaai de onderarm neer om een lage aanval te blokken."),
+    Techniek("Age-uke", "Geel", "Hoge opwaartse blok ter bescherming van het hoofd.")
+)
+
+@Preview(name = "Yellow belt — with techniques", showBackground = true, showSystemUi = true)
 @Composable
-fun TechniekDetailScreenPreview() {
+fun TechniekDetailYellowPreview() {
     ShinkaikarateappTheme {
-        TechniekDetailScreen(uiState = TechniekDetailUiState(belt = "Geel"))
+        TechniekDetailScreen(
+            uiState = TechniekDetailUiState(
+                belt = "Geel",
+                program = previewYellowProgram,
+                technieken = previewYellowTechnieken,
+                notes = ""
+            )
+        )
+    }
+}
+
+@Preview(name = "Black belt — with notes", showBackground = true, showSystemUi = true)
+@Composable
+fun TechniekDetailBlackPreview() {
+    ShinkaikarateappTheme {
+        TechniekDetailScreen(
+            uiState = TechniekDetailUiState(
+                belt = "Zwart",
+                program = listOf(
+                    ProgramSection("Kata", listOf("Bassai Dai", "Kanku Dai", "Jion")),
+                    ProgramSection("Bunkai", listOf("Toepassingen op alle kata"))
+                ),
+                technieken = listOf(
+                    Techniek("Gyaku-zuki", "Zwart", "Tegenstoot: stoot met de achterste hand."),
+                    Techniek("Mawashi-geri", "Zwart", "Draaiende trap naar het hoofd of de romp.")
+                ),
+                notes = "Focus op heupbeweging bij mawashi-geri. Kata tempo oefenen met sensei."
+            )
+        )
+    }
+}
+
+@Preview(name = "Empty — no content loaded", showBackground = true, showSystemUi = true)
+@Composable
+fun TechniekDetailEmptyPreview() {
+    ShinkaikarateappTheme {
+        TechniekDetailScreen(uiState = TechniekDetailUiState(belt = "Groen"))
     }
 }

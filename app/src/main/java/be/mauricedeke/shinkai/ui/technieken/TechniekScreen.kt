@@ -22,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +75,8 @@ fun TechniekScreen(
 
 @Composable
 private fun BeltCard(belt: Belt, onClick: () -> Unit) {
-    val beltColor = belt.beltColor.toColor()
+    val isDark = isSystemInDarkTheme()
+    val beltColor = belt.beltColor.toColor(isDark)
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -112,10 +114,39 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewBelts = listOf(
+    Belt(name = "Geel", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW),
+    Belt(name = "Oranje", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.ORANGE),
+    Belt(name = "Rood", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.RED),
+    Belt(name = "Groen", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.GREEN),
+    Belt(name = "Blauw", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BLUE),
+    Belt(name = "Paars", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.PURPLE),
+    Belt(name = "Bruin I", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_I),
+    Belt(name = "Zwart", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BLACK),
+)
+
+@Preview(name = "With belts", showBackground = true, showSystemUi = true)
 @Composable
-fun TechniekScreenPreview() {
-    ShinkaikarateappTheme {
-        TechniekScreen(uiState = TechniekUiState())
+fun TechniekScreenWithBeltsPreview() {
+    ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState(belts = previewBelts)) }
+}
+
+@Preview(name = "Empty", showBackground = true, showSystemUi = true)
+@Composable
+fun TechniekScreenEmptyPreview() {
+    ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState()) }
+}
+
+@Preview(name = "Error", showBackground = true, showSystemUi = true)
+@Composable
+fun TechniekScreenErrorPreview() {
+    ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState(isError = true)) }
+}
+
+@Preview(name = "Dark — with belts", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun TechniekScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        TechniekScreen(uiState = TechniekUiState(belts = previewBelts))
     }
 }

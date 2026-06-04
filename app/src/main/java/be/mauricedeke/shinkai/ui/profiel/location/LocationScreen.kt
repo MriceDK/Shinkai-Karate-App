@@ -117,8 +117,40 @@ private fun LocationRow(
     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "All enabled", showBackground = true, showSystemUi = true)
 @Composable
-fun LocationScreenPreview() {
+fun LocationScreenAllEnabledPreview() {
     ShinkaikarateappTheme { LocationScreen(uiState = LocationUiState()) }
+}
+
+@Preview(name = "All disabled", showBackground = true, showSystemUi = true)
+@Composable
+fun LocationScreenAllDisabledPreview() {
+    ShinkaikarateappTheme {
+        LocationScreen(
+            uiState = LocationUiState(
+                settings = LocationSettings(
+                    useForTrainingLocations = false,
+                    useForImprovements = false,
+                    useForTrackingTrainings = false
+                )
+            )
+        )
+    }
+}
+
+@Preview(name = "Dark — partial", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun LocationScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        LocationScreen(
+            uiState = LocationUiState(
+                settings = LocationSettings(
+                    useForTrainingLocations = true,
+                    useForImprovements = false,
+                    useForTrackingTrainings = true
+                )
+            )
+        )
+    }
 }

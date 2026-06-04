@@ -269,10 +269,66 @@ private fun ShortcutCard(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Empty", showBackground = true, showSystemUi = true)
 @Composable
-fun HomeScreenPreview() {
+fun HomeScreenEmptyPreview() {
     ShinkaikarateappTheme {
         HomeScreen(uiState = HomeUiState())
+    }
+}
+
+@Preview(name = "With events and training", showBackground = true, showSystemUi = true)
+@Composable
+fun HomeScreenWithDataPreview() {
+    ShinkaikarateappTheme {
+        HomeScreen(uiState = HomeUiState(
+            upcomingEvents = listOf(
+                be.mauricedeke.shinkai.domain.model.Event(
+                    id = "1", title = "Stage Naigairyu",
+                    startTime = "09:00", endTime = "12:00",
+                    date = "2026-06-15", location = "Sporthal Brugge"
+                ),
+                be.mauricedeke.shinkai.domain.model.Event(
+                    id = "2", title = "Examen Geel",
+                    startTime = "14:00", endTime = "16:00",
+                    date = "2026-06-22", location = "Dojo Gent"
+                )
+            ),
+            nextTraining = Training(
+                id = "t1", type = "Technieken",
+                startTime = "20:00", endTime = "22:00",
+                date = java.time.LocalDate.now(),
+                sensei = "Sensei Kim"
+            ),
+            shortcuts = listOf(ShortcutId.EVENTS, ShortcutId.TECHNIEKEN, ShortcutId.STRENGTH_TEST, ShortcutId.TRAINING_HISTORY)
+        ))
+    }
+}
+
+@Preview(name = "Events error", showBackground = true, showSystemUi = true)
+@Composable
+fun HomeScreenErrorPreview() {
+    ShinkaikarateappTheme {
+        HomeScreen(uiState = HomeUiState(isEventsError = true))
+    }
+}
+
+@Preview(name = "Dark — with data", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun HomeScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        HomeScreen(uiState = HomeUiState(
+            upcomingEvents = listOf(
+                be.mauricedeke.shinkai.domain.model.Event(
+                    id = "1", title = "Stage Naigairyu",
+                    startTime = "09:00", endTime = "12:00",
+                    date = "2026-06-15", location = "Sporthal Brugge"
+                )
+            ),
+            nextTraining = Training(
+                id = "t1", type = "Kata", startTime = "19:00", endTime = "21:00",
+                date = java.time.LocalDate.now()
+            )
+        ))
     }
 }

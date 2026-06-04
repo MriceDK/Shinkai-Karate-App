@@ -238,8 +238,34 @@ private fun ReminderPickerRow(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "All enabled", showBackground = true, showSystemUi = true)
 @Composable
-fun NotificationsScreenPreview() {
+fun NotificationsScreenAllEnabledPreview() {
     ShinkaikarateappTheme { NotificationsScreen(uiState = NotificationsUiState()) }
+}
+
+@Preview(name = "Events disabled, training enabled", showBackground = true, showSystemUi = true)
+@Composable
+fun NotificationsScreenPartialPreview() {
+    ShinkaikarateappTheme {
+        NotificationsScreen(
+            uiState = NotificationsUiState(
+                settings = NotificationSettings(
+                    eventNotifications = false,
+                    eventReminderEnabled = false,
+                    trainingNotifications = true,
+                    trainingReminderEnabled = true,
+                    examNotifications = false,
+                    changeNotifications = true,
+                    updateNotifications = false
+                )
+            )
+        )
+    }
+}
+
+@Preview(name = "Dark — all enabled", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun NotificationsScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) { NotificationsScreen(uiState = NotificationsUiState()) }
 }

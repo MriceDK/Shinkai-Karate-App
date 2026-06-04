@@ -198,8 +198,20 @@ private fun FormField(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Pre-filled profile", showBackground = true, showSystemUi = true)
 @Composable
 fun AccountScreenPreview() {
     ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState()) }
+}
+
+@Preview(name = "Empty fields", showBackground = true, showSystemUi = true)
+@Composable
+fun AccountScreenEmptyPreview() {
+    ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState(naam = "", email = "")) }
+}
+
+@Preview(name = "Dark — pre-filled", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun AccountScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) { AccountScreen(uiState = AccountUiState()) }
 }

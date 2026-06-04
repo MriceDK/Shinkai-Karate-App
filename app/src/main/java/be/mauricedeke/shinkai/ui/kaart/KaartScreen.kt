@@ -110,8 +110,20 @@ fun KaartScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Default — dojo location", showBackground = true, showSystemUi = true)
 @Composable
 fun KaartScreenPreview() {
     ShinkaikarateappTheme { KaartScreen(uiState = KaartUiState()) }
+}
+
+@Preview(name = "With event navigation button", showBackground = true, showSystemUi = true)
+@Composable
+fun KaartScreenWithEventPreview() {
+    ShinkaikarateappTheme { KaartScreen(uiState = KaartUiState(showEventDetail = true)) }
+}
+
+@Preview(name = "Dark — with event navigation", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun KaartScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) { KaartScreen(uiState = KaartUiState(showEventDetail = true)) }
 }

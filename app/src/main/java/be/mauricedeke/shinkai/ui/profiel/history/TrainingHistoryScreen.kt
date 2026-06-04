@@ -271,8 +271,51 @@ private fun TrainingCardRow(icon: ImageVector, value: String) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewTrainings = listOf(
+    be.mauricedeke.shinkai.domain.model.Training(
+        id = "t1", type = "Technieken",
+        startTime = "20:00", endTime = "22:00",
+        date = LocalDate.of(2026, 6, 4),
+        sensei = "Sensei Kim", injuries = "Geen"
+    ),
+    be.mauricedeke.shinkai.domain.model.Training(
+        id = "t2", type = "Kata",
+        startTime = "19:30", endTime = "21:30",
+        date = LocalDate.of(2026, 6, 4),
+        sensei = "Sensei Luc", injuries = "Lichte kniepijn"
+    )
+)
+
+@Preview(name = "Empty day", showBackground = true, showSystemUi = true)
 @Composable
-fun TrainingHistoryScreenPreview() {
+fun TrainingHistoryEmptyPreview() {
     ShinkaikarateappTheme { TrainingHistoryScreen(uiState = TrainingHistoryUiState()) }
+}
+
+@Preview(name = "Day with trainings — one selected", showBackground = true, showSystemUi = true)
+@Composable
+fun TrainingHistoryWithTrainingsPreview() {
+    ShinkaikarateappTheme {
+        TrainingHistoryScreen(
+            uiState = TrainingHistoryUiState(
+                selectedDate = LocalDate.of(2026, 6, 4),
+                selectedTrainings = previewTrainings,
+                trainingDates = setOf(
+                    LocalDate.of(2026, 6, 4),
+                    LocalDate.of(2026, 6, 11),
+                    LocalDate.of(2026, 6, 18)
+                ),
+                selectedTrainingId = "t1",
+                notes = "Goed gewerkt aan gyaku-zuki. Meer focus nodig op heupbeweging."
+            )
+        )
+    }
+}
+
+@Preview(name = "Error state", showBackground = true, showSystemUi = true)
+@Composable
+fun TrainingHistoryErrorPreview() {
+    ShinkaikarateappTheme {
+        TrainingHistoryScreen(uiState = TrainingHistoryUiState(isError = true))
+    }
 }

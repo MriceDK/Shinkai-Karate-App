@@ -418,8 +418,76 @@ fun EventsScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+private val previewUpcomingEvents = listOf(
+    Event(
+        id = "1", title = "Stage Naigairyu",
+        startTime = "09:00", endTime = "12:00",
+        date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
+        localDate = java.time.LocalDate.of(2026, 6, 15)
+    ),
+    Event(
+        id = "2", title = "Examen Geel",
+        startTime = "14:00", endTime = "16:00",
+        date = "2026-06-22", location = "Dojo Gent", city = "Gent",
+        localDate = java.time.LocalDate.of(2026, 6, 22)
+    )
+)
+
+private val previewInboxEvent = Event(
+    id = "3", title = "Zomerstage 2026",
+    startTime = "09:00", endTime = "18:00",
+    date = "2026-07-01", location = "Sporthal Kortrijk", city = "Kortrijk",
+    isInbox = true, localDate = java.time.LocalDate.of(2026, 7, 1)
+)
+
+@Preview(name = "Empty", showBackground = true, showSystemUi = true)
 @Composable
-fun EventsScreenPreview() {
+fun EventsScreenEmptyPreview() {
     ShinkaikarateappTheme { EventsScreen(uiState = EventsUiState()) }
+}
+
+@Preview(name = "With upcoming events", showBackground = true, showSystemUi = true)
+@Composable
+fun EventsScreenWithEventsPreview() {
+    ShinkaikarateappTheme {
+        EventsScreen(
+            uiState = EventsUiState(
+                upcomingEvents = previewUpcomingEvents,
+                rsvp = mapOf("1" to true, "2" to null)
+            )
+        )
+    }
+}
+
+@Preview(name = "With inbox event", showBackground = true, showSystemUi = true)
+@Composable
+fun EventsScreenWithInboxPreview() {
+    ShinkaikarateappTheme {
+        EventsScreen(
+            uiState = EventsUiState(
+                upcomingEvents = previewUpcomingEvents,
+                inboxEvents = listOf(previewInboxEvent),
+                rsvp = mapOf("1" to false, "2" to true, "3" to null)
+            )
+        )
+    }
+}
+
+@Preview(name = "Error", showBackground = true, showSystemUi = true)
+@Composable
+fun EventsScreenErrorPreview() {
+    ShinkaikarateappTheme { EventsScreen(uiState = EventsUiState(isError = true)) }
+}
+
+@Preview(name = "Dark — with events", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun EventsScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        EventsScreen(
+            uiState = EventsUiState(
+                upcomingEvents = previewUpcomingEvents,
+                rsvp = mapOf("1" to true)
+            )
+        )
+    }
 }

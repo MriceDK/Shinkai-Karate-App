@@ -9,21 +9,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +50,7 @@ fun PunchTestScreen(
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
     val progressAnim by animateFloatAsState(
         targetValue = uiState.progress,
         animationSpec = tween(50),
@@ -51,132 +58,146 @@ fun PunchTestScreen(
     )
 
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 72.dp, bottom = 32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .align(Alignment.Center),
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
-            Text(
-                "Punch Force Test",
-                fontWeight = FontWeight.Bold,
-                fontSize = 22.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(
-                when (uiState.phase) {
-                    MeasurementPhase.IDLE -> "Hold the phone firmly and punch as hard as you can."
-                    MeasurementPhase.MEASURING -> "PUNCH NOW!"
-                    MeasurementPhase.DONE -> "Your result"
-                },
-                fontSize = 14.sp,
-                color = if (uiState.phase == MeasurementPhase.MEASURING) MaterialTheme.colorScheme.primary
-                        else MaterialTheme.colorScheme.onSurfaceVariant,
-                fontWeight = if (uiState.phase == MeasurementPhase.MEASURING) FontWeight.Bold else FontWeight.Normal,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(Modifier.height(32.dp))
-
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.size(220.dp)) {
-                CircularProgressIndicator(
-                    progress = { progressAnim },
-                    modifier = Modifier.fillMaxSize(),
-                    strokeWidth = 10.dp,
-                    color = uiState.resultBelt?.toColor() ?: MaterialTheme.colorScheme.primary,
-                    trackColor = MaterialTheme.colorScheme.outlineVariant
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp, horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "Punch Force Test",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 22.sp,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        uiState.score.toString(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 64.sp,
-                        color = uiState.resultBelt?.toColor() ?: MaterialTheme.colorScheme.primary
-                    )
-                    Text(
-                        "N",
-                        fontSize = 18.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontWeight = FontWeight.Medium
-                    )
-                }
-            }
 
-            Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(8.dp))
 
-            // Belt result shown after measurement
-            if (uiState.resultBelt != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
+                Text(
+                    when (uiState.phase) {
+                        MeasurementPhase.IDLE -> "Hold the phone firmly and punch as hard as you can."
+                        MeasurementPhase.MEASURING -> "PUNCH NOW!"
+                        MeasurementPhase.DONE -> "Your result"
+                    },
+                    fontSize = 14.sp,
+                    color = if (uiState.phase == MeasurementPhase.MEASURING) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontWeight = if (uiState.phase == MeasurementPhase.MEASURING) FontWeight.Bold else FontWeight.Normal,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(Modifier.height(32.dp))
+
+                Box(contentAlignment = Alignment.Center, modifier = Modifier.size(220.dp)) {
+                    CircularProgressIndicator(
+                        progress = { progressAnim },
+                        modifier = Modifier.fillMaxSize(),
+                        strokeWidth = 10.dp,
+                        color = uiState.resultBelt?.toColor(isDark) ?: MaterialTheme.colorScheme.primary,
+                        trackColor = MaterialTheme.colorScheme.outlineVariant
+                    )
                     Box(
                         modifier = Modifier
-                            .size(width = 40.dp, height = 14.dp)
-                            .background(uiState.resultBelt.toColor(), RoundedCornerShape(50))
-                    )
-                    Text(
-                        uiState.resultBelt.displayName(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = uiState.resultBelt.toColor()
-                    )
+                            .size(170.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                uiState.score.toString(),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 64.sp,
+                                color = MaterialTheme.colorScheme.onBackground
+                            )
+                            Text(
+                                "N",
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontWeight = FontWeight.Medium
+                            )
+                        }
+                    }
                 }
-            } else {
-                Spacer(Modifier.height(22.dp))
-            }
 
-            Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(24.dp))
 
-            // Best score
-            if (uiState.bestBelt != null) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    Text("Best:", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Box(
-                        modifier = Modifier
-                            .size(width = 18.dp, height = 8.dp)
-                            .background(uiState.bestBelt.toColor(), RoundedCornerShape(50))
-                    )
-                    Text(
-                        "${uiState.bestScore} N",
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                if (uiState.resultBelt != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(width = 40.dp, height = 14.dp)
+                                .background(uiState.resultBelt.toColor(isDark), RoundedCornerShape(50))
+                        )
+                        Text(
+                            uiState.resultBelt.displayName(),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = uiState.resultBelt.toColor(isDark)
+                        )
+                    }
+                } else {
+                    Spacer(Modifier.height(22.dp))
                 }
-            } else {
-                Spacer(Modifier.height(20.dp))
-            }
 
-            Spacer(Modifier.height(40.dp))
+                Spacer(Modifier.height(8.dp))
 
-            when (uiState.phase) {
-                MeasurementPhase.IDLE -> Button(
-                    onClick = onStart,
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.width(160.dp)
-                ) { Text("Start", fontSize = 16.sp) }
+                if (uiState.bestBelt != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text("Best:", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Box(
+                            modifier = Modifier
+                                .size(width = 18.dp, height = 8.dp)
+                                .background(uiState.bestBelt.toColor(isDark), RoundedCornerShape(50))
+                        )
+                        Text(
+                            "${uiState.bestScore} N",
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                } else {
+                    Spacer(Modifier.height(20.dp))
+                }
 
-                MeasurementPhase.MEASURING -> OutlinedButton(
-                    onClick = onReset,
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.width(160.dp)
-                ) { Text("Cancel", fontSize = 16.sp) }
+                Spacer(Modifier.height(32.dp))
 
-                MeasurementPhase.DONE -> Button(
-                    onClick = onStart,
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    shape = RoundedCornerShape(50),
-                    modifier = Modifier.width(160.dp)
-                ) { Text("Try Again", fontSize = 16.sp) }
+                when (uiState.phase) {
+                    MeasurementPhase.IDLE -> Button(
+                        onClick = onStart,
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        shape = RoundedCornerShape(50),
+                        modifier = Modifier.width(160.dp)
+                    ) { Text("Start", fontSize = 16.sp) }
+
+                    MeasurementPhase.MEASURING -> OutlinedButton(
+                        onClick = onReset,
+                        shape = RoundedCornerShape(50),
+                        modifier = Modifier.width(160.dp)
+                    ) { Text("Cancel", fontSize = 16.sp) }
+
+                    MeasurementPhase.DONE -> Button(
+                        onClick = onStart,
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        shape = RoundedCornerShape(50),
+                        modifier = Modifier.width(160.dp)
+                    ) { Text("Try Again", fontSize = 16.sp) }
+                }
             }
         }
 
@@ -189,9 +210,31 @@ fun PunchTestScreen(
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(name = "Idle — ready to start", showBackground = true, showSystemUi = true)
 @Composable
-fun PunchTestScreenPreview() {
+fun PunchTestScreenIdlePreview() {
+    ShinkaikarateappTheme {
+        PunchTestScreen(uiState = PunchTestUiState(phase = MeasurementPhase.IDLE))
+    }
+}
+
+@Preview(name = "Measuring — in progress", showBackground = true, showSystemUi = true)
+@Composable
+fun PunchTestScreenMeasuringPreview() {
+    ShinkaikarateappTheme {
+        PunchTestScreen(
+            uiState = PunchTestUiState(
+                phase = MeasurementPhase.MEASURING,
+                score = 412,
+                progress = 0.45f
+            )
+        )
+    }
+}
+
+@Preview(name = "Done — with result", showBackground = true, showSystemUi = true)
+@Composable
+fun PunchTestScreenDonePreview() {
     ShinkaikarateappTheme {
         PunchTestScreen(
             uiState = PunchTestUiState(
@@ -201,6 +244,23 @@ fun PunchTestScreenPreview() {
                 resultBelt = BeltColor.PURPLE,
                 bestBelt = BeltColor.PURPLE,
                 progress = 1f
+            )
+        )
+    }
+}
+
+@Preview(name = "Dark — done", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun PunchTestScreenDarkPreview() {
+    ShinkaikarateappTheme(darkTheme = true) {
+        PunchTestScreen(
+            uiState = PunchTestUiState(
+                phase = MeasurementPhase.DONE,
+                score = 520,
+                bestScore = 659,
+                resultBelt = BeltColor.GREEN,
+                bestBelt = BeltColor.PURPLE,
+                progress = 0.75f
             )
         )
     }
