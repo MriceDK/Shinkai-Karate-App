@@ -47,6 +47,9 @@ import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,6 +66,30 @@ fun EventDetailScreen(
     fun openNavigation() {
         val query = Uri.encode("${event.location}, ${event.city}")
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("geo:0,0?q=$query"))
+        context.startActivity(intent)
+    }
+
+    fun addToCalendar() {
+        val zone = ZoneId.systemDefault()
+        val beginMillis = event.localDate?.let { date ->
+            runCatching { LocalDateTime.of(date, LocalTime.parse(event.startTime)) }
+                .getOrNull()
+                ?.atZone(zone)?.toInstant()?.toEpochMilli()
+        }
+        val endMillis = event.localDate?.let { date ->
+            runCatching { LocalDateTime.of(date, LocalTime.parse(event.endTime)) }
+                .getOrNull()
+                ?.atZone(zone)?.toInstant()?.toEpochMilli()
+        }
+        val location = listOf(event.location, event.city).filter { it.isNotBlank() }.joinToString(", ")
+        val intent = Intent(Intent.ACTION_INSERT).apply {
+            data = android.provider.CalendarContract.Events.CONTENT_URI
+            putExtra(android.provider.CalendarContract.Events.TITLE, event.title)
+            putExtra(android.provider.CalendarContract.Events.EVENT_LOCATION, location)
+            putExtra(android.provider.CalendarContract.Events.DESCRIPTION, event.description)
+            if (beginMillis != null) putExtra(android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginMillis)
+            if (endMillis != null) putExtra(android.provider.CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+        }
         context.startActivity(intent)
     }
 
@@ -138,7 +165,7 @@ fun EventDetailScreen(
         }
         Spacer(Modifier.height(16.dp))
         Button(
-            onClick = {},
+            onClick = ::addToCalendar,
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             shape = RoundedCornerShape(50)
         ) {
@@ -211,15 +238,6 @@ fun EventDetailScreen(
             lineHeight = 22.sp,
             color = MaterialTheme.colorScheme.onBackground
         )
-        Spacer(Modifier.height(32.dp))
-        Button(
-            onClick = {},
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier.fillMaxWidth(0.85f)
-        ) {
-            Text("Verwijder Evenement", fontSize = 15.sp)
-        }
         Spacer(Modifier.height(16.dp))
     }
     RoundBackButton(

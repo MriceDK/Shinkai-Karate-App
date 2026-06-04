@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.ui.events.manage
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -40,6 +41,7 @@ fun ManageEventsScreen(
     uiState: ManageEventsUiState,
     onRsvp: (eventId: String, attending: Boolean) -> Unit,
     onBackClick: () -> Unit,
+    onEventClick: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     androidx.compose.foundation.layout.Box(modifier = modifier.fillMaxSize()) {
@@ -88,7 +90,8 @@ fun ManageEventsScreen(
                     EventManageRow(
                         event = event,
                         rsvp = uiState.rsvp[event.id],
-                        onRsvp = { attending -> onRsvp(event.id, attending) }
+                        onRsvp = { attending -> onRsvp(event.id, attending) },
+                        onClick = { onEventClick(event.id) }
                     )
                 }
             }
@@ -110,7 +113,8 @@ fun ManageEventsScreen(
 private fun EventManageRow(
     event: Event,
     rsvp: Boolean?,
-    onRsvp: (Boolean) -> Unit
+    onRsvp: (Boolean) -> Unit,
+    onClick: () -> Unit = {}
 ) {
     val isUpcoming = event.localDate == null || !event.localDate.isBefore(LocalDate.now())
 
@@ -131,7 +135,7 @@ private fun EventManageRow(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f).clickable(onClick = onClick)) {
                 Text(
                     event.title,
                     fontWeight = FontWeight.SemiBold,

@@ -145,7 +145,11 @@ fun ShinkaiNavGraph(
             ManageEventsScreen(
                 uiState = manageEventsUiState,
                 onRsvp = manageEventsViewModel::setRsvp,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onEventClick = { id ->
+                    eventDetailViewModel.loadEvent(id)
+                    navController.navigate(Screen.EventDetail.createRoute(id))
+                }
             )
         }
 
