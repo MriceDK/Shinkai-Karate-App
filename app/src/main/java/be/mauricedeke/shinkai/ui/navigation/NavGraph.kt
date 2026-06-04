@@ -296,7 +296,13 @@ fun ShinkaiNavGraph(
                 locationPermissionGranted = locationGranted,
                 onRequestLocationPermission = { mainViewModel.requestPermission(AppPermission.Location) },
                 onLocationStart = kaartViewModel::onLocationStart,
-                onLocationStop = kaartViewModel::onLocationStop
+                onLocationStop = kaartViewModel::onLocationStop,
+                onEventSelected = kaartViewModel::onEventSelected,
+                onFetchRoute = { dest -> kaartViewModel.fetchRoute(dest) },
+                onViewEventDetails = { id ->
+                    eventDetailViewModel.loadEvent(id)
+                    navController.navigate(Screen.EventDetail.createRoute(id))
+                }
             )
         }
     }

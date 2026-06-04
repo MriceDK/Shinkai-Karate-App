@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.di
 
 import be.mauricedeke.shinkai.data.repository.AccelerometerRepositoryImpl
+import be.mauricedeke.shinkai.data.repository.RouteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.EventRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.LexiconRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.LocationRepositoryImpl
@@ -13,6 +14,7 @@ import be.mauricedeke.shinkai.data.repository.TrainingNoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TrainingRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.UserRepositoryImpl
 import be.mauricedeke.shinkai.domain.repository.AccelerometerRepository
+import be.mauricedeke.shinkai.domain.repository.RouteRepository
 import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LexiconRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
@@ -68,4 +70,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindMicrophoneRepository(impl: MicrophoneRepositoryImpl): MicrophoneRepository
+
+    @Binds
+    abstract fun bindRouteRepository(impl: RouteRepositoryImpl): RouteRepository
 }
