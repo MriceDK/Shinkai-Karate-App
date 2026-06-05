@@ -72,9 +72,9 @@ import kotlin.math.roundToInt
 fun EventsScreen(
     uiState: EventsUiState,
     onDateSelected: (LocalDate) -> Unit = {},
-    onEventClick: (String) -> Unit = {},
+    onEventClick: (java.util.UUID) -> Unit = {},
     onManageEventsClick: () -> Unit = {},
-    onRsvp: (eventId: String, attending: Boolean) -> Unit = { _, _ -> },
+    onRsvp: (eventId: java.util.UUID, attending: Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
     val events = uiState.upcomingEvents
@@ -418,15 +418,19 @@ fun EventsScreen(
     }
 }
 
+private val previewId1 = java.util.UUID.randomUUID()
+private val previewId2 = java.util.UUID.randomUUID()
+private val previewId3 = java.util.UUID.randomUUID()
+
 private val previewUpcomingEvents = listOf(
     Event(
-        id = "1", title = "Stage Naigairyu",
+        id = previewId1, title = "Stage Naigairyu",
         startTime = "09:00", endTime = "12:00",
         date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
         localDate = java.time.LocalDate.of(2026, 6, 15)
     ),
     Event(
-        id = "2", title = "Examen Geel",
+        id = previewId2, title = "Examen Geel",
         startTime = "14:00", endTime = "16:00",
         date = "2026-06-22", location = "Dojo Gent", city = "Gent",
         localDate = java.time.LocalDate.of(2026, 6, 22)
@@ -434,7 +438,7 @@ private val previewUpcomingEvents = listOf(
 )
 
 private val previewInboxEvent = Event(
-    id = "3", title = "Zomerstage 2026",
+    id = previewId3, title = "Zomerstage 2026",
     startTime = "09:00", endTime = "18:00",
     date = "2026-07-01", location = "Sporthal Kortrijk", city = "Kortrijk",
     isInbox = true, localDate = java.time.LocalDate.of(2026, 7, 1)
@@ -453,7 +457,7 @@ fun EventsScreenWithEventsPreview() {
         EventsScreen(
             uiState = EventsUiState(
                 upcomingEvents = previewUpcomingEvents,
-                rsvp = mapOf("1" to true, "2" to null)
+                rsvp = mapOf(previewId1 to true, previewId2 to null)
             )
         )
     }
@@ -467,7 +471,7 @@ fun EventsScreenWithInboxPreview() {
             uiState = EventsUiState(
                 upcomingEvents = previewUpcomingEvents,
                 inboxEvents = listOf(previewInboxEvent),
-                rsvp = mapOf("1" to false, "2" to true, "3" to null)
+                rsvp = mapOf(previewId1 to false, previewId2 to true, previewId3 to null)
             )
         )
     }
@@ -486,7 +490,7 @@ fun EventsScreenDarkPreview() {
         EventsScreen(
             uiState = EventsUiState(
                 upcomingEvents = previewUpcomingEvents,
-                rsvp = mapOf("1" to true)
+                rsvp = mapOf(previewId1 to true)
             )
         )
     }

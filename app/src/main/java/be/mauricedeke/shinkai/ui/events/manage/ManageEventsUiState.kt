@@ -1,9 +1,10 @@
 package be.mauricedeke.shinkai.ui.events.manage
 
 import be.mauricedeke.shinkai.domain.model.Event
+import java.util.UUID
 
 data class ManageEventsUiState(
     val events: List<Event> = emptyList(),
-    val rsvp: Map<String, Boolean?> = emptyMap(), // true = attending, false = not attending, null = no response
+    val rsvp: Map<UUID, Boolean?> = emptyMap(),
     val isError: Boolean = false
 )

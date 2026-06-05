@@ -53,7 +53,7 @@ fun TrainingHistoryScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onDateSelected: (LocalDate) -> Unit = {},
-    onTrainingSelected: (String) -> Unit = {},
+    onTrainingSelected: (java.util.UUID) -> Unit = {},
     onNotesChanged: (String) -> Unit = {},
     onLogClick: () -> Unit = {},
     onLogSave: (type: String, startTime: String, endTime: String, sensei: String, injuries: String) -> Unit = { _, _, _, _, _ -> },
@@ -271,15 +271,17 @@ private fun TrainingCardRow(icon: ImageVector, value: String) {
     }
 }
 
+private val previewTrainingId1 = java.util.UUID.randomUUID()
+
 private val previewTrainings = listOf(
     be.mauricedeke.shinkai.domain.model.Training(
-        id = "t1", type = "Technieken",
+        id = previewTrainingId1, type = "Technieken",
         startTime = "20:00", endTime = "22:00",
         date = LocalDate.of(2026, 6, 4),
         sensei = "Sensei Kim", injuries = "Geen"
     ),
     be.mauricedeke.shinkai.domain.model.Training(
-        id = "t2", type = "Kata",
+        type = "Kata",
         startTime = "19:30", endTime = "21:30",
         date = LocalDate.of(2026, 6, 4),
         sensei = "Sensei Luc", injuries = "Lichte kniepijn"
@@ -305,7 +307,7 @@ fun TrainingHistoryWithTrainingsPreview() {
                     LocalDate.of(2026, 6, 11),
                     LocalDate.of(2026, 6, 18)
                 ),
-                selectedTrainingId = "t1",
+                selectedTrainingId = previewTrainingId1,
                 notes = "Goed gewerkt aan gyaku-zuki. Meer focus nodig op heupbeweging."
             )
         )

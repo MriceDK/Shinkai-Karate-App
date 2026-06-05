@@ -218,9 +218,9 @@ private val previewYellowProgram = listOf(
 )
 
 private val previewYellowTechnieken = listOf(
-    Techniek("Oi-zuki", "Geel", "Stap-stoot: stap naar voren en stoot met de voorste hand."),
-    Techniek("Gedan-barai", "Geel", "Lage blok: zwaai de onderarm neer om een lage aanval te blokken."),
-    Techniek("Age-uke", "Geel", "Hoge opwaartse blok ter bescherming van het hoofd.")
+    Techniek(name = "Oi-zuki", belt = "Geel", description = "Stap-stoot: stap naar voren en stoot met de voorste hand."),
+    Techniek(name = "Gedan-barai", belt = "Geel", description = "Lage blok: zwaai de onderarm neer om een lage aanval te blokken."),
+    Techniek(name = "Age-uke", belt = "Geel", description = "Hoge opwaartse blok ter bescherming van het hoofd.")
 )
 
 @Preview(name = "Yellow belt — with techniques", showBackground = true, showSystemUi = true)
@@ -250,8 +250,8 @@ fun TechniekDetailBlackPreview() {
                     ProgramSection("Bunkai", listOf("Toepassingen op alle kata"))
                 ),
                 technieken = listOf(
-                    Techniek("Gyaku-zuki", "Zwart", "Tegenstoot: stoot met de achterste hand."),
-                    Techniek("Mawashi-geri", "Zwart", "Draaiende trap naar het hoofd of de romp.")
+                    Techniek(name = "Gyaku-zuki", belt = "Zwart", description = "Tegenstoot: stoot met de achterste hand."),
+                    Techniek(name = "Mawashi-geri", belt = "Zwart", description = "Draaiende trap naar het hoofd of de romp.")
                 ),
                 notes = "Focus op heupbeweging bij mawashi-geri. Kata tempo oefenen met sensei."
             )

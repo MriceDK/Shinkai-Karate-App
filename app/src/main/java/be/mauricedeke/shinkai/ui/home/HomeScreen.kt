@@ -49,7 +49,7 @@ fun HomeScreen(
     uiState: HomeUiState,
     modifier: Modifier = Modifier,
     onNavigate: (String) -> Unit = {},
-    onEventClick: (String) -> Unit = {},
+    onEventClick: (java.util.UUID) -> Unit = {},
     onShortcutToggle: (ShortcutId) -> Unit = {},
 ) {
     var showEditSheet by remember { mutableStateOf(false) }
@@ -64,7 +64,7 @@ fun HomeScreen(
     val upcomingEvents = uiState.upcomingEvents
 
     val fallbackTraining = uiState.nextTraining ?: Training(
-        id = "1", type = "Technieken",
+        type = "Technieken",
         startTime = "20:00", endTime = "22:00",
         date = LocalDate.of(2025, 3, 18)
     )
@@ -284,18 +284,18 @@ fun HomeScreenWithDataPreview() {
         HomeScreen(uiState = HomeUiState(
             upcomingEvents = listOf(
                 be.mauricedeke.shinkai.domain.model.Event(
-                    id = "1", title = "Stage Naigairyu",
+                    id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
                     startTime = "09:00", endTime = "12:00",
                     date = "2026-06-15", location = "Sporthal Brugge"
                 ),
                 be.mauricedeke.shinkai.domain.model.Event(
-                    id = "2", title = "Examen Geel",
+                    id = java.util.UUID.randomUUID(), title = "Examen Geel",
                     startTime = "14:00", endTime = "16:00",
                     date = "2026-06-22", location = "Dojo Gent"
                 )
             ),
             nextTraining = Training(
-                id = "t1", type = "Technieken",
+                type = "Technieken",
                 startTime = "20:00", endTime = "22:00",
                 date = java.time.LocalDate.now(),
                 sensei = "Sensei Kim"
@@ -320,13 +320,13 @@ fun HomeScreenDarkPreview() {
         HomeScreen(uiState = HomeUiState(
             upcomingEvents = listOf(
                 be.mauricedeke.shinkai.domain.model.Event(
-                    id = "1", title = "Stage Naigairyu",
+                    id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
                     startTime = "09:00", endTime = "12:00",
                     date = "2026-06-15", location = "Sporthal Brugge"
                 )
             ),
             nextTraining = Training(
-                id = "t1", type = "Kata", startTime = "19:00", endTime = "21:00",
+                type = "Kata", startTime = "19:00", endTime = "21:00",
                 date = java.time.LocalDate.now()
             )
         ))

@@ -1,6 +1,8 @@
 package be.mauricedeke.shinkai.domain.repository
 
+import java.util.UUID
+
 interface TrainingNoteRepository {
-    fun getNote(id: String): String
-    fun saveNote(id: String, note: String)
+    fun getNote(id: UUID): String
+    fun saveNote(id: UUID, note: String)
 }

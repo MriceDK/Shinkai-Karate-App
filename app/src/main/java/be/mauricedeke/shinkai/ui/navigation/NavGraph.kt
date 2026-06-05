@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
 import be.mauricedeke.shinkai.MainViewModel
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
+import java.util.UUID
 import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailScreen
@@ -110,7 +111,7 @@ fun ShinkaiNavGraph(
                 onNavigate = { navController.navigate(it) },
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
-                    navController.navigate(Screen.EventDetail.createRoute(id))
+                    navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 },
                 onShortcutToggle = { homeViewModel.toggleShortcut(it) }
             )
@@ -145,7 +146,7 @@ fun ShinkaiNavGraph(
                 onDateSelected = eventsViewModel::onDateSelected,
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
-                    navController.navigate(Screen.EventDetail.createRoute(id))
+                    navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 },
                 onManageEventsClick = { navController.navigate(Screen.ManageEvents.route) },
                 onRsvp = eventsViewModel::setRsvp
@@ -159,7 +160,7 @@ fun ShinkaiNavGraph(
                 onBackClick = { navController.popBackStack() },
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
-                    navController.navigate(Screen.EventDetail.createRoute(id))
+                    navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 }
             )
         }
@@ -168,8 +169,9 @@ fun ShinkaiNavGraph(
             Screen.EventDetail.route,
             arguments = listOf(navArgument("eventId") { type = NavType.StringType })
         ) { backStack ->
-            val id = backStack.arguments?.getString("eventId") ?: ""
-            eventDetailViewModel.loadEvent(id)
+            val id = backStack.arguments?.getString("eventId")
+                ?.let { runCatching { UUID.fromString(it) }.getOrNull() }
+            if (id != null) eventDetailViewModel.loadEvent(id)
             EventDetailScreen(
                 uiState = eventDetailUiState,
                 onBackClick = { navController.popBackStack() },
@@ -300,7 +302,7 @@ fun ShinkaiNavGraph(
                 onFetchRoute = { dest -> kaartViewModel.fetchRoute(dest) },
                 onViewEventDetails = { id ->
                     eventDetailViewModel.loadEvent(id)
-                    navController.navigate(Screen.EventDetail.createRoute(id))
+                    navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 }
             )
         }

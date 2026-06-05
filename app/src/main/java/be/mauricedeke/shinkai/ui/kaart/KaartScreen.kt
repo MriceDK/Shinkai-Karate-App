@@ -66,7 +66,7 @@ fun KaartScreen(
     onLocationStart: () -> Unit = {},
     onLocationStop: () -> Unit = {},
     onEventSelected: (Event?) -> Unit = {},
-    onViewEventDetails: (String) -> Unit = {},
+    onViewEventDetails: (java.util.UUID) -> Unit = {},
     onFetchRoute: (Point) -> Unit = {},
     modifier: Modifier = Modifier
 ) {

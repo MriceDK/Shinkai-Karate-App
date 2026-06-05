@@ -145,12 +145,12 @@ private fun LexiconRow(entry: LexiconEntry) {
 }
 
 private val previewLexiconEntries = listOf(
-    LexiconEntry("Rei", "Buiging", "Teken van respect dat voor en na elke training wordt gebracht."),
-    LexiconEntry("Dojo", "Trainingsplaats", "De ruimte waar karate beoefend wordt."),
-    LexiconEntry("Sensei", "Leraar", "Iemand die al verder staat op het pad."),
-    LexiconEntry("Kiai", "Geestskracht", "Krachtige uitroep bij een techniek om energie te focussen."),
-    LexiconEntry("Kata", "Vormen", "Vaste opeenvolging van technieken die solo worden geoefend."),
-    LexiconEntry("Kumite", "Vrij gevecht", "Oefengevecht met partner.")
+    LexiconEntry(japaneseWord = "Rei", translation = "Buiging", description = "Teken van respect dat voor en na elke training wordt gebracht."),
+    LexiconEntry(japaneseWord = "Dojo", translation = "Trainingsplaats", description = "De ruimte waar karate beoefend wordt."),
+    LexiconEntry(japaneseWord = "Sensei", translation = "Leraar", description = "Iemand die al verder staat op het pad."),
+    LexiconEntry(japaneseWord = "Kiai", translation = "Geestskracht", description = "Krachtige uitroep bij een techniek om energie te focussen."),
+    LexiconEntry(japaneseWord = "Kata", translation = "Vormen", description = "Vaste opeenvolging van technieken die solo worden geoefend."),
+    LexiconEntry(japaneseWord = "Kumite", translation = "Vrij gevecht", description = "Oefengevecht met partner.")
 )
 
 @Preview(name = "With entries", showBackground = true, showSystemUi = true)

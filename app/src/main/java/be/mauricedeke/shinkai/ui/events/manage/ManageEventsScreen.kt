@@ -39,9 +39,9 @@ import java.time.LocalDate
 @Composable
 fun ManageEventsScreen(
     uiState: ManageEventsUiState,
-    onRsvp: (eventId: String, attending: Boolean) -> Unit,
+    onRsvp: (eventId: java.util.UUID, attending: Boolean) -> Unit,
     onBackClick: () -> Unit,
-    onEventClick: (String) -> Unit = {},
+    onEventClick: (java.util.UUID) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     androidx.compose.foundation.layout.Box(modifier = modifier.fillMaxSize()) {
@@ -211,9 +211,14 @@ private fun EventManageRow(
     }
 }
 
+private val previewEventId1 = java.util.UUID.randomUUID()
+private val previewEventId2 = java.util.UUID.randomUUID()
+private val previewEventId3 = java.util.UUID.randomUUID()
+private val previewEventId4 = java.util.UUID.randomUUID()
+
 private val previewEvents = listOf(
     Event(
-        id = "1",
+        id = previewEventId1,
         title = "Kumite training",
         date = "15 jun 2026",
         startTime = "19:00",
@@ -222,7 +227,7 @@ private val previewEvents = listOf(
         localDate = LocalDate.now().plusDays(12)
     ),
     Event(
-        id = "2",
+        id = previewEventId2,
         title = "Kata competitie",
         date = "22 jun 2026",
         startTime = "10:00",
@@ -231,7 +236,7 @@ private val previewEvents = listOf(
         localDate = LocalDate.now().plusDays(19)
     ),
     Event(
-        id = "3",
+        id = previewEventId3,
         title = "Zomerstage",
         date = "1 jul 2026",
         startTime = "09:00",
@@ -240,7 +245,7 @@ private val previewEvents = listOf(
         localDate = LocalDate.now().plusDays(28)
     ),
     Event(
-        id = "4",
+        id = previewEventId4,
         title = "Voorjaarsexamen",
         date = "4 mei 2026",
         startTime = "13:00",
@@ -257,7 +262,7 @@ private fun ManageEventsScreenPreview() {
         ManageEventsScreen(
             uiState = ManageEventsUiState(
                 events = previewEvents,
-                rsvp = mapOf("1" to true, "2" to false, "4" to true),
+                rsvp = mapOf(previewEventId1 to true, previewEventId2 to false, previewEventId4 to true),
                 isError = false
             ),
             onRsvp = { _, _ -> },

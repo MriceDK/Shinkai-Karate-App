@@ -1,9 +1,10 @@
 package be.mauricedeke.shinkai.domain.model
 
 import java.time.LocalDate
+import java.util.UUID
 
 data class Training(
-    val id: String = "",
+    val id: UUID = UUID.randomUUID(),
     val type: String = "",
     val startTime: String = "",
     val endTime: String = "",

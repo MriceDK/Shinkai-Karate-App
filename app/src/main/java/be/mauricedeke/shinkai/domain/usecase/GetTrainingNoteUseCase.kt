@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetTrainingNoteUseCase @Inject constructor(
     private val trainingNoteRepository: TrainingNoteRepository
 ) {
-    operator fun invoke(id: String): String = trainingNoteRepository.getNote(id)
+    operator fun invoke(id: java.util.UUID): String = trainingNoteRepository.getNote(id)
 }

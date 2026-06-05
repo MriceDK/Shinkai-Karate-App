@@ -249,8 +249,10 @@ fun EventDetailScreen(
     }
 }
 
+private val previewEventDetailId = java.util.UUID.randomUUID()
+
 private val previewEvent = Event(
-    id = "1", title = "Stage Naigairyu",
+    id = previewEventDetailId, title = "Stage Naigairyu",
     startTime = "09:00", endTime = "12:00",
     date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
     description = "Een intensieve stage waarbij alle graden welkom zijn. Breng je eigen drinkwater en een handdoek mee.",

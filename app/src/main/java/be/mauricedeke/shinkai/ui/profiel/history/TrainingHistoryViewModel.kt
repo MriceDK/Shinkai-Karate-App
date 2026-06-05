@@ -77,7 +77,7 @@ class TrainingHistoryViewModel @Inject constructor(
         }
     }
 
-    fun onTrainingSelected(id: String) {
+    fun onTrainingSelected(id: UUID) {
         val current = _uiState.value.selectedTrainingId
         if (current == id) {
             _uiState.update { it.copy(selectedTrainingId = null, notes = "") }
@@ -98,7 +98,7 @@ class TrainingHistoryViewModel @Inject constructor(
     fun logTraining(type: String, startTime: String, endTime: String, sensei: String, injuries: String) {
         val date = _uiState.value.selectedDate
         val training = Training(
-            id = UUID.randomUUID().toString(),
+            id = UUID.randomUUID(),
             type = type,
             startTime = startTime,
             endTime = endTime,

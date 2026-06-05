@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +22,7 @@ class EventDetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(EventDetailUiState())
     val uiState: StateFlow<EventDetailUiState> = _uiState
 
-    fun loadEvent(id: String) {
+    fun loadEvent(id: UUID) {
         viewModelScope.launch {
             val event = getEventById(id)
             if (event != null) _uiState.update { it.copy(event = event, rsvp = event.rsvp) }

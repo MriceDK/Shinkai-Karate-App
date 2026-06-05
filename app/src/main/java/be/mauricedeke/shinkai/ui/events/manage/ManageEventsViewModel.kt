@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,7 +47,7 @@ class ManageEventsViewModel @Inject constructor(
         }
     }
 
-    fun setRsvp(eventId: String, attending: Boolean) {
+    fun setRsvp(eventId: UUID, attending: Boolean) {
         val event = _uiState.value.events.find { it.id == eventId } ?: return
         val isUpcoming = event.localDate == null || !event.localDate.isBefore(LocalDate.now())
         if (!isUpcoming) return
@@ -57,3 +58,4 @@ class ManageEventsViewModel @Inject constructor(
         viewModelScope.launch { setRsvpUseCase(eventId, next) }
     }
 }
+
