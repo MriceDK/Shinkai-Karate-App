@@ -102,13 +102,17 @@ private fun ShinkaiAppContent(
             else -> Screen.Profiel.route
         }
 
+        val showBottomBar = currentRoute != Screen.Login.route
+
         Scaffold(
             contentWindowInsets = WindowInsets.safeDrawing,
             bottomBar = {
-                ShinkaiBottomBar(
-                    activeRoute = activeTab,
-                    onTabClick = { route -> navController.navigate(route) }
-                )
+                if (showBottomBar) {
+                    ShinkaiBottomBar(
+                        activeRoute = activeTab,
+                        onTabClick = { route -> navController.navigate(route) }
+                    )
+                }
             },
             snackbarHost = {
                 SnackbarHost(snackbarHostState) { data ->

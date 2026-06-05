@@ -71,7 +71,8 @@ fun ShinkaiNavGraph(
     profielViewModel: ProfielViewModel = hiltViewModel(),
     strengthTestViewModel: StrengthTestViewModel = hiltViewModel(),
     trainingHistoryViewModel: TrainingHistoryViewModel = hiltViewModel(),
-    accountViewModel: AccountViewModel = hiltViewModel()
+    accountViewModel: AccountViewModel = hiltViewModel(),
+    loginViewModel: be.mauricedeke.shinkai.ui.login.LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val permissionRequest by mainViewModel.permissionRequest.collectAsStateWithLifecycle()
@@ -88,6 +89,16 @@ fun ShinkaiNavGraph(
     val strengthTestUiState by strengthTestViewModel.uiState.collectAsStateWithLifecycle()
     val trainingHistoryUiState by trainingHistoryViewModel.uiState.collectAsStateWithLifecycle()
     val accountUiState by accountViewModel.uiState.collectAsStateWithLifecycle()
+    val loginUiState by loginViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(loginUiState.loginSuccess) {
+        if (loginUiState.loginSuccess) {
+            loginViewModel.onLoginHandled()
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Login.route) { inclusive = true }
+            }
+        }
+    }
 
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
@@ -101,9 +112,23 @@ fun ShinkaiNavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = Screen.Login.route,
         modifier = modifier
     ) {
+
+        composable(Screen.Login.route) {
+            be.mauricedeke.shinkai.ui.login.LoginScreen(
+                uiState = loginUiState,
+                onEmailChanged = loginViewModel::onEmailChanged,
+                onPasswordChanged = loginViewModel::onPasswordChanged,
+                onLoginClick = loginViewModel::onLoginClick,
+                onGuestClick = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable(Screen.Home.route) {
             HomeScreen(
