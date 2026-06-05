@@ -1,0 +1,91 @@
+package be.mauricedeke.shinkai.di
+
+import be.mauricedeke.shinkai.data.remote.AuthTokenStore
+import be.mauricedeke.shinkai.data.remote.api.AuthApi
+import be.mauricedeke.shinkai.data.remote.api.BeltApi
+import be.mauricedeke.shinkai.data.remote.api.EventApi
+import be.mauricedeke.shinkai.data.remote.api.KataApi
+import be.mauricedeke.shinkai.data.remote.api.LexiconApi
+import be.mauricedeke.shinkai.data.remote.api.StrengthApi
+import be.mauricedeke.shinkai.data.remote.api.SupportApi
+import be.mauricedeke.shinkai.data.remote.api.TrainingApi
+import be.mauricedeke.shinkai.data.remote.api.TrainingSessionApi
+import be.mauricedeke.shinkai.data.remote.api.UserApi
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
+
+private const val BASE_URL = "https://api.shinkai.be/v1/"
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+
+    @Provides
+    @Singleton
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .addLast(KotlinJsonAdapterFactory())
+        .build()
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(tokenStore: AuthTokenStore): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .addInterceptor { chain ->
+                val request = tokenStore.accessToken
+                    ?.let { chain.request().newBuilder().header("Authorization", "Bearer $it").build() }
+                    ?: chain.request()
+                chain.proceed(request)
+            }
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Provides @Singleton
+    fun provideAuthApi(retrofit: Retrofit): AuthApi = retrofit.create(AuthApi::class.java)
+
+    @Provides @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi = retrofit.create(UserApi::class.java)
+
+    @Provides @Singleton
+    fun provideEventApi(retrofit: Retrofit): EventApi = retrofit.create(EventApi::class.java)
+
+    @Provides @Singleton
+    fun provideTrainingApi(retrofit: Retrofit): TrainingApi = retrofit.create(TrainingApi::class.java)
+
+    @Provides @Singleton
+    fun provideTrainingSessionApi(retrofit: Retrofit): TrainingSessionApi = retrofit.create(TrainingSessionApi::class.java)
+
+    @Provides @Singleton
+    fun provideBeltApi(retrofit: Retrofit): BeltApi = retrofit.create(BeltApi::class.java)
+
+    @Provides @Singleton
+    fun provideKataApi(retrofit: Retrofit): KataApi = retrofit.create(KataApi::class.java)
+
+    @Provides @Singleton
+    fun provideLexiconApi(retrofit: Retrofit): LexiconApi = retrofit.create(LexiconApi::class.java)
+
+    @Provides @Singleton
+    fun provideStrengthApi(retrofit: Retrofit): StrengthApi = retrofit.create(StrengthApi::class.java)
+
+    @Provides @Singleton
+    fun provideSupportApi(retrofit: Retrofit): SupportApi = retrofit.create(SupportApi::class.java)
+}
