@@ -1,7 +1,7 @@
 package be.mauricedeke.shinkai.data.repository
 
-import be.mauricedeke.shinkai.data.local.BeltNoteEntity
-import be.mauricedeke.shinkai.data.local.NoteDao
+import be.mauricedeke.shinkai.data.local.room.entity.BeltNoteEntity
+import be.mauricedeke.shinkai.data.local.room.dao.NoteDao
 import be.mauricedeke.shinkai.domain.repository.NoteRepository
 import javax.inject.Inject
 import javax.inject.Singleton

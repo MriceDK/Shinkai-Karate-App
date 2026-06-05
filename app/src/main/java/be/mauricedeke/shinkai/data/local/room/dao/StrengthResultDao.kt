@@ -1,8 +1,9 @@
-package be.mauricedeke.shinkai.data.local
+package be.mauricedeke.shinkai.data.local.room.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import be.mauricedeke.shinkai.data.local.room.entity.StrengthResultEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

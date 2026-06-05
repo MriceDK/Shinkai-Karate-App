@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.data.local
+package be.mauricedeke.shinkai.data.local.room.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

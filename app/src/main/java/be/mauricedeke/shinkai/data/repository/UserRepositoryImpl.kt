@@ -1,8 +1,8 @@
 package be.mauricedeke.shinkai.data.repository
 
 import be.mauricedeke.shinkai.data.fake.FakeDataSource
-import be.mauricedeke.shinkai.data.local.UserProfileDao
-import be.mauricedeke.shinkai.data.local.UserProfileEntity
+import be.mauricedeke.shinkai.data.local.room.dao.UserProfileDao
+import be.mauricedeke.shinkai.data.local.room.entity.UserProfileEntity
 import be.mauricedeke.shinkai.domain.model.UserProfile
 import be.mauricedeke.shinkai.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow

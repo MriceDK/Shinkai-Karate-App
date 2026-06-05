@@ -1,8 +1,8 @@
 package be.mauricedeke.shinkai.data.repository
 
 import be.mauricedeke.shinkai.data.fake.FakeDataSource
-import be.mauricedeke.shinkai.data.local.StrengthResultDao
-import be.mauricedeke.shinkai.data.local.StrengthResultEntity
+import be.mauricedeke.shinkai.data.local.room.dao.StrengthResultDao
+import be.mauricedeke.shinkai.data.local.room.entity.StrengthResultEntity
 import be.mauricedeke.shinkai.domain.model.StrengthResult
 import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.domain.model.beltColorFromDb
