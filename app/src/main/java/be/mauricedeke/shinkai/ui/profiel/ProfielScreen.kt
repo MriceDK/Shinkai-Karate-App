@@ -1,9 +1,5 @@
 package be.mauricedeke.shinkai.ui.profiel
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -48,7 +44,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,24 +61,11 @@ fun ProfielScreen(
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
     onLocationClick: () -> Unit = {},
-    onProfilePictureSelected: (String) -> Unit = {},
     isDarkTheme: Boolean = false,
     onDarkThemeToggle: (Boolean) -> Unit = {},
 ) {
     val profile = uiState.userProfile
     val loggedIn = profile != null
-    val context = LocalContext.current
-    val photoPicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        if (uri != null) {
-            context.contentResolver.takePersistableUriPermission(
-                uri,
-                android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-            onProfilePictureSelected(uri.toString())
-        }
-    }
 
     Column(
         modifier = modifier
@@ -99,49 +81,28 @@ fun ProfielScreen(
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    contentAlignment = Alignment.BottomEnd,
-                    modifier = Modifier.clickable {
-                        photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    }
-                ) {
-                    if (profile?.profilePictureUri != null) {
-                        AsyncImage(
-                            model = profile.profilePictureUri,
-                            contentDescription = "Profile picture",
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(72.dp)
-                                .clip(CircleShape)
-                        )
-                    } else {
-                        Box(
-                            modifier = Modifier
-                                .size(72.dp)
-                                .clip(CircleShape)
-                                .background(if (loggedIn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                Icons.Default.Person,
-                                null,
-                                tint = if (loggedIn) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.size(44.dp)
-                            )
-                        }
-                    }
+                if (profile?.profilePictureUri != null) {
+                    AsyncImage(
+                        model = profile.profilePictureUri,
+                        contentDescription = "Profile picture",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(72.dp)
+                            .clip(CircleShape)
+                    )
+                } else {
                     Box(
                         modifier = Modifier
-                            .size(22.dp)
+                            .size(72.dp)
                             .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surface),
+                            .background(if (loggedIn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            Icons.Default.Edit,
+                            Icons.Default.Person,
                             null,
-                            modifier = Modifier.size(12.dp),
-                            tint = MaterialTheme.colorScheme.onSurface
+                            tint = if (loggedIn) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(44.dp)
                         )
                     }
                 }
