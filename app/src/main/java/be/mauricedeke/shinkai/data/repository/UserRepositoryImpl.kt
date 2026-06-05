@@ -5,6 +5,8 @@ import be.mauricedeke.shinkai.data.local.UserProfileDao
 import be.mauricedeke.shinkai.data.local.UserProfileEntity
 import be.mauricedeke.shinkai.domain.model.UserProfile
 import be.mauricedeke.shinkai.domain.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -13,6 +15,19 @@ import javax.inject.Singleton
 class UserRepositoryImpl @Inject constructor(
     private val userProfileDao: UserProfileDao
 ) : UserRepository {
+
+    override fun observeUserProfile(): Flow<UserProfile?> =
+        userProfileDao.observe().map { entity ->
+            entity?.let {
+                UserProfile(
+                    userId = it.userId,
+                    name = it.name,
+                    email = it.email,
+                    belt = it.belt,
+                    profilePictureUri = it.profilePictureUri
+                )
+            } ?: FakeDataSource.userProfile
+        }
 
     override suspend fun getUserProfile(): UserProfile? {
         var entity = userProfileDao.get() ?: return FakeDataSource.userProfile
