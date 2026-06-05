@@ -1,16 +1,13 @@
-# 🎬 Project Status — Howest Prime App
+# ShinKai — Karate Club App
 
 ## Author
-- Ann Audenaert  
-- Koen Koreman  
+- Maurice De Kegel
 
+## Project Summary
 
-# Project Summary
+ShinKai is a mobile companion app for members of a Shinkempo karate club. It gives members a central place to manage their training, track upcoming events, study techniques and lexicon per belt level, and measure their physical progress through strength tests. The app communicates with a REST API and a LavinMQ message broker, and persists user data locally with Room.
 
-The mobile app is responsible for retrieving Howest Prime tickets and notifying the user about important events such as payment reminders and movie start reminders.
-
-The app also contains extra features that improve the cinema experience for visitors entering the building.
-
+---
 
 # Daily Status
 
@@ -19,13 +16,11 @@ The app also contains extra features that improve the cinema experience for visi
 > - Update the status tables for each feature
 
 ## Monday, June 1st, 2026
-
 - Made the events and calendar work dynamically with the current date
 - Added functionality for opening events from the calendar (also works for past events)
 - Added swipe left/right on the calendar to switch between months
 
 ## Tuesday, June 2nd, 2026
-
 - Added `localDate` and `rsvp` fields to the Event model and updated FakeDataSource with future-dated events
 - Wired events and home screen to FakeDataSource, limited displayed events and added placeholders
 - Added manage events screen with per-event RSVP and upcoming-only restriction
@@ -35,242 +30,195 @@ The app also contains extra features that improve the cinema experience for visi
 - Wired manage events to the nav graph and scoped settings ViewModels to backstack entry for save-on-click behavior
 
 ## Wednesday, June 3rd, 2026
-- worked on other project
+- Worked on other project
 
 ## Thursday, June 4th, 2026
+- Added camera/gallery chooser bottom sheet for profile picture in AccountScreen
+- Fixed camera crash (SecurityException) by adding runtime CAMERA permission request
+- Persisted captured photos to filesDir and saved URI in Room
+- Made ProfielScreen observe Room reactively so profile picture updates immediately
+- Added `java.util.UUID` IDs to all domain models (Event, Training, Techniek, LexiconEntry)
+- Refactored all repositories, use cases, ViewModels, UiStates, screens, and NavGraph to use UUID
+- Replaced rsvpMap pattern with direct mutation on mutable event lists
 
-... continue for each day until the end of the project
+## Friday, June 5th, 2026
+- Created all remote DTOs (`data/remote/dto/`) with Moshi `@JsonClass` annotations
+- Created all Retrofit API interfaces (`data/remote/api/`) covering Auth, User, Events, Trainings, Belts, Katas, Lexicon, Strength, Support
+- Created request body DTOs for all POST/PUT/PATCH endpoints
 
-# Status Overview Technical Requirements
+---
+
+# Status Overview
 
 ## Status Legend
 
 | Status | Meaning |
 |---|---|
 | ✅ | Implemented |
-| ⏳ | Work in progress |
-| ❌ | Not implemented |
-| 🧪 | Testing |
-| ⚠️ | Problems / blocked |
+| ⏳ | In progress / wired to fake data |
+| ❌ | Not yet implemented |
 
-## Must Have (12/20)
+---
 
-### Tickets
+## Screens
+
+| Status | Screen | Notes |
+|---|---|---|
+| ✅ | HomeScreen | Upcoming events, next training, customisable shortcuts |
+| ✅ | EventsScreen | Calendar view, event list, inbox events |
+| ✅ | EventDetailScreen | Event info, RSVP buttons |
+| ✅ | ManageEventsScreen | RSVP management for all events, past events greyed out |
+| ✅ | KaartScreen | Mapbox map with event markers, dojo zones (GeoJSON), user location |
+| ✅ | TechniekScreen | Belt selector |
+| ✅ | TechniekDetailScreen | Programme sections, technique list, notes per belt |
+| ✅ | LexiconScreen | Searchable Japanese–Dutch glossary |
+| ✅ | ProfielScreen | Profile overview, belt, stats |
+| ✅ | AccountScreen | Edit name/email, profile picture (camera + gallery) |
+| ✅ | TrainingHistoryScreen | Calendar + training log per day, notes per training |
+| ✅ | StrengthTestScreen | Overview of best punch + kiai scores |
+| ✅ | PunchTestScreen | Accelerometer-based punch force measurement |
+| ✅ | KiaiTestScreen | Microphone-based kiai dB measurement |
+| ✅ | NotificationsScreen | Toggle and configure notification preferences |
+| ✅ | LocationScreen | Toggle location permission usage |
+| ❌ | LoginScreen | Auth flow not yet implemented |
+| ❌ | KataScreen | No screen yet |
+| ❌ | SupportScreen | No screen yet |
+
+---
+
+## Data Layer
+
+### Room Database
+
+| Status | Table | Used by |
+|---|---|---|
+| ✅ | `user_profile` | ProfielScreen, AccountScreen — name, email, belt, profile picture URI |
+| ✅ | `belt_note` | TechniekDetailScreen — free-text notes per belt |
+| ✅ | `notification_settings` | NotificationsScreen — all notification toggle/reminder prefs |
+| ✅ | `location_settings` | LocationScreen — location permission toggles |
+| ✅ | `shortcuts` | HomeScreen — which shortcuts are pinned |
+| ✅ | `strength_result` | StrengthTestScreen — best punch and kiai scores |
+
+### Remote API (Retrofit + Moshi)
+
+All interfaces and DTOs are defined. None are wired to repositories yet — all data still comes from FakeDataSource.
+
+| Status | Interface | Endpoints |
+|---|---|---|
+| ⏳ | `AuthApi` | `POST /auth/login` |
+| ⏳ | `UserApi` | `GET /users/me`, `PUT /users/me` |
+| ⏳ | `EventApi` | `GET /events`, `GET /events/inbox`, `GET /events/{id}`, `POST /events/{id}/rsvp` |
+| ⏳ | `TrainingApi` | `GET /trainings`, `GET /trainings/next`, `GET /trainings/{id}`, `POST /trainings`, `PATCH /trainings/{id}/note` |
+| ⏳ | `BeltApi` | `GET /belts`, `GET /belts/{name}`, `GET /belts/{name}/notes`, `PUT /belts/{name}/notes` |
+| ⏳ | `KataApi` | `GET /katas` |
+| ⏳ | `LexiconApi` | `GET /lexicon` |
+| ⏳ | `StrengthApi` | `GET /strength-results`, `PUT /strength-results/{type}`, `POST /strength-test/punch`, `POST /strength-test/kiai` |
+| ⏳ | `SupportApi` | `POST /support` |
+
+### Message Broker (LavinMQ)
 
 | Status | Feature | Notes |
 |---|---|---|
-| ⏳ | Receive tickets from the MessageBroker | |
-| ❌ | Save tickets in a local Room database | |
-| ❌ | Display upcoming tickets in a TicketListScreen | |
-| ❌ | Show QR code when clicking on a ticket | |
-| ❌ | Set a reminder notification 1 hour before movie start | |
+| ✅ | `LavinMQMessageConsumer` | Connects to broker, consumes messages |
+| ✅ | `LavinMQMessagePublisher` | Publishes messages to broker |
+| ✅ | `AmqpNotificationService` | Listens for push notification events |
+| ✅ | `NotificationEventBus` | In-app event bus for broker messages |
 
-### Snacks
+---
 
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Retrieve snack data via Retrofit | |
-| ❌ | Save snacks in a local Room database | |
-| ❌ | Display snacks in a SnackListScreen | |
-| ❌ | Add snacks to a cart | |
-| ❌ | Show cart overview in CartScreen | |
-| ❌ | Share order via intent/message | |
-
-### Location
+## Sensors & Hardware
 
 | Status | Feature | Notes |
 |---|---|---|
-| ❌ | Show Mapbox map with cinema location | |
-| ❌ | Display user location marker | |
+| ✅ | Accelerometer | Used in PunchTestScreen to measure strike force |
+| ✅ | Microphone | Used in KiaiTestScreen to measure kiai volume in dB |
+| ✅ | GPS / FusedLocationProvider | Used in KaartScreen to show user position on map |
+| ✅ | Camera | Used in AccountScreen to take a new profile photo |
+| ✅ | Gallery | Used in AccountScreen to pick a profile photo |
 
+---
 
-### Sensors
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Detect light intensity and movement | |
-| ❌ | Flashlight activation via toggle button | |
-| ❌ | Unit testing | |
-
-
-## Intermediate (14+/20)
-
-### Tickets
+## Background Work
 
 | Status | Feature | Notes |
 |---|---|---|
-| ❌ | Show detailed ticket information | |
-| ❌ | Multiple notification options | |
+| ✅ | `NotificationWorker` | WorkManager worker for scheduled reminders |
+| ✅ | `WorkManagerModule` | Hilt module providing WorkManager |
 
+---
 
-### Snacks
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Send snack orders to MessageBroker | |
-
-
-### Location
+## Other
 
 | Status | Feature | Notes |
 |---|---|---|
-| ❌ | Detect entering/exiting building | |
+| ✅ | Dark / Light theme | Toggled from settings, persisted via DataStore |
+| ✅ | Permission manager | Central `PermissionManager` for CAMERA, location, microphone |
+| ✅ | Bottom navigation | Home, Events, Kaart, Technieken, Profiel |
+| ✅ | Hilt dependency injection | All repositories, use cases, ViewModels wired |
+| ✅ | MVVM + Use Cases | Clean Architecture throughout |
+| ❌ | Login / token auth | Bearer token not yet attached to Retrofit requests |
+| ❌ | Real API wiring | Repositories still use FakeDataSource |
 
-
-### Sensors
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Auto flashlight inside building | |
-| ❌ | Auto flashlight when light is low | |
-| ❌ | Auto flashlight on movement | |
-| ❌ | Unit + instrumented testing | |
-
-
-## Experienced (16+/20)
-
-###  Tickets
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Save tickets securely in key vault | |
-| ❌ | Filter upcoming/all tickets | |
-| ❌ | Rate expired tickets | |
-
-### Snacks
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Notification when order is ready | |
-| ❌ | Locker system with QR-code | |
-| ❌ | QR scanning with camera | |
-| ❌ | Unlock locker after successful scan | |
-
-### Location
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Navigate to correct room | |
-| ❌ | Show friends’ locations | |
-
-
-### Extra Features
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | Additional approved features | |
-
-
-## Extra Mile (18+/20)
-
-| Status | Feature | Notes |
-|---|---|---|
-| ❌ | CI/CD deployment to Firebase App Distribution | |
-
+---
 
 # App Overview
 
-Describe the implementation of the following topics.
+## Architecture
 
-
-## Screenshots
-![](ReadmeImages/Screenshot.png)
-
-Provide screenshots for every screen in the application.  
-Each screen should have a unique name.
-
+```
+UI (Composables)
+    └── ViewModel  ←→  UiState
+            └── Use Cases
+                    └── Repositories (interfaces)
+                            ├── Impl (FakeDataSource / Room / Retrofit)
+                            └── Data layer (Room DAOs, Retrofit APIs, DataStore)
+```
 
 ## Room Database
-![](ReadmeImages/Database.png)
 
-Describe:
-- Stored data
-- Related screens
-- Database structure
+Six tables are persisted locally:
+- **user_profile** — single-row table (id = 0) for the logged-in user's name, email, belt, and profile picture URI
+- **belt_note** — one note string per belt name for the Technieken screen
+- **notification_settings** — all reminder and notification toggles
+- **location_settings** — location permission usage toggles
+- **shortcuts** — ordered list of shortcut IDs pinned on the Home screen
+- **strength_result** — best punch (N) and kiai (dB) scores
 
+## API Requests
 
-##  API Requests
-![](ReadmeImages/API.png)
+All endpoints are defined in `data/remote/api/`. JSON is parsed with Moshi. Request and response DTOs live in `data/remote/dto/`. The next step is a Hilt `NetworkModule` that provides Retrofit instances, followed by replacing FakeDataSource calls in each `RepositoryImpl`.
 
-Describe:
-- API endpoint
-- JSON response
-- Screen usage
+## Message Broker
 
-## MessageBroker
-![](ReadmeImages/Database.png)
-
-Describe:
-- Connection setup
-- Queue/topic usage
-- Message handling
-
-
-## Tickets
-![](ReadmeImages/Notifications.png)
-
-Describe:
-- Ticket storage
-- Ticket retrieval
-- QR generation
-
-
-## Intents
-![](ReadmeImages/Intents.png)
-
-Describe:
-- Shared intents
-- Navigation intents
-- External app integration
-
+LavinMQ (AMQP) is used for real-time push notifications. `LavinMQMessageConsumer` connects and consumes messages; `AmqpNotificationService` translates them into Android notifications via `NotificationEventBus`.
 
 ## WorkManager
-![](ReadmeImages/Workmanager.png)
 
-Describe:
-- Background tasks
-- Scheduling
-- Notification handling
+`NotificationWorker` handles scheduled background reminders (event and training reminders) triggered from `NotificationSettings`. Scheduling logic lives in `WorkerUtils`.
 
-## Notifications
-![](ReadmeImages/Notifications.png)
+## Map
 
-Describe:
-- Reminder notifications
-- Notification channels
-- Trigger moments
+Mapbox SDK is used on the Kaart screen. Event locations are shown as markers (lat/lng from the API). Dojo zones are rendered as GeoJSON polygons. The user's live GPS position is tracked via `LocationRepository` using the Fused Location Provider.
 
+## Sensors
 
-##  Map
-![](ReadmeImages/SensorData.png)
+- **Accelerometer** (`AccelerometerRepository`) — records peak G-force during a punch and maps the score to a `BeltColor` via `BeltPunchScore`
+- **Microphone** (`MicrophoneRepository`) — records audio, computes peak dB, maps to a `BeltColor` via `BeltKiaiDb`
 
-Describe:
-- Mapbox integration
-- Geolocation
-- GeoJSON usage
+## Camera
 
+Profile picture changes in `AccountScreen` offer a bottom sheet with two options:
+- **Camera** — requests `CAMERA` permission, uses `FileProvider` to create a temp file, copies the result to `filesDir/profile_pictures/` after capture
+- **Gallery** — uses `PickVisualMedia` with `takePersistableUriPermission`
 
-##  Sensor Data
-![](ReadmeImages/SensorData.png)
+The selected URI is saved immediately to Room and observed reactively so `ProfielScreen` updates without requiring a manual refresh.
 
-Describe:
-- Sensor usage
-- Light detection
-- Movement detection
-
-
-##  Camera (Optional)
-![](ReadmeImages/Camera.png)
-
-Describe:
-- QR scanning implementation
-- Camera integration
-
+---
 
 # Repositories
 
 ## Code Repository
-- [Link to repository]
+- [GitHub — st-client-mobile-Maurice-De-Kegel](https://github.com)
 
-##  APK
+## APK
 - [Link to APK]
