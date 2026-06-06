@@ -87,9 +87,12 @@ class TrainingHistoryViewModel @Inject constructor(
     }
 
     fun onNotesChanged(notes: String) {
-        val id = _uiState.value.selectedTrainingId ?: return
         _uiState.update { it.copy(notes = notes) }
-        saveTrainingNote(id, notes)
+    }
+
+    fun onNotesFocusLost() {
+        val id = _uiState.value.selectedTrainingId ?: return
+        saveTrainingNote(id, _uiState.value.notes)
     }
 
     fun showLogSheet() = _uiState.update { it.copy(showLogSheet = true) }

@@ -24,7 +24,7 @@ data class ProgramSectionDto(
 @JsonClass(generateAdapter = true)
 data class TechniekDto(
     val name: String,
-    val belt: String,
     val description: String,
-    val programme: String
+    val belt: String? = null,
+    val programme: String? = null
 )

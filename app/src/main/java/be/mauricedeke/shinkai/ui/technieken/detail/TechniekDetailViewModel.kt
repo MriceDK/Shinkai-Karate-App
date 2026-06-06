@@ -40,8 +40,11 @@ class TechniekDetailViewModel @Inject constructor(
 
     fun onNotesChanged(notes: String) {
         _uiState.update { it.copy(notes = notes) }
+    }
+
+    fun onNotesFocusLost() {
         viewModelScope.launch {
-            saveNote(_uiState.value.belt, notes)
+            saveNote(_uiState.value.belt, _uiState.value.notes)
         }
     }
 }

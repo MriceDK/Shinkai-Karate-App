@@ -1,5 +1,6 @@
 package be.mauricedeke.shinkai.di
 
+import be.mauricedeke.shinkai.BuildConfig
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
 import be.mauricedeke.shinkai.data.remote.api.AuthApi
 import be.mauricedeke.shinkai.data.remote.api.BeltApi
@@ -11,6 +12,7 @@ import be.mauricedeke.shinkai.data.remote.api.SupportApi
 import be.mauricedeke.shinkai.data.remote.api.TrainingApi
 import be.mauricedeke.shinkai.data.remote.api.TrainingSessionApi
 import be.mauricedeke.shinkai.data.remote.api.UserApi
+import be.mauricedeke.shinkai.data.remote.api.VersionsApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -22,8 +24,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-
-private const val BASE_URL = "https://api.shinkai.be/v1/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -54,7 +54,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.API_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
@@ -88,4 +88,7 @@ object NetworkModule {
 
     @Provides @Singleton
     fun provideSupportApi(retrofit: Retrofit): SupportApi = retrofit.create(SupportApi::class.java)
+
+    @Provides @Singleton
+    fun provideVersionsApi(retrofit: Retrofit): VersionsApi = retrofit.create(VersionsApi::class.java)
 }

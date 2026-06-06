@@ -2,6 +2,7 @@ package be.mauricedeke.shinkai.ui.profiel.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.mauricedeke.shinkai.data.remote.client.AuthClient
 import be.mauricedeke.shinkai.domain.model.UserProfile
 import be.mauricedeke.shinkai.domain.usecase.GetUserProfileUseCase
 import be.mauricedeke.shinkai.domain.usecase.UpdateUserProfileUseCase
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val getUserProfile: GetUserProfileUseCase,
-    private val updateUserProfile: UpdateUserProfileUseCase
+    private val updateUserProfile: UpdateUserProfileUseCase,
+    private val authClient: AuthClient
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(AccountUiState())
@@ -34,6 +36,7 @@ class AccountViewModel @Inject constructor(
 
     fun onNaamChanged(naam: String) = _uiState.update { it.copy(naam = naam) }
     fun onEmailChanged(email: String) = _uiState.update { it.copy(email = email) }
+    fun onCurrentPasswordChanged(pw: String) = _uiState.update { it.copy(currentPassword = pw) }
     fun onNewPasswordChanged(pw: String) = _uiState.update { it.copy(newPassword = pw) }
     fun onConfirmPasswordChanged(pw: String) = _uiState.update { it.copy(confirmPassword = pw) }
     fun onProfilePictureSelected(uri: String) {
@@ -48,6 +51,15 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch {
             val s = _uiState.value
             updateUserProfile(UserProfile(name = s.naam, email = s.email, profilePictureUri = s.profilePictureUri))
+        }
+    }
+
+    fun onSavePassword() {
+        val s = _uiState.value
+        if (s.currentPassword.isBlank() || s.newPassword.isBlank() || s.newPassword != s.confirmPassword) return
+        viewModelScope.launch {
+            authClient.changePassword(s.currentPassword, s.newPassword)
+            _uiState.update { it.copy(currentPassword = "", newPassword = "", confirmPassword = "") }
         }
     }
 }

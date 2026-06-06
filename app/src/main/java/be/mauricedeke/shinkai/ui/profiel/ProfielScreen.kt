@@ -21,7 +21,6 @@ import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Link
@@ -61,6 +60,7 @@ fun ProfielScreen(
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
     onLocationClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
     isDarkTheme: Boolean = false,
     onDarkThemeToggle: (Boolean) -> Unit = {},
 ) {
@@ -208,12 +208,7 @@ fun ProfielScreen(
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            ProfileListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = {})
-            ProfileListItem(
-                Icons.Default.Delete,
-                "Delete Account",
-                labelColor = MaterialTheme.colorScheme.primary,
-                onClick = {})
+            ProfileListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
         }
         Spacer(Modifier.height(16.dp))
     }

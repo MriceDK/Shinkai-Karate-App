@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
@@ -55,6 +56,7 @@ fun TrainingHistoryScreen(
     onDateSelected: (LocalDate) -> Unit = {},
     onTrainingSelected: (java.util.UUID) -> Unit = {},
     onNotesChanged: (String) -> Unit = {},
+    onNotesFocusLost: () -> Unit = {},
     onLogClick: () -> Unit = {},
     onLogSave: (type: String, startTime: String, endTime: String, sensei: String, injuries: String) -> Unit = { _, _, _, _, _ -> },
     onLogDismiss: () -> Unit = {},
@@ -179,7 +181,8 @@ fun TrainingHistoryScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp),
+                            .height(120.dp)
+                            .onFocusChanged { if (!it.isFocused) onNotesFocusLost() },
                         minLines = 4,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color.Transparent,

@@ -76,6 +76,15 @@ fun ShinkaiNavGraph(
 ) {
     val context = LocalContext.current
     val permissionRequest by mainViewModel.permissionRequest.collectAsStateWithLifecycle()
+    val isAuthenticated by mainViewModel.isAuthenticated.collectAsStateWithLifecycle()
+
+    LaunchedEffect(isAuthenticated) {
+        if (isAuthenticated == true) {
+            navController.navigate(Screen.Home.route) {
+                popUpTo(Screen.Login.route) { inclusive = true }
+            }
+        }
+    }
 
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val techniekUiState by techniekViewModel.uiState.collectAsStateWithLifecycle()
@@ -161,6 +170,7 @@ fun ShinkaiNavGraph(
             TechniekDetailScreen(
                 uiState = techniekDetailUiState,
                 onNotesChanged = techniekDetailViewModel::onNotesChanged,
+                onNotesFocusLost = techniekDetailViewModel::onNotesFocusLost,
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -219,6 +229,12 @@ fun ShinkaiNavGraph(
                 onTrainingHistoryClick = { navController.navigate(Screen.TrainingHistory.route) },
                 onNotificationsClick = { navController.navigate(Screen.Notifications.route) },
                 onLocationClick = { navController.navigate(Screen.Location.route) },
+                onLogoutClick = {
+                    profielViewModel.logout()
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
                 isDarkTheme = darkThemeEnabled,
                 onDarkThemeToggle = onDarkThemeToggle
             )
@@ -229,9 +245,10 @@ fun ShinkaiNavGraph(
                 uiState = accountUiState,
                 onNaamChanged = accountViewModel::onNaamChanged,
                 onEmailChanged = accountViewModel::onEmailChanged,
+                onCurrentPasswordChanged = accountViewModel::onCurrentPasswordChanged,
                 onNewPasswordChanged = accountViewModel::onNewPasswordChanged,
                 onConfirmPasswordChanged = accountViewModel::onConfirmPasswordChanged,
-                onSavePassword = accountViewModel::onSave,
+                onSavePassword = accountViewModel::onSavePassword,
                 onSave = { accountViewModel.onSave(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() },
                 onProfilePictureSelected = accountViewModel::onProfilePictureSelected
@@ -244,6 +261,7 @@ fun ShinkaiNavGraph(
                 onDateSelected = trainingHistoryViewModel::onDateSelected,
                 onTrainingSelected = trainingHistoryViewModel::onTrainingSelected,
                 onNotesChanged = trainingHistoryViewModel::onNotesChanged,
+                onNotesFocusLost = trainingHistoryViewModel::onNotesFocusLost,
                 onLogClick = trainingHistoryViewModel::showLogSheet,
                 onLogSave = trainingHistoryViewModel::logTraining,
                 onLogDismiss = trainingHistoryViewModel::dismissLogSheet,

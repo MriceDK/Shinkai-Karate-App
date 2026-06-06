@@ -29,6 +29,8 @@ android {
         buildConfigField("String", "MAPBOX_PUBLIC_TOKEN", "\"${project.findProperty("MAPBOX_PUBLIC_TOKEN")}\"")
         buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${project.findProperty("MAPBOX_ACCESS_TOKEN")}\"")
 
+        buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
+
 
 
     }

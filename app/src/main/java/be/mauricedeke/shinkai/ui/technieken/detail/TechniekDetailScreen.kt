@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.ProgramSection
 import be.mauricedeke.shinkai.domain.model.Techniek
@@ -46,6 +47,7 @@ import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 fun TechniekDetailScreen(
     uiState: TechniekDetailUiState,
     onNotesChanged: (String) -> Unit = {},
+    onNotesFocusLost: () -> Unit = {},
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -139,7 +141,8 @@ fun TechniekDetailScreen(
                         onValueChange = onNotesChanged,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(120.dp),
+                            .height(120.dp)
+                            .onFocusChanged { if (!it.isFocused) onNotesFocusLost() },
                         minLines = 4,
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color.Transparent,

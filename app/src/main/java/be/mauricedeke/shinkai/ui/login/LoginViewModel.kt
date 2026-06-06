@@ -2,6 +2,7 @@ package be.mauricedeke.shinkai.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.mauricedeke.shinkai.data.local.datastore.AppDataStore
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
 import be.mauricedeke.shinkai.data.remote.client.AuthClient
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,7 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authClient: AuthClient,
-    private val tokenStore: AuthTokenStore
+    private val tokenStore: AuthTokenStore,
+    private val appDataStore: AppDataStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -34,6 +36,7 @@ class LoginViewModel @Inject constructor(
             authClient.login(state.email.trim(), state.password)
                 .onSuccess { response ->
                     tokenStore.accessToken = response.accessToken
+                    appDataStore.setAccessToken(response.accessToken)
                     _uiState.update {
                         it.copy(
                             isLoading = false,

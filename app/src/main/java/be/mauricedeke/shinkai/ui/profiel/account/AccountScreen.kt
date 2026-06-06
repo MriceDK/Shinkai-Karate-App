@@ -67,6 +67,7 @@ fun AccountScreen(
     uiState: AccountUiState,
     onNaamChanged: (String) -> Unit = {},
     onEmailChanged: (String) -> Unit = {},
+    onCurrentPasswordChanged: (String) -> Unit = {},
     onNewPasswordChanged: (String) -> Unit = {},
     onConfirmPasswordChanged: (String) -> Unit = {},
     onSavePassword: () -> Unit = {},
@@ -247,6 +248,8 @@ fun AccountScreen(
             Spacer(Modifier.height(12.dp))
             FormField("EMAIL:", uiState.email, onEmailChanged, keyboardType = KeyboardType.Email)
             Spacer(Modifier.height(16.dp))
+            FormField("Current Password:", uiState.currentPassword, onCurrentPasswordChanged, password = true)
+            Spacer(Modifier.height(12.dp))
             FormField("New Password:", uiState.newPassword, onNewPasswordChanged, password = true)
             Spacer(Modifier.height(12.dp))
             FormField(

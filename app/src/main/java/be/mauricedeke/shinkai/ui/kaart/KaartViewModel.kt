@@ -2,8 +2,8 @@ package be.mauricedeke.shinkai.ui.kaart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.mauricedeke.shinkai.data.fake.FakeDataSource
 import be.mauricedeke.shinkai.domain.model.Event
+import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
 import com.mapbox.geojson.Point
@@ -17,10 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class KaartViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
-    private val routeRepository: RouteRepository
+    private val routeRepository: RouteRepository,
+    private val eventRepository: EventRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(KaartUiState(events = FakeDataSource.events))
+    private val _uiState = MutableStateFlow(KaartUiState())
     val uiState: StateFlow<KaartUiState> = _uiState
 
     init {
@@ -28,6 +29,10 @@ class KaartViewModel @Inject constructor(
             locationRepository.location.collect { point ->
                 _uiState.update { it.copy(userLocation = point) }
             }
+        }
+        viewModelScope.launch {
+            val events = eventRepository.getEvents() ?: emptyList()
+            _uiState.update { it.copy(events = events) }
         }
     }
 
