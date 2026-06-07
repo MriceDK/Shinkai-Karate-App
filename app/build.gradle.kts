@@ -117,6 +117,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    // Location & Geofencing
+    implementation(libs.play.services.location)
+
     // MapBox
     implementation(libs.mapbox.maps)
     implementation(libs.mapbox.maps.compose)

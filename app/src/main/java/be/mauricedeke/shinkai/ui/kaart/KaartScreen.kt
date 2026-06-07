@@ -49,6 +49,9 @@ import com.mapbox.maps.extension.compose.style.ColorValue
 import com.mapbox.maps.extension.compose.style.DoubleValue
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
+import com.mapbox.geojson.Polygon
+import kotlin.math.cos
+import kotlin.math.sin
 import com.mapbox.maps.extension.compose.style.layers.generated.FillLayer
 import com.mapbox.maps.extension.compose.style.layers.generated.LineLayer
 import com.mapbox.maps.extension.compose.style.sources.GeoJSONData
@@ -67,6 +70,8 @@ fun KaartScreen(
     onLocationStop: () -> Unit = {},
     onEventSelected: (Event?) -> Unit = {},
     onViewEventDetails: (java.util.UUID) -> Unit = {},
+    onTrainingSelected: (TrainingSessionPoint?) -> Unit = {},
+    onViewTrainingDetails: (String) -> Unit = {},
     onFetchRoute: (Point) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -101,15 +106,6 @@ fun KaartScreen(
         modifier = modifier.fillMaxSize(),
         mapViewportState = mapViewportState
     ) {
-        FillLayer(
-            sourceState = rememberGeoJsonSourceState {
-                data = GeoJSONData(FakeDataSource.dojoZones)
-            },
-        ) {
-            fillColor = ColorValue(Color.Red.copy(alpha = 0.3f))
-            fillOpacity = DoubleValue(0.3)
-        }
-
         MapEffect(locationPermissionGranted) { mapView ->
             if (locationPermissionGranted) {
                 mapView.location.updateSettings {
@@ -135,6 +131,34 @@ fun KaartScreen(
             lineWidth = DoubleValue(5.0)
         }
 
+        val geofenceSourceState = rememberGeoJsonSourceState()
+        LaunchedEffect(uiState.events, uiState.trainingPoints) {
+            val eventFeatures = uiState.events
+                .filter { it.lat != null && it.lng != null }
+                .map { event ->
+                    Feature.fromGeometry(
+                        Polygon.fromLngLats(listOf(geofenceCirclePoints(event.lat!!, event.lng!!)))
+                    )
+                }
+            val trainingFeatures = uiState.trainingPoints.map { point ->
+                Feature.fromGeometry(
+                    Polygon.fromLngLats(listOf(geofenceCirclePoints(point.lat, point.lng)))
+                )
+            }
+            geofenceSourceState.data = GeoJSONData(
+                FeatureCollection.fromFeatures(eventFeatures + trainingFeatures).toJson()
+            )
+        }
+        val geofenceFillColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+        val geofenceStrokeColor = MaterialTheme.colorScheme.primary
+        FillLayer(sourceState = geofenceSourceState) {
+            fillColor = ColorValue(geofenceFillColor)
+        }
+        LineLayer(sourceState = geofenceSourceState) {
+            lineColor = ColorValue(geofenceStrokeColor)
+            lineWidth = DoubleValue(2.0)
+        }
+
         uiState.events.forEach { event ->
             if (event.lat != null && event.lng != null) {
                 key(event.id) {
@@ -145,6 +169,19 @@ fun KaartScreen(
                             onEventSelected(event)
                             true
                         }
+                    }
+                }
+            }
+        }
+
+        uiState.trainingPoints.forEach { point ->
+            key("training-${point.id}") {
+                PointAnnotation(point = Point.fromLngLat(point.lng, point.lat)) {
+                    iconImage = markerIcon
+                    iconSize = 0.8
+                    interactionsState.onClicked {
+                        onTrainingSelected(point)
+                        true
                     }
                 }
             }
@@ -181,6 +218,97 @@ fun KaartScreen(
                 }
             )
         }
+    }
+
+    if (uiState.selectedTrainingPoint != null) {
+        ModalBottomSheet(
+            onDismissRequest = { onTrainingSelected(null) },
+            sheetState = sheetState
+        ) {
+            TrainingSessionDetailSheet(
+                point = uiState.selectedTrainingPoint,
+                onViewDetails = {
+                    onTrainingSelected(null)
+                    onViewTrainingDetails(uiState.selectedTrainingPoint.id)
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TrainingSessionDetailSheet(
+    point: TrainingSessionPoint,
+    onViewDetails: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 8.dp)
+    ) {
+        Text(
+            text = point.type,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        Spacer(Modifier.height(16.dp))
+        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Schedule,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Column {
+                Text(
+                    text = point.date,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = "${point.startTime} – ${point.endTime}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        if (point.location.isNotBlank()) {
+            Spacer(Modifier.height(12.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.LocationOn,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = point.location,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+
+        Spacer(Modifier.height(24.dp))
+
+        OutlinedButton(
+            onClick = onViewDetails,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("View details")
+        }
+
+        Spacer(Modifier.height(16.dp))
     }
 }
 
@@ -284,6 +412,17 @@ private fun EventDetailSheet(
         }
 
         Spacer(Modifier.height(16.dp))
+    }
+}
+
+private fun geofenceCirclePoints(lat: Double, lng: Double, radiusMeters: Double = 50.0, steps: Int = 64): List<Point> {
+    val earthRadius = 6_371_000.0
+    val latRad = Math.toRadians(lat)
+    return (0..steps).map { i ->
+        val angle = Math.toRadians(i * 360.0 / steps)
+        val dLat = Math.toDegrees(radiusMeters / earthRadius * cos(angle))
+        val dLng = Math.toDegrees(radiusMeters / (earthRadius * cos(latRad)) * sin(angle))
+        Point.fromLngLat(lng + dLng, lat + dLat)
     }
 }
 

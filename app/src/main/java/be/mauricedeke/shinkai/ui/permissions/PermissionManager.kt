@@ -25,6 +25,9 @@ fun PermissionManager(
     val recordAudioLauncher = rememberLauncherForActivityResult(RequestPermission()) {
         onPermissionResult()
     }
+    val backgroundLocationLauncher = rememberLauncherForActivityResult(RequestPermission()) {
+        onPermissionResult()
+    }
 
     LaunchedEffect(permissionRequest) {
         when (permissionRequest) {
@@ -37,6 +40,9 @@ fun PermissionManager(
             }
             AppPermission.Location -> locationLauncher.launch(
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+            )
+            AppPermission.BackgroundLocation -> backgroundLocationLauncher.launch(
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
             AppPermission.Camera -> cameraLauncher.launch(Manifest.permission.CAMERA)
             AppPermission.RecordAudio -> recordAudioLauncher.launch(Manifest.permission.RECORD_AUDIO)

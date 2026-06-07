@@ -40,19 +40,30 @@ import java.util.Locale
 @Composable
 fun LogTrainingSheet(
     date: LocalDate,
+    initialType: String = "",
+    initialStartTime: String = "",
+    initialEndTime: String = "",
     onSave: (type: String, startTime: String, endTime: String, sensei: String, injuries: String) -> Unit,
     onDismiss: () -> Unit
 ) {
-    var type by remember { mutableStateOf("") }
-    var startTime by remember { mutableStateOf("19:00") }
-    var endTime by remember { mutableStateOf("21:00") }
+    val defaultStart = initialStartTime.ifBlank { "19:00" }
+    val defaultEnd = initialEndTime.ifBlank { "21:00" }
+
+    var type by remember { mutableStateOf(initialType) }
+    var startTime by remember { mutableStateOf(defaultStart) }
+    var endTime by remember { mutableStateOf(defaultEnd) }
     var sensei by remember { mutableStateOf("") }
     var injuries by remember { mutableStateOf("") }
     var showStartPicker by remember { mutableStateOf(false) }
     var showEndPicker by remember { mutableStateOf(false) }
 
-    val startPickerState = rememberTimePickerState(initialHour = 19, initialMinute = 0, is24Hour = true)
-    val endPickerState = rememberTimePickerState(initialHour = 21, initialMinute = 0, is24Hour = true)
+    val startHour = defaultStart.substringBefore(":").toIntOrNull() ?: 19
+    val startMinute = defaultStart.substringAfter(":").toIntOrNull() ?: 0
+    val endHour = defaultEnd.substringBefore(":").toIntOrNull() ?: 21
+    val endMinute = defaultEnd.substringAfter(":").toIntOrNull() ?: 0
+
+    val startPickerState = rememberTimePickerState(initialHour = startHour, initialMinute = startMinute, is24Hour = true)
+    val endPickerState = rememberTimePickerState(initialHour = endHour, initialMinute = endMinute, is24Hour = true)
 
     if (showStartPicker) {
         AlertDialog(

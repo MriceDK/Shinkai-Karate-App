@@ -6,6 +6,9 @@ import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
+import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
+import be.mauricedeke.shinkai.geofence.PendingLogPrompt
+import be.mauricedeke.shinkai.geofence.PendingLogStore
 import be.mauricedeke.shinkai.messaging.InAppNotification
 import be.mauricedeke.shinkai.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
@@ -25,7 +28,9 @@ class MainViewModel @Inject constructor(
     private val restoreSession: RestoreSessionUseCase,
     private val clearSession: ClearSessionUseCase,
     private val sessionEventBus: SessionEventBus,
-    private val scheduleReminders: ScheduleRemindersUseCase
+    private val scheduleReminders: ScheduleRemindersUseCase,
+    private val setupGeofences: SetupGeofencesUseCase,
+    private val pendingLogStore: PendingLogStore
 ) : ViewModel() {
 
     private val _inAppNotification = MutableSharedFlow<InAppNotification>()
@@ -33,6 +38,9 @@ class MainViewModel @Inject constructor(
 
     private val _permissionRequest = MutableStateFlow<AppPermission?>(null)
     val permissionRequest: StateFlow<AppPermission?> = _permissionRequest.asStateFlow()
+
+    private val _pendingLogPrompt = MutableStateFlow<PendingLogPrompt?>(pendingLogStore.get())
+    val pendingLogPrompt: StateFlow<PendingLogPrompt?> = _pendingLogPrompt.asStateFlow()
 
     // null = still loading, true = valid token, false = no/expired token
     private val _isAuthenticated = MutableStateFlow<Boolean?>(null)
@@ -42,7 +50,10 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val authenticated = restoreSession()
             _isAuthenticated.value = authenticated
-            if (authenticated == true) scheduleReminders()
+            if (authenticated == true) {
+                scheduleReminders()
+                setupGeofences()
+            }
         }
         viewModelScope.launch {
             notificationEventBus.events.collect { notification ->
@@ -63,5 +74,20 @@ class MainViewModel @Inject constructor(
 
     fun onPermissionResult() {
         _permissionRequest.value = null
+    }
+
+    fun recheckPendingLog() {
+        val prompt = pendingLogStore.get()
+        if (prompt != null) _pendingLogPrompt.value = prompt
+    }
+
+    fun dismissLogPrompt() {
+        pendingLogStore.clear()
+        _pendingLogPrompt.value = null
+    }
+
+    fun confirmLogPrompt() {
+        pendingLogStore.clear()
+        _pendingLogPrompt.value = null
     }
 }

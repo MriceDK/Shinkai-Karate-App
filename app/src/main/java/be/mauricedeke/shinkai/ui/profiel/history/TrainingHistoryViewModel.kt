@@ -123,7 +123,19 @@ class TrainingHistoryViewModel @Inject constructor(
         }
     }
 
-    fun showLogSheet() = _uiState.update { it.copy(showLogSheet = true) }
+    fun showLogSheet(
+        initialType: String = "",
+        initialStartTime: String = "",
+        initialEndTime: String = ""
+    ) = _uiState.update {
+        it.copy(
+            showLogSheet = true,
+            logInitialType = initialType,
+            logInitialStartTime = initialStartTime,
+            logInitialEndTime = initialEndTime
+        )
+    }
+
     fun dismissLogSheet() = _uiState.update { it.copy(showLogSheet = false) }
 
     fun logTraining(type: String, startTime: String, endTime: String, sensei: String, injuries: String) {

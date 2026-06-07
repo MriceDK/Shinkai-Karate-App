@@ -35,6 +35,7 @@ workmanager = "2.9.0"
 workRuntimeKtx = "2.10.0"
 
 # Maps
+playServicesLocation = "21.3.0"
 mapbox = "11.24.3"
 mapboxSearch = "2.24.3"
 mapboxNavigation = "3.7.0"
@@ -102,6 +103,7 @@ okhttp-logging = { group = "com.squareup.okhttp3", name="logging-interceptor", v
 rabbitmq-amqp-client = { group = "com.rabbitmq", name = "amqp-client", version.ref = "rabbitmq"}
 
 # Maps
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 mapbox-maps = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
 mapbox-search = { module = "com.mapbox.search:mapbox-search-android", version.ref = "mapboxSearch" }
 mapbox-maps-compose = { module = "com.mapbox.extension:maps-compose-ndk27", version.ref = "mapbox" }

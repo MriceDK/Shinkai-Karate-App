@@ -18,6 +18,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.Text
 import be.mauricedeke.shinkai.MainViewModel
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
 import java.util.UUID
@@ -95,6 +98,29 @@ fun ShinkaiNavGraph(
             }
             null -> Unit
         }
+    }
+
+    val pendingLogPrompt by mainViewModel.pendingLogPrompt.collectAsStateWithLifecycle()
+    pendingLogPrompt?.let { prompt ->
+        AlertDialog(
+            onDismissRequest = mainViewModel::dismissLogPrompt,
+            title = { Text("Training bijhouden?") },
+            text = { Text("Je was aanwezig bij ${prompt.name}. Wil je dit loggen in je trainingshistoriek?") },
+            confirmButton = {
+                TextButton(onClick = {
+                    mainViewModel.confirmLogPrompt()
+                    navController.navigate(Screen.TrainingHistory.route)
+                    trainingHistoryViewModel.showLogSheet(
+                        initialType = prompt.logType,
+                        initialStartTime = prompt.startTime,
+                        initialEndTime = prompt.endTime
+                    )
+                }) { Text("Ja, log het") }
+            },
+            dismissButton = {
+                TextButton(onClick = mainViewModel::dismissLogPrompt) { Text("Nee") }
+            }
+        )
     }
 
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
@@ -392,6 +418,10 @@ fun ShinkaiNavGraph(
                 onLocationStart = kaartViewModel::onLocationStart,
                 onLocationStop = kaartViewModel::onLocationStop,
                 onEventSelected = kaartViewModel::onEventSelected,
+                onTrainingSelected = kaartViewModel::onTrainingSelected,
+                onViewTrainingDetails = { id ->
+                    navController.navigate(Screen.TrainingSessionDetail.createRoute(id))
+                },
                 onFetchRoute = { dest -> kaartViewModel.fetchRoute(dest) },
                 onViewEventDetails = { id ->
                     eventDetailViewModel.loadEvent(id)

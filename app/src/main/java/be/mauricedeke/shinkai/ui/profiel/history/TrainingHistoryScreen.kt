@@ -70,6 +70,9 @@ fun TrainingHistoryScreen(
     if (uiState.showLogSheet) {
         LogTrainingSheet(
             date = uiState.selectedDate,
+            initialType = uiState.logInitialType,
+            initialStartTime = uiState.logInitialStartTime,
+            initialEndTime = uiState.logInitialEndTime,
             onSave = onLogSave,
             onDismiss = onLogDismiss
         )
