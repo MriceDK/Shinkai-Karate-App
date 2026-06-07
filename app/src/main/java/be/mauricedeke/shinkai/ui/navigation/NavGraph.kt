@@ -1,5 +1,6 @@
 package be.mauricedeke.shinkai.ui.navigation
 
+import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.compose.runtime.Composable
@@ -48,7 +49,7 @@ import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestViewModel
-import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
+import be.mauricedeke.shinkai.ui.technieken.KataListScreen
 import be.mauricedeke.shinkai.ui.technieken.TechniekViewModel
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailScreen
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailViewModel
@@ -166,8 +167,13 @@ fun ShinkaiNavGraph(
                 onBeltClick = { belt ->
                     techniekDetailViewModel.loadBelt(belt)
                     navController.navigate(Screen.TechniekDetail.createRoute(belt))
-                }
+                },
+                onKataClick = { navController.navigate(Screen.KataList.route) }
             )
+        }
+
+        composable(Screen.KataList.route) {
+            KataListScreen(uiState = techniekUiState)
         }
 
         composable(

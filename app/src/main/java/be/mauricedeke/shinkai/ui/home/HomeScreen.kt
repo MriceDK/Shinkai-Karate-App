@@ -3,7 +3,6 @@ package be.mauricedeke.shinkai.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,11 +34,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Training
+import be.mauricedeke.shinkai.ui.components.EventRow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
@@ -188,54 +187,6 @@ private fun EventSection(title: String, content: @Composable () -> Unit) {
     }
 }
 
-@Composable
-private fun EventRow(
-    time: String,
-    date: String,
-    name: String,
-    location: String,
-    onClick: (() -> Unit)? = null
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 6.dp)
-            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center) {
-        Column(modifier = Modifier.width(100.dp)) {
-            Text(
-                time,
-                fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-            Text(date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
-        }
-        Box(
-            modifier = Modifier
-                .width(1.dp)
-                .height(36.dp)
-                .background(MaterialTheme.colorScheme.outlineVariant)
-        )
-        Spacer(Modifier.width(12.dp))
-        Column(modifier = Modifier.width(100.dp)) {
-            Text(
-                name,
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.height(32.dp)
-                )
-            if (location.isNotBlank()) Text(
-                location,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                fontSize = 12.sp
-            )
-        }
-    }
-}
 
 @Composable
 private fun ShortcutCard(

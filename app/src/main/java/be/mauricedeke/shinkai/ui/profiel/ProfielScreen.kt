@@ -1,7 +1,6 @@
 package be.mauricedeke.shinkai.ui.profiel
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.LocationOn
@@ -47,6 +44,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.ui.components.SectionHeader
+import be.mauricedeke.shinkai.ui.components.SettingsListItem
 import be.mauricedeke.shinkai.ui.theme.BeltYellow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import coil.compose.AsyncImage
@@ -153,12 +152,12 @@ fun ProfielScreen(
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            ProfileListItem(
+            SettingsListItem(
                 Icons.Default.FitnessCenter,
                 "Strength Test",
                 onClick = onStrengthTestClick
             )
-            ProfileListItem(
+            SettingsListItem(
                 Icons.Default.CalendarMonth,
                 "Training History",
                 onClick = onTrainingHistoryClick
@@ -169,12 +168,12 @@ fun ProfielScreen(
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            ProfileListItem(
+            SettingsListItem(
                 Icons.Default.Notifications,
                 "Notifications",
                 onClick = onNotificationsClick
             )
-            ProfileListItem(Icons.Default.LocationOn, "Location", onClick = onLocationClick)
+            SettingsListItem(Icons.Default.LocationOn, "Location", onClick = onLocationClick)
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("General Settings")
@@ -186,19 +185,19 @@ fun ProfielScreen(
                 checked = isDarkTheme,
                 onCheckedChange = onDarkThemeToggle
             )
-            ProfileListItem(Icons.Default.Chat, "Contact Support", onClick = {})
+            SettingsListItem(Icons.Default.Chat, "Contact Support", onClick = {})
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Socials")
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            ProfileListItem(
+            SettingsListItem(
                 Icons.Default.Link,
                 "Shinkai.be",
                 labelColor = Color(0xFF1565C0),
                 onClick = {})
-            ProfileListItem(
+            SettingsListItem(
                 Icons.Default.Link,
                 "Shinkai.be",
                 labelColor = Color(0xFF4267B2),
@@ -208,43 +207,12 @@ fun ProfielScreen(
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            ProfileListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
+            SettingsListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
         }
         Spacer(Modifier.height(16.dp))
     }
 }
 
-@Composable
-private fun ProfileListItem(
-    icon: ImageVector,
-    label: String,
-    labelColor: Color = Color.Unspecified,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            icon,
-            null,
-            modifier = Modifier.size(22.dp),
-            tint = MaterialTheme.colorScheme.onSurface
-        )
-        Spacer(Modifier.width(16.dp))
-        Text(
-            label,
-            modifier = Modifier.weight(1f),
-            color = if (labelColor == Color.Unspecified) MaterialTheme.colorScheme.onSurface else labelColor,
-            fontSize = 15.sp
-        )
-        Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-}
 
 @Composable
 private fun ProfileToggleItem(
@@ -285,18 +253,6 @@ private fun ProfileToggleItem(
     HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }
 
-@Composable
-private fun SectionHeader(title: String) {
-    Text(
-        title,
-        fontSize = 13.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        fontWeight = FontWeight.Medium,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-    )
-}
 
 @Preview(name = "Not logged in", showBackground = true, showSystemUi = true)
 @Composable

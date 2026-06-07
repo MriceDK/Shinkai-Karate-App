@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.domain.model
 
 fun BeltColor.punchScore(): Int = when (this) {
+    BeltColor.WHITE     -> 300
     BeltColor.YELLOW    -> 400
     BeltColor.ORANGE    -> 500
     BeltColor.RED       -> 600

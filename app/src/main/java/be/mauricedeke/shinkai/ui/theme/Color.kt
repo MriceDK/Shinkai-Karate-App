@@ -20,6 +20,9 @@ val ShinkaiDark = ShinkaiBlack
 val ShinkaiGray = ShinkaiBackground
 val ShinkaiCardBg = ShinkaiWhite
 
+val BeltWit = Color(0xFFFFFFFF)
+val BeltWitDark = Color(0xFFE0E0E0)
+
 val BeltYellow = Color(0xFFFFD700)
 val BeltOrange = Color(0xFFFF8C00)
 val BeltRed = Color(0xFFCC0000)
@@ -38,6 +41,7 @@ val BeltZwart = Color(0xFF000000)
 val BeltZwartDark = Color(0xFF4B4B4B)
 
 fun be.mauricedeke.shinkai.domain.model.BeltColor.toColor(isDark: Boolean = false): Color = when (this) {
+    be.mauricedeke.shinkai.domain.model.BeltColor.WHITE    -> if (isDark) BeltWitDark else BeltWit
     be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW   -> BeltYellow
     be.mauricedeke.shinkai.domain.model.BeltColor.ORANGE   -> BeltOrange
     be.mauricedeke.shinkai.domain.model.BeltColor.RED      -> BeltRed

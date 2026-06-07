@@ -6,6 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import be.mauricedeke.shinkai.data.local.ShinkaiDatabase
 import be.mauricedeke.shinkai.data.local.room.dao.BeltDao
+import be.mauricedeke.shinkai.data.local.room.dao.KataDao
 import be.mauricedeke.shinkai.data.local.room.dao.LexiconDao
 import be.mauricedeke.shinkai.data.local.room.dao.LocationSettingsDao
 import be.mauricedeke.shinkai.data.local.room.dao.NoteDao
@@ -86,6 +87,11 @@ private val MIGRATION_12_13 = object : Migration(12, 13) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `lexicon_entries` (`id` TEXT NOT NULL, `japaneseWord` TEXT NOT NULL, `translation` TEXT NOT NULL, `description` TEXT NOT NULL, PRIMARY KEY(`id`))")
     }
 }
+private val MIGRATION_13_14 = object : Migration(13, 14) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `katas` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `belt` TEXT NOT NULL, `beltColor` TEXT NOT NULL, `description` TEXT NOT NULL, `moves` TEXT NOT NULL, PRIMARY KEY(`id`))")
+    }
+}
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -98,7 +104,7 @@ object DatabaseModule {
             .addMigrations(
                 MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
                 MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11,
-                MIGRATION_11_12, MIGRATION_12_13
+                MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14
             )
             .build()
 
@@ -111,4 +117,5 @@ object DatabaseModule {
     @Provides fun provideBeltDao(db: ShinkaiDatabase): BeltDao = db.beltDao()
     @Provides fun provideTechniekDao(db: ShinkaiDatabase): TechniekDao = db.techniekDao()
     @Provides fun provideLexiconDao(db: ShinkaiDatabase): LexiconDao = db.lexiconDao()
+    @Provides fun provideKataDao(db: ShinkaiDatabase): KataDao = db.kataDao()
 }

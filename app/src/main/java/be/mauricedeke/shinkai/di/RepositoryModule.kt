@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.di
 
 import be.mauricedeke.shinkai.data.repository.AccelerometerRepositoryImpl
+import be.mauricedeke.shinkai.data.repository.KataRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.RouteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.EventRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.LexiconRepositoryImpl
@@ -14,6 +15,7 @@ import be.mauricedeke.shinkai.data.repository.TrainingNoteRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.TrainingRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.UserRepositoryImpl
 import be.mauricedeke.shinkai.domain.repository.AccelerometerRepository
+import be.mauricedeke.shinkai.domain.repository.KataRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
 import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LexiconRepository
@@ -34,6 +36,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindKataRepository(impl: KataRepositoryImpl): KataRepository
 
     @Binds
     abstract fun bindEventRepository(impl: EventRepositoryImpl): EventRepository

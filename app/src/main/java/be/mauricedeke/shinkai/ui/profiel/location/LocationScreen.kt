@@ -2,10 +2,8 @@ package be.mauricedeke.shinkai.ui.profiel.location
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,8 +11,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.LocationSettings
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
+import be.mauricedeke.shinkai.ui.components.SettingsToggleRow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
@@ -47,18 +44,18 @@ fun LocationScreen(
                 color = MaterialTheme.colorScheme.onSurface
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            LocationRow(
+            SettingsToggleRow(
                 "Use Location for training locations",
                 s.useForTrainingLocations
             ) { onSettingsChanged(s.copy(useForTrainingLocations = it)) }
-            LocationRow(
+            SettingsToggleRow(
                 "Use Location for improvements",
                 s.useForImprovements
             ) { onSettingsChanged(s.copy(useForImprovements = it)) }
-            LocationRow(
-                "Use Location for tracking trainings",
-                s.useForTrackingTrainings,
-                "Automatically logs when you go to the dojo on a training day"
+            SettingsToggleRow(
+                label = "Use Location for tracking trainings",
+                checked = s.useForTrackingTrainings,
+                subtitle = "Automatically logs when you go to the dojo on a training day"
             ) { onSettingsChanged(s.copy(useForTrackingTrainings = it)) }
             Spacer(Modifier.weight(1f))
             Button(
@@ -80,41 +77,6 @@ fun LocationScreen(
                 .padding(start = 16.dp, top = 8.dp)
         )
     }
-}
-
-@Composable
-private fun LocationRow(
-    label: String,
-    checked: Boolean,
-    subtitle: String? = null,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (subtitle != null) Text(
-                subtitle,
-                fontSize = 11.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedTrackColor = MaterialTheme.colorScheme.primary,
-                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
-                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        )
-    }
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }
 
 @Preview(name = "All enabled", showBackground = true, showSystemUi = true)

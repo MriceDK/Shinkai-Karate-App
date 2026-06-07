@@ -35,6 +35,7 @@ sealed class Screen(
     data object Notifications : Screen("notifications")
     data object Location : Screen("location")
     data object Kaart : Screen("kaart")
+    data object KataList : Screen("technieken/katas")
     data object Login : Screen("login")
 }
 

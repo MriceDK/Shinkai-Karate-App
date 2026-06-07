@@ -3,6 +3,7 @@ package be.mauricedeke.shinkai.ui.technieken
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Belt
+import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -40,13 +41,11 @@ import be.mauricedeke.shinkai.ui.theme.toColor
 fun TechniekScreen(
     uiState: TechniekUiState,
     onBeltClick: (String) -> Unit = {},
+    onKataClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (uiState.isError) {
-        Box(
-            modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(
                 "Kon technieken niet laden. Probeer opnieuw.",
                 color = MaterialTheme.colorScheme.primary,
@@ -62,13 +61,59 @@ fun TechniekScreen(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 8.dp, vertical = 24.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
         contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(uiState.belts) { belt ->
             BeltCard(belt = belt, onClick = { onBeltClick(belt.name) })
+        }
+        item {
+            KataSquare(onClick = onKataClick)
+        }
+    }
+}
+
+@Composable
+private fun KataSquare(onClick: () -> Unit) {
+    val colors = listOf(BeltColor.YELLOW, BeltColor.GREEN, BeltColor.BLUE, BeltColor.BROWN_I, BeltColor.BLACK)
+    val isDark = isSystemInDarkTheme()
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(0.9f)
+            .shadow(
+                8.dp,
+                RoundedCornerShape(8.dp),
+                ambientColor = MaterialTheme.colorScheme.outline,
+                spotColor = MaterialTheme.colorScheme.outline
+            )
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
+                colors.forEach { beltColor ->
+                    Box(
+                        modifier = Modifier
+                            .size(width = 56.dp, height = 8.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(beltColor.toColor(isDark))
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text("Kata's", fontSize = 15.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -115,38 +160,25 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
 }
 
 private val previewBelts = listOf(
-    Belt(name = "Geel", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW),
-    Belt(name = "Oranje", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.ORANGE),
-    Belt(name = "Rood", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.RED),
-    Belt(name = "Groen", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.GREEN),
-    Belt(name = "Blauw", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BLUE),
-    Belt(name = "Paars", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.PURPLE),
-    Belt(name = "Bruin I", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_I),
-    Belt(name = "Zwart", beltColor = be.mauricedeke.shinkai.domain.model.BeltColor.BLACK),
+    Belt(name = "Wit", beltColor = BeltColor.WHITE),
+    Belt(name = "Geel", beltColor = BeltColor.YELLOW),
+    Belt(name = "Oranje", beltColor = BeltColor.ORANGE),
+    Belt(name = "Rood", beltColor = BeltColor.RED),
+    Belt(name = "Groen", beltColor = BeltColor.GREEN),
+    Belt(name = "Blauw", beltColor = BeltColor.BLUE),
+    Belt(name = "Paars", beltColor = BeltColor.PURPLE),
+    Belt(name = "Bruin I", beltColor = BeltColor.BROWN_I),
+    Belt(name = "Zwart", beltColor = BeltColor.BLACK),
 )
 
-@Preview(name = "With belts", showBackground = true, showSystemUi = true)
+@Preview(name = "Technieken", showBackground = true, showSystemUi = true)
 @Composable
-fun TechniekScreenWithBeltsPreview() {
+fun TechniekScreenPreview() {
     ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState(belts = previewBelts)) }
 }
 
-@Preview(name = "Empty", showBackground = true, showSystemUi = true)
-@Composable
-fun TechniekScreenEmptyPreview() {
-    ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState()) }
-}
-
-@Preview(name = "Error", showBackground = true, showSystemUi = true)
-@Composable
-fun TechniekScreenErrorPreview() {
-    ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState(isError = true)) }
-}
-
-@Preview(name = "Dark — with belts", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Technieken Dark", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun TechniekScreenDarkPreview() {
-    ShinkaikarateappTheme(darkTheme = true) {
-        TechniekScreen(uiState = TechniekUiState(belts = previewBelts))
-    }
+    ShinkaikarateappTheme(darkTheme = true) { TechniekScreen(uiState = TechniekUiState(belts = previewBelts)) }
 }

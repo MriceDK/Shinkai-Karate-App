@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.domain.model
 
 fun BeltColor.kiaiDb(): Int = when (this) {
+    BeltColor.WHITE     -> 80
     BeltColor.YELLOW    -> 85
     BeltColor.ORANGE    -> 88
     BeltColor.RED       -> 90
@@ -14,6 +15,7 @@ fun BeltColor.kiaiDb(): Int = when (this) {
 }
 
 fun BeltColor.displayName(): String = when (this) {
+    BeltColor.WHITE     -> "White belt"
     BeltColor.YELLOW    -> "Yellow belt"
     BeltColor.ORANGE    -> "Orange belt"
     BeltColor.RED       -> "Red belt"

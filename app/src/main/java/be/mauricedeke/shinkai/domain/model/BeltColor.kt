@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.domain.model
 
 enum class BeltColor {
+    WHITE,
     YELLOW,
     ORANGE,
     RED,

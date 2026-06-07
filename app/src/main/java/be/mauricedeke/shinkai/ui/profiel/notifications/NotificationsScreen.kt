@@ -18,8 +18,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
+import be.mauricedeke.shinkai.ui.components.SettingsToggleRow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 private val reminderOptions = listOf(
@@ -79,12 +78,12 @@ fun NotificationsScreen(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                NotifRow("Event Notifications", s.eventNotifications) {
+                SettingsToggleRow("Event Notifications", s.eventNotifications) {
                     onSettingsChanged(s.copy(eventNotifications = it))
                 }
                 AnimatedVisibility(visible = s.eventNotifications) {
                     Column {
-                        NotifRow("Event Reminders", s.eventReminderEnabled, "Notify before an event starts") {
+                        SettingsToggleRow("Event Reminders", s.eventReminderEnabled, "Notify before an event starts") {
                             onSettingsChanged(s.copy(eventReminderEnabled = it))
                         }
                         AnimatedVisibility(visible = s.eventReminderEnabled) {
@@ -97,12 +96,12 @@ fun NotificationsScreen(
                         }
                     }
                 }
-                NotifRow("Training Notifications", s.trainingNotifications) {
+                SettingsToggleRow("Training Notifications", s.trainingNotifications) {
                     onSettingsChanged(s.copy(trainingNotifications = it))
                 }
                 AnimatedVisibility(visible = s.trainingNotifications) {
                     Column {
-                        NotifRow("Training Reminders", s.trainingReminderEnabled, "Notify before a training starts") {
+                        SettingsToggleRow("Training Reminders", s.trainingReminderEnabled, "Notify before a training starts") {
                             onSettingsChanged(s.copy(trainingReminderEnabled = it))
                         }
                         AnimatedVisibility(visible = s.trainingReminderEnabled) {
@@ -115,17 +114,17 @@ fun NotificationsScreen(
                         }
                     }
                 }
-                NotifRow(
+                SettingsToggleRow(
                     "Change Notifications",
                     s.changeNotifications,
                     "Notifies you of changes to the techniques"
                 ) { onSettingsChanged(s.copy(changeNotifications = it)) }
-                NotifRow("Exam Notifications", s.examNotifications) {
+                SettingsToggleRow("Exam Notifications", s.examNotifications) {
                     onSettingsChanged(s.copy(examNotifications = it))
                 }
                 AnimatedVisibility(visible = s.examNotifications) {
                     Column {
-                        NotifRow("Exam Reminders", s.examReminderEnabled, "Notify before an exam starts") {
+                        SettingsToggleRow("Exam Reminders", s.examReminderEnabled, "Notify before an exam starts") {
                             onSettingsChanged(s.copy(examReminderEnabled = it))
                         }
                         AnimatedVisibility(visible = s.examReminderEnabled) {
@@ -139,7 +138,7 @@ fun NotificationsScreen(
                         }
                     }
                 }
-                NotifRow("Update Notifications", s.updateNotifications) {
+                SettingsToggleRow("Update Notifications", s.updateNotifications) {
                     onSettingsChanged(s.copy(updateNotifications = it))
                 }
         }
@@ -152,40 +151,6 @@ fun NotificationsScreen(
     }
 }
 
-@Composable
-private fun NotifRow(
-    label: String,
-    checked: Boolean,
-    subtitle: String? = null,
-    onCheckedChange: (Boolean) -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(label, fontSize = 15.sp, color = MaterialTheme.colorScheme.onSurface)
-            if (subtitle != null) Text(
-                subtitle,
-                fontSize = 11.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
-        Switch(
-            checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
-                checkedTrackColor = MaterialTheme.colorScheme.primary,
-                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
-                uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        )
-    }
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
