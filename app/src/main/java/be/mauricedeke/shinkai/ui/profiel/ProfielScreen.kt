@@ -59,6 +59,7 @@ fun ProfielScreen(
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
     onLocationClick: () -> Unit = {},
+    onSupportClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     isDarkTheme: Boolean = false,
     onDarkThemeToggle: (Boolean) -> Unit = {},
@@ -185,7 +186,7 @@ fun ProfielScreen(
                 checked = isDarkTheme,
                 onCheckedChange = onDarkThemeToggle
             )
-            SettingsListItem(Icons.Default.Chat, "Contact Support", onClick = {})
+            SettingsListItem(Icons.Default.Chat, "Contact Support", onClick = onSupportClick)
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Socials")

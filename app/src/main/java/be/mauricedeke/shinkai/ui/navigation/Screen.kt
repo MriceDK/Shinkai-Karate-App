@@ -37,6 +37,7 @@ sealed class Screen(
     data object Kaart : Screen("kaart")
     data object KataList : Screen("technieken/katas")
     data object Login : Screen("login")
+    data object Support : Screen("support")
 }
 
 val bottomNavScreens = listOf(

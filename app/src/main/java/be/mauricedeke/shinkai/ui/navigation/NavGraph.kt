@@ -43,6 +43,8 @@ import be.mauricedeke.shinkai.ui.profiel.location.LocationScreen
 import be.mauricedeke.shinkai.ui.profiel.location.LocationViewModel
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsScreen
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsViewModel
+import be.mauricedeke.shinkai.ui.profiel.support.SupportScreen
+import be.mauricedeke.shinkai.ui.profiel.support.SupportViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
@@ -247,6 +249,7 @@ fun ShinkaiNavGraph(
                 onTrainingHistoryClick = { navController.navigate(Screen.TrainingHistory.route) },
                 onNotificationsClick = { navController.navigate(Screen.Notifications.route) },
                 onLocationClick = { navController.navigate(Screen.Location.route) },
+                onSupportClick = { navController.navigate(Screen.Support.route) },
                 onLogoutClick = {
                     profielViewModel.logout()
                     navController.navigate(Screen.Login.route) {
@@ -345,6 +348,19 @@ fun ShinkaiNavGraph(
                 uiState = uiState,
                 onSettingsChanged = vm::onSettingsChanged,
                 onSave = { vm.onSave(); navController.popBackStack() },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.Support.route) {
+            val vm: SupportViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
+            SupportScreen(
+                uiState = uiState,
+                onSubjectChanged = vm::onSubjectChanged,
+                onMessageChanged = vm::onMessageChanged,
+                onSend = vm::onSend,
+                onSuccessDismissed = { vm.onSuccessDismissed(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
             )
         }
