@@ -2,8 +2,7 @@ package be.mauricedeke.shinkai.ui.events.manage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.mauricedeke.shinkai.domain.usecase.GetEventsUseCase
-import be.mauricedeke.shinkai.domain.usecase.GetInboxEventsUseCase
+import be.mauricedeke.shinkai.domain.usecase.GetManagedEventsUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetRsvpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ManageEventsViewModel @Inject constructor(
-    private val getEvents: GetEventsUseCase,
-    private val getInboxEvents: GetInboxEventsUseCase,
+    private val getManagedEvents: GetManagedEventsUseCase,
     private val setRsvpUseCase: SetRsvpUseCase
 ) : ViewModel() {
 
@@ -31,20 +29,12 @@ class ManageEventsViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             _uiState.update { it.copy(isError = false) }
-            val events = getEvents()
-            val inboxEvents = getInboxEvents()
-            if (events == null || inboxEvents == null) {
+            val result = getManagedEvents()
+            if (result == null) {
                 _uiState.update { it.copy(isError = true) }
                 return@launch
             }
-            val today = LocalDate.now()
-            val cutoff = today.minusMonths(1)
-            val filtered = (events + inboxEvents)
-                .filter { it.localDate == null || !it.localDate.isBefore(cutoff) }
-            val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
-            val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
-                         past.sortedByDescending { it.localDate }
-            _uiState.update { it.copy(events = sorted, rsvp = sorted.associate { e -> e.id to e.rsvp }, isError = false) }
+            _uiState.update { it.copy(events = result.events, rsvp = result.rsvp, isError = false) }
         }
     }
 
@@ -59,4 +49,3 @@ class ManageEventsViewModel @Inject constructor(
         viewModelScope.launch { setRsvpUseCase(eventId, next) }
     }
 }
-

@@ -3,6 +3,7 @@ package be.mauricedeke.shinkai.ui.events
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.Event
+import be.mauricedeke.shinkai.domain.usecase.ComputeEventListsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetEventsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetInboxEventsUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetRsvpUseCase
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class EventsViewModel @Inject constructor(
     private val getEvents: GetEventsUseCase,
     private val getInboxEvents: GetInboxEventsUseCase,
-    private val setRsvpUseCase: SetRsvpUseCase
+    private val setRsvpUseCase: SetRsvpUseCase,
+    private val computeEventLists: ComputeEventListsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventsUiState())
@@ -49,7 +51,7 @@ class EventsViewModel @Inject constructor(
 
             val rsvp = (events + inbox).associate { it.id to it.rsvp }
             _uiState.update { it.copy(rsvp = rsvp, selectedDate = today, isError = false) }
-            recomputeLists(rsvp)
+            applyEventLists(rsvp)
         }
     }
 
@@ -62,25 +64,17 @@ class EventsViewModel @Inject constructor(
         val next = if (current == attending) null else attending
         val newRsvp = _uiState.value.rsvp + (eventId to next)
         _uiState.update { it.copy(rsvp = newRsvp) }
-        recomputeLists(newRsvp)
+        applyEventLists(newRsvp)
         viewModelScope.launch { setRsvpUseCase(eventId, next) }
     }
 
-    private fun recomputeLists(rsvp: Map<UUID, Boolean?>) {
-        val today = LocalDate.now()
-        fun isUpcoming(date: LocalDate?) = date == null || !date.isBefore(today)
-
-        val upcomingInbox = cachedInboxEvents.filter { isUpcoming(it.localDate) }
-        val upcomingRegular = cachedRegularEvents.filter { isUpcoming(it.localDate) }
-        val allUpcoming = (upcomingRegular + upcomingInbox)
-            .sortedWith(compareBy(nullsLast()) { it.localDate })
-        val pendingInbox = allUpcoming.filter { rsvp[it.id] == null }
-
+    private fun applyEventLists(rsvp: Map<UUID, Boolean?>) {
+        val result = computeEventLists(cachedRegularEvents, cachedInboxEvents, rsvp)
         _uiState.update { state ->
             state.copy(
-                upcomingEvents = allUpcoming.take(4),
-                allUpcomingEvents = allUpcoming,
-                inboxEvents = pendingInbox
+                upcomingEvents = result.upcomingEvents,
+                allUpcomingEvents = result.allUpcomingEvents,
+                inboxEvents = result.inboxEvents
             )
         }
     }

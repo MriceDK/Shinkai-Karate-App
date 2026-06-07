@@ -1,11 +1,10 @@
 package be.mauricedeke.shinkai
 
-import android.util.Base64
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import be.mauricedeke.shinkai.data.local.datastore.AppDataStore
-import be.mauricedeke.shinkai.data.remote.AuthTokenStore
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
+import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
+import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
 import be.mauricedeke.shinkai.messaging.InAppNotification
 import be.mauricedeke.shinkai.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
@@ -16,16 +15,14 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val notificationEventBus: NotificationEventBus,
-    private val appDataStore: AppDataStore,
-    private val tokenStore: AuthTokenStore,
+    private val restoreSession: RestoreSessionUseCase,
+    private val clearSession: ClearSessionUseCase,
     private val sessionEventBus: SessionEventBus
 ) : ViewModel() {
 
@@ -41,15 +38,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val token = appDataStore.accessToken.first()
-            if (token != null && isJwtValid(token)) {
-                tokenStore.accessToken = token
-                _isAuthenticated.value = true
-            } else {
-                if (token != null) appDataStore.clearAccessToken()
-                tokenStore.accessToken = null
-                _isAuthenticated.value = false
-            }
+            _isAuthenticated.value = restoreSession()
         }
         viewModelScope.launch {
             notificationEventBus.events.collect { notification ->
@@ -58,7 +47,7 @@ class MainViewModel @Inject constructor(
         }
         viewModelScope.launch {
             sessionEventBus.sessionExpired.collect {
-                appDataStore.clearAccessToken()
+                clearSession()
                 _isAuthenticated.value = false
             }
         }
@@ -70,14 +59,5 @@ class MainViewModel @Inject constructor(
 
     fun onPermissionResult() {
         _permissionRequest.value = null
-    }
-
-    private fun isJwtValid(token: String): Boolean = try {
-        val payload = token.split(".")[1]
-        val decoded = Base64.decode(payload, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
-        val exp = JSONObject(String(decoded)).getLong("exp")
-        System.currentTimeMillis() / 1000 < exp
-    } catch (e: Exception) {
-        false
     }
 }
