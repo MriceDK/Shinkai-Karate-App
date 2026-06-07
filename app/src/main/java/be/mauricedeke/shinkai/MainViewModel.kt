@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.data.local.datastore.AppDataStore
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
+import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.messaging.InAppNotification
 import be.mauricedeke.shinkai.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val notificationEventBus: NotificationEventBus,
     private val appDataStore: AppDataStore,
-    private val tokenStore: AuthTokenStore
+    private val tokenStore: AuthTokenStore,
+    private val sessionEventBus: SessionEventBus
 ) : ViewModel() {
 
     private val _inAppNotification = MutableSharedFlow<InAppNotification>()
@@ -52,6 +54,12 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             notificationEventBus.events.collect { notification ->
                 _inAppNotification.emit(notification)
+            }
+        }
+        viewModelScope.launch {
+            sessionEventBus.sessionExpired.collect {
+                appDataStore.clearAccessToken()
+                _isAuthenticated.value = false
             }
         }
     }

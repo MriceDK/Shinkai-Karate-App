@@ -79,10 +79,16 @@ fun ShinkaiNavGraph(
     val isAuthenticated by mainViewModel.isAuthenticated.collectAsStateWithLifecycle()
 
     LaunchedEffect(isAuthenticated) {
-        if (isAuthenticated == true) {
-            navController.navigate(Screen.Home.route) {
+        when (isAuthenticated) {
+            true -> navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
             }
+            false -> if (navController.currentDestination?.route != Screen.Login.route) {
+                navController.navigate(Screen.Login.route) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
+            null -> Unit
         }
     }
 
@@ -113,9 +119,12 @@ fun ShinkaiNavGraph(
     val currentRoute = currentBackStackEntry?.destination?.route
     LaunchedEffect(currentRoute) {
         when (currentRoute) {
+            Screen.Home.route -> homeViewModel.load()
             Screen.Events.route -> eventsViewModel.refresh()
             Screen.ManageEvents.route -> manageEventsViewModel.refresh()
             Screen.TrainingHistory.route -> trainingHistoryViewModel.resetToToday()
+            Screen.Technieken.route -> techniekViewModel.load()
+            Screen.Lexicon.route -> lexiconViewModel.load()
         }
     }
 

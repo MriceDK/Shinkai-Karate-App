@@ -37,6 +37,9 @@ class TrainingRepositoryImpl @Inject constructor(
         return trainingsCache
     }
 
+    override suspend fun getNextTraining(): Training? =
+        trainingClient.getNextTraining().getOrNull()?.toDomain()
+
     override suspend fun getTrainingsByDate(date: LocalDate): List<Training>? =
         getTrainings()?.filter { it.date == date }
 

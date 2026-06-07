@@ -30,6 +30,7 @@ class ManageEventsViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isError = false) }
             val events = getEvents()
             val inboxEvents = getInboxEvents()
             if (events == null || inboxEvents == null) {
@@ -43,7 +44,7 @@ class ManageEventsViewModel @Inject constructor(
             val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
             val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
                          past.sortedByDescending { it.localDate }
-            _uiState.update { it.copy(events = sorted, rsvp = sorted.associate { e -> e.id to e.rsvp }) }
+            _uiState.update { it.copy(events = sorted, rsvp = sorted.associate { e -> e.id to e.rsvp }, isError = false) }
         }
     }
 

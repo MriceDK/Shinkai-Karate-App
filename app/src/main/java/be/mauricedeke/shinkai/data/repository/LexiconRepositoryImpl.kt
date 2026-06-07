@@ -20,19 +20,13 @@ class LexiconRepositoryImpl @Inject constructor(
     private val lexiconDao: LexiconDao
 ) : LexiconRepository {
 
-    private var cache: List<LexiconEntry>? = null
-
     override suspend fun getLexiconEntries(): List<LexiconEntry>? {
-        cache?.let { return it }
-
         val apiVersion = versionsClient.getVersions().getOrNull()?.lexicon ?: -1
         val storedVersion = appDataStore.getLexiconVersion()
         val roomEntries = lexiconDao.getAll()
 
         if (apiVersion >= 0 && apiVersion == storedVersion && roomEntries.isNotEmpty()) {
-            val entries = roomEntries.map { it.toDomain() }
-            cache = entries
-            return entries
+            return roomEntries.map { it.toDomain() }
         }
 
         val dtos = lexiconClient.getLexiconEntries().getOrNull()
@@ -52,7 +46,6 @@ class LexiconRepositoryImpl @Inject constructor(
 
         if (apiVersion >= 0) appDataStore.setLexiconVersion(apiVersion)
 
-        cache = entries
         return entries
     }
 

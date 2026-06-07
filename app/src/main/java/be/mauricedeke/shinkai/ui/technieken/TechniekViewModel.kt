@@ -19,14 +19,14 @@ class TechniekViewModel @Inject constructor(
     val uiState: StateFlow<TechniekUiState> = _uiState
 
     init {
+        load()
+    }
+
+    fun load() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isError = false) }
             val belts = getBelts()
-            _uiState.update {
-                it.copy(
-                    belts = belts ?: emptyList(),
-                    isError = belts == null
-                )
-            }
+            _uiState.update { it.copy(belts = belts ?: emptyList(), isError = belts == null) }
         }
     }
 }

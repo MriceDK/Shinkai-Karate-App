@@ -31,22 +31,16 @@ class TechniekRepositoryImpl @Inject constructor(
     private val moshi: Moshi
 ) : TechniekRepository {
 
-    private var beltsCache: List<Belt>? = null
-
     private val programmeAdapter by lazy { moshi.adapter(ProgrammeDto::class.java) }
 
     override suspend fun getBelts(): List<Belt>? {
-        beltsCache?.let { return it }
-
         val apiVersions = versionsClient.getVersions().getOrNull()?.belts ?: emptyMap()
         val storedVersions = appDataStore.getBeltVersions()
         val roomBelts = beltDao.getAll()
 
         if (apiVersions.isNotEmpty() && apiVersions == storedVersions && roomBelts.isNotEmpty()) {
             val technieken = techniekDao.getAll()
-            val belts = roomBelts.map { it.toDomain(technieken.filter { t -> t.beltName == it.name }) }
-            beltsCache = belts
-            return belts
+            return roomBelts.map { it.toDomain(technieken.filter { t -> t.beltName == it.name }) }
         }
 
         val dtos = beltClient.getBelts().getOrNull() ?: return roomBelts
@@ -75,7 +69,6 @@ class TechniekRepositoryImpl @Inject constructor(
 
         if (apiVersions.isNotEmpty()) appDataStore.setBeltVersions(apiVersions)
 
-        beltsCache = belts
         return belts
     }
 

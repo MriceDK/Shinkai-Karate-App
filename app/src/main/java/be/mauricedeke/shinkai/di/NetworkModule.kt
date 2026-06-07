@@ -2,6 +2,7 @@ package be.mauricedeke.shinkai.di
 
 import be.mauricedeke.shinkai.BuildConfig
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
+import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.data.remote.api.AuthApi
 import be.mauricedeke.shinkai.data.remote.api.BeltApi
 import be.mauricedeke.shinkai.data.remote.api.EventApi
@@ -37,7 +38,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenStore: AuthTokenStore): OkHttpClient =
+    fun provideOkHttpClient(tokenStore: AuthTokenStore, sessionEventBus: SessionEventBus): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -46,7 +47,12 @@ object NetworkModule {
                 val request = tokenStore.accessToken
                     ?.let { chain.request().newBuilder().header("Authorization", "Bearer $it").build() }
                     ?: chain.request()
-                chain.proceed(request)
+                val response = chain.proceed(request)
+                if (response.code == 401) {
+                    tokenStore.accessToken = null
+                    sessionEventBus.notifySessionExpired()
+                }
+                response
             }
             .build()
 

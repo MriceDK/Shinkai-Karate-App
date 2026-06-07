@@ -19,7 +19,12 @@ class LexiconViewModel @Inject constructor(
     val uiState: StateFlow<LexiconUiState> = _uiState
 
     init {
+        load()
+    }
+
+    fun load() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isError = false) }
             val entries = getLexiconEntries()
             _uiState.update { it.copy(entries = entries ?: emptyList(), isError = entries == null) }
         }
