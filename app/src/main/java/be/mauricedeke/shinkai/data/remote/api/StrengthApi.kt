@@ -2,6 +2,7 @@ package be.mauricedeke.shinkai.data.remote.api
 
 import be.mauricedeke.shinkai.data.remote.dto.StrengthBestDto
 import be.mauricedeke.shinkai.data.remote.dto.StrengthResultDto
+import be.mauricedeke.shinkai.data.remote.dto.SubmitStrengthRequestDto
 import be.mauricedeke.shinkai.data.remote.dto.UpdateStrengthRequestDto
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -21,8 +22,8 @@ interface StrengthApi {
     ): StrengthBestDto
 
     @POST("strength-test/punch")
-    suspend fun submitPunchTest(@Body body: UpdateStrengthRequestDto): StrengthResultDto
+    suspend fun submitPunchTest(@Body body: SubmitStrengthRequestDto): StrengthResultDto
 
     @POST("strength-test/kiai")
-    suspend fun submitKiaiTest(@Body body: UpdateStrengthRequestDto): StrengthResultDto
+    suspend fun submitKiaiTest(@Body body: SubmitStrengthRequestDto): StrengthResultDto
 }

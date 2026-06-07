@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.beltColorFromDb
 import be.mauricedeke.shinkai.domain.repository.MicrophoneRepository
-import be.mauricedeke.shinkai.domain.usecase.SaveStrengthResultUseCase
+import be.mauricedeke.shinkai.domain.usecase.SubmitKiaiTestUseCase
 import be.mauricedeke.shinkai.ui.profiel.strength.MeasurementPhase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class KiaiTestViewModel @Inject constructor(
     private val microphoneRepository: MicrophoneRepository,
-    private val saveStrengthResult: SaveStrengthResultUseCase
+    private val submitKiaiTest: SubmitKiaiTestUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(KiaiTestUiState())
@@ -59,18 +59,23 @@ class KiaiTestViewModel @Inject constructor(
 
             microphoneRepository.stop()
             val finalPeakDb = amplitudeToDb(sessionPeakRms).roundToInt()
-            val newBestDb = maxOf(_uiState.value.bestDb, finalPeakDb)
             _uiState.update {
                 it.copy(
                     phase = MeasurementPhase.DONE,
                     peakDb = finalPeakDb,
-                    bestDb = newBestDb,
                     resultBelt = beltColorFromDb(finalPeakDb),
-                    bestBelt = beltColorFromDb(newBestDb),
                     progress = 1f
                 )
             }
-            withContext(Dispatchers.IO) { saveStrengthResult("Kiai Strength", newBestDb) }
+            val result = withContext(Dispatchers.IO) { submitKiaiTest(finalPeakDb) }
+            val newBestDb = maxOf(_uiState.value.bestDb, finalPeakDb)
+            _uiState.update {
+                it.copy(
+                    bestDb = newBestDb,
+                    resultBelt = result?.beltColor ?: beltColorFromDb(finalPeakDb),
+                    bestBelt = result?.beltColor ?: beltColorFromDb(newBestDb)
+                )
+            }
         }
     }
 

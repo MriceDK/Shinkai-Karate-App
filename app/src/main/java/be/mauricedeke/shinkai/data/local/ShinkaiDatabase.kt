@@ -10,6 +10,7 @@ import be.mauricedeke.shinkai.data.local.room.dao.LocationSettingsDao
 import be.mauricedeke.shinkai.data.local.room.dao.NoteDao
 import be.mauricedeke.shinkai.data.local.room.dao.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.room.dao.ShortcutsDao
+import be.mauricedeke.shinkai.data.local.room.dao.StrengthHistoryDao
 import be.mauricedeke.shinkai.data.local.room.dao.StrengthResultDao
 import be.mauricedeke.shinkai.data.local.room.dao.TechniekDao
 import be.mauricedeke.shinkai.data.local.room.dao.UserProfileDao
@@ -20,6 +21,7 @@ import be.mauricedeke.shinkai.data.local.room.entity.LexiconEntryEntity
 import be.mauricedeke.shinkai.data.local.room.entity.LocationSettingsEntity
 import be.mauricedeke.shinkai.data.local.room.entity.NotificationSettingsEntity
 import be.mauricedeke.shinkai.data.local.room.entity.ShortcutsEntity
+import be.mauricedeke.shinkai.data.local.room.entity.StrengthHistoryEntity
 import be.mauricedeke.shinkai.data.local.room.entity.StrengthResultEntity
 import be.mauricedeke.shinkai.data.local.room.entity.TechniekEntity
 import be.mauricedeke.shinkai.data.local.room.entity.UserProfileEntity
@@ -32,13 +34,14 @@ import be.mauricedeke.shinkai.data.local.room.entity.UserProfileEntity
         LocationSettingsEntity::class,
         UserProfileEntity::class,
         StrengthResultEntity::class,
+        StrengthHistoryEntity::class,
         ShortcutsEntity::class,
         BeltEntity::class,
         TechniekEntity::class,
         LexiconEntryEntity::class,
         KataEntity::class
     ],
-    version = 14,
+    version = 15,
     exportSchema = false
 )
 abstract class ShinkaiDatabase : RoomDatabase() {
@@ -47,6 +50,7 @@ abstract class ShinkaiDatabase : RoomDatabase() {
     abstract fun locationSettingsDao(): LocationSettingsDao
     abstract fun userProfileDao(): UserProfileDao
     abstract fun strengthResultDao(): StrengthResultDao
+    abstract fun strengthHistoryDao(): StrengthHistoryDao
     abstract fun shortcutsDao(): ShortcutsDao
     abstract fun beltDao(): BeltDao
     abstract fun techniekDao(): TechniekDao

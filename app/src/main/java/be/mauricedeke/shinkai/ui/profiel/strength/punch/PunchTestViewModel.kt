@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.beltColorFromPunch
 import be.mauricedeke.shinkai.domain.repository.AccelerometerRepository
-import be.mauricedeke.shinkai.domain.usecase.SaveStrengthResultUseCase
+import be.mauricedeke.shinkai.domain.usecase.SubmitPunchTestUseCase
 import be.mauricedeke.shinkai.ui.profiel.strength.MeasurementPhase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class PunchTestViewModel @Inject constructor(
     private val accelerometerRepository: AccelerometerRepository,
-    private val saveStrengthResult: SaveStrengthResultUseCase
+    private val submitPunchTest: SubmitPunchTestUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PunchTestUiState())
@@ -54,17 +54,22 @@ class PunchTestViewModel @Inject constructor(
 
             accelerometerRepository.stop()
             val finalScore = _uiState.value.score
-            val newBestScore = maxOf(_uiState.value.bestScore, finalScore)
             _uiState.update {
                 it.copy(
                     phase = MeasurementPhase.DONE,
                     progress = 1f,
-                    bestScore = newBestScore,
-                    resultBelt = beltColorFromPunch(finalScore),
-                    bestBelt = beltColorFromPunch(newBestScore)
+                    resultBelt = beltColorFromPunch(finalScore)
                 )
             }
-            withContext(Dispatchers.IO) { saveStrengthResult("Punching Strength", newBestScore) }
+            val result = withContext(Dispatchers.IO) { submitPunchTest(finalScore) }
+            val newBestScore = maxOf(_uiState.value.bestScore, finalScore)
+            _uiState.update {
+                it.copy(
+                    bestScore = newBestScore,
+                    resultBelt = result?.beltColor ?: beltColorFromPunch(finalScore),
+                    bestBelt = result?.beltColor ?: beltColorFromPunch(newBestScore)
+                )
+            }
         }
     }
 

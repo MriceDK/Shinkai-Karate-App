@@ -34,6 +34,11 @@ data class UpdateStrengthRequestDto(
 )
 
 @JsonClass(generateAdapter = true)
+data class SubmitStrengthRequestDto(
+    val score: Double
+)
+
+@JsonClass(generateAdapter = true)
 data class CreateSupportTicketRequestDto(
     val subject: String,
     val message: String

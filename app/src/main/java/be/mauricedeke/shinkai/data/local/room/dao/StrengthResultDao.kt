@@ -11,6 +11,9 @@ interface StrengthResultDao {
     @Query("SELECT * FROM strength_results ORDER BY type")
     fun observeAll(): Flow<List<StrengthResultEntity>>
 
+    @Query("SELECT bestScore FROM strength_results WHERE type = :type LIMIT 1")
+    suspend fun getBestScore(type: String): Int?
+
     @Upsert
     suspend fun upsert(entity: StrengthResultEntity)
 }

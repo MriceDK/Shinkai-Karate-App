@@ -12,6 +12,7 @@ import be.mauricedeke.shinkai.data.local.room.dao.LocationSettingsDao
 import be.mauricedeke.shinkai.data.local.room.dao.NoteDao
 import be.mauricedeke.shinkai.data.local.room.dao.NotificationSettingsDao
 import be.mauricedeke.shinkai.data.local.room.dao.ShortcutsDao
+import be.mauricedeke.shinkai.data.local.room.dao.StrengthHistoryDao
 import be.mauricedeke.shinkai.data.local.room.dao.StrengthResultDao
 import be.mauricedeke.shinkai.data.local.room.dao.TechniekDao
 import be.mauricedeke.shinkai.data.local.room.dao.UserProfileDao
@@ -92,6 +93,11 @@ private val MIGRATION_13_14 = object : Migration(13, 14) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `katas` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `belt` TEXT NOT NULL, `beltColor` TEXT NOT NULL, `description` TEXT NOT NULL, `moves` TEXT NOT NULL, PRIMARY KEY(`id`))")
     }
 }
+private val MIGRATION_14_15 = object : Migration(14, 15) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS `strength_history` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `type` TEXT NOT NULL, `score` INTEGER NOT NULL, `unit` TEXT NOT NULL, `beltColor` TEXT, `timestamp` INTEGER NOT NULL)")
+    }
+}
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -104,7 +110,7 @@ object DatabaseModule {
             .addMigrations(
                 MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6,
                 MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11,
-                MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14
+                MIGRATION_11_12, MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15
             )
             .build()
 
@@ -113,6 +119,7 @@ object DatabaseModule {
     @Provides fun provideLocationSettingsDao(db: ShinkaiDatabase): LocationSettingsDao = db.locationSettingsDao()
     @Provides fun provideUserProfileDao(db: ShinkaiDatabase): UserProfileDao = db.userProfileDao()
     @Provides fun provideStrengthResultDao(db: ShinkaiDatabase): StrengthResultDao = db.strengthResultDao()
+    @Provides fun provideStrengthHistoryDao(db: ShinkaiDatabase): StrengthHistoryDao = db.strengthHistoryDao()
     @Provides fun provideShortcutsDao(db: ShinkaiDatabase): ShortcutsDao = db.shortcutsDao()
     @Provides fun provideBeltDao(db: ShinkaiDatabase): BeltDao = db.beltDao()
     @Provides fun provideTechniekDao(db: ShinkaiDatabase): TechniekDao = db.techniekDao()
