@@ -3,7 +3,7 @@ package be.mauricedeke.shinkai.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.usecase.GetHomeUpcomingEventsUseCase
-import be.mauricedeke.shinkai.domain.usecase.GetNextTrainingUseCase
+import be.mauricedeke.shinkai.domain.usecase.GetNextTrainingSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetShortcutsUseCase
 import be.mauricedeke.shinkai.domain.usecase.ToggleShortcutUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getHomeUpcomingEvents: GetHomeUpcomingEventsUseCase,
-    private val getNextTraining: GetNextTrainingUseCase,
+    private val getNextTraining: GetNextTrainingSessionUseCase,
     private val getShortcuts: GetShortcutsUseCase,
     private val toggleShortcutUseCase: ToggleShortcutUseCase
 ) : ViewModel() {
