@@ -46,8 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.ui.components.SectionHeader
 import be.mauricedeke.shinkai.ui.components.SettingsListItem
-import be.mauricedeke.shinkai.ui.theme.BeltYellow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import be.mauricedeke.shinkai.ui.theme.toBeltColor
+import be.mauricedeke.shinkai.ui.theme.toColor
 import coil.compose.AsyncImage
 
 @Composable
@@ -133,17 +134,19 @@ fun ProfielScreen(
             }
             Spacer(Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
+                val beltName = profile?.belt?.ifBlank { "Geel" } ?: "Geel"
+                val beltColor = beltName.toBeltColor().toColor(isDark = isDarkTheme)
                 Box(contentAlignment = Alignment.Center) {
                     Box(
                         modifier = Modifier
                             .size(width = 48.dp, height = 16.dp)
                             .clip(RoundedCornerShape(50))
-                            .background(BeltYellow)
+                            .background(beltColor)
                     )
                 }
                 Spacer(Modifier.width(8.dp))
                 Text(
-                    profile?.belt?.ifBlank { "Yellow belt" } ?: "Yellow belt",
+                    beltName,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurface
                 )

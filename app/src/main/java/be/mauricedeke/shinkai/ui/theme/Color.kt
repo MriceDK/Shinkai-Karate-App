@@ -54,3 +54,23 @@ fun be.mauricedeke.shinkai.domain.model.BeltColor.toColor(isDark: Boolean = fals
     be.mauricedeke.shinkai.domain.model.BeltColor.BLACK    -> if (isDark) BeltZwartDark else BeltZwart
 }
 
+fun String.toBeltColor(): be.mauricedeke.shinkai.domain.model.BeltColor {
+    // Try direct enum match first (e.g. "YELLOW", "BROWN_I")
+    runCatching { be.mauricedeke.shinkai.domain.model.BeltColor.valueOf(this.uppercase()) }
+        .getOrNull()?.let { return it }
+    return when (this.lowercase().trim()) {
+        "wit", "white", "white belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.WHITE
+        "geel", "yellow", "yellow belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW
+        "oranje", "orange", "orange belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.ORANGE
+        "rood", "red", "red belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.RED
+        "groen", "green", "green belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.GREEN
+        "blauw", "blue", "blue belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.BLUE
+        "paars", "purple", "purple belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.PURPLE
+        "bruin - i", "bruin i", "brown i", "brown belt i", "brown - i" -> be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_I
+        "bruin - ii", "bruin ii", "brown ii", "brown belt ii", "brown - ii" -> be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_II
+        "bruin - iii", "bruin iii", "brown iii", "brown belt iii", "brown - iii" -> be.mauricedeke.shinkai.domain.model.BeltColor.BROWN_III
+        "zwart", "black", "black belt" -> be.mauricedeke.shinkai.domain.model.BeltColor.BLACK
+        else -> be.mauricedeke.shinkai.domain.model.BeltColor.YELLOW
+    }
+}
+
