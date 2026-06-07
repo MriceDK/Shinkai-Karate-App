@@ -36,14 +36,15 @@ class HomeViewModel @Inject constructor(
 
     fun load() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isEventsError = false) }
+            _uiState.update { it.copy(isEventsError = false, isRefreshing = true) }
             val upcomingEvents = getHomeUpcomingEvents()
             val nextTraining = getNextTraining()
             _uiState.update {
                 it.copy(
                     upcomingEvents = upcomingEvents ?: emptyList(),
                     nextTraining = nextTraining,
-                    isEventsError = upcomingEvents == null
+                    isEventsError = upcomingEvents == null,
+                    isRefreshing = false
                 )
             }
         }

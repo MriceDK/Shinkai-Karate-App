@@ -7,5 +7,6 @@ data class TechniekUiState(
     val belts: List<Belt> = emptyList(),
     val katas: List<Kata> = emptyList(),
     val isError: Boolean = false,
-    val isKataError: Boolean = false
+    val isKataError: Boolean = false,
+    val isRefreshing: Boolean = false
 )

@@ -21,8 +21,10 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,40 +39,47 @@ import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TechniekScreen(
     uiState: TechniekUiState,
     onBeltClick: (String) -> Unit = {},
     onKataClick: () -> Unit = {},
+    onRefresh: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    if (uiState.isError) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(
-                "Kon technieken niet laden. Probeer opnieuw.",
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(32.dp)
-            )
-        }
-        return
-    }
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(horizontal = 8.dp, vertical = 8.dp),
-        contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
     ) {
-        items(uiState.belts) { belt ->
-            BeltCard(belt = belt, onClick = { onBeltClick(belt.name) })
-        }
-        item {
-            KataSquare(onClick = onKataClick)
+        if (uiState.isError) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    "Kon technieken niet laden. Probeer opnieuw.",
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(32.dp)
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
+                contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(uiState.belts) { belt ->
+                    BeltCard(belt = belt, onClick = { onBeltClick(belt.name) })
+                }
+                item {
+                    KataSquare(onClick = onKataClick)
+                }
+            }
         }
     }
 }

@@ -72,11 +72,16 @@ class TechniekRepositoryImpl @Inject constructor(
         return belts
     }
 
-    override suspend fun getBeltByName(name: String): Belt? =
-        getBelts()?.find { it.name == name }
+    override suspend fun getBeltByName(name: String): Belt? {
+        val entity = beltDao.getByName(name) ?: return null
+        val technieken = techniekDao.getByBelt(name)
+        return entity.toDomain(technieken)
+    }
 
     override suspend fun getTechnieksByBelt(belt: String): List<Techniek> =
-        getBelts()?.find { it.name == belt }?.technieken ?: emptyList()
+        techniekDao.getByBelt(belt).map { t ->
+            Techniek(id = UUID.randomUUID(), name = t.name, belt = t.beltName, description = t.description, programma = t.programma)
+        }
 
     private fun BeltDto.toEntity() = BeltEntity(
         name = name,

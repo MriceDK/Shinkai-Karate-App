@@ -19,7 +19,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -40,14 +42,21 @@ import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LexiconScreen(
     uiState: LexiconUiState,
     onSearchQueryChanged: (String) -> Unit = {},
+    onRefresh: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
+    ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
@@ -86,6 +95,7 @@ fun LexiconScreen(
                 items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
             }
         }
+    }
     }
 }
 

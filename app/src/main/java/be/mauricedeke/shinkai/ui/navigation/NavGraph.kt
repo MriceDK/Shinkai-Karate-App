@@ -125,6 +125,7 @@ fun ShinkaiNavGraph(
             Screen.ManageEvents.route -> manageEventsViewModel.refresh()
             Screen.TrainingHistory.route -> trainingHistoryViewModel.resetToToday()
             Screen.Technieken.route -> techniekViewModel.load()
+            Screen.KataList.route -> techniekViewModel.loadKatas()
             Screen.Lexicon.route -> lexiconViewModel.load()
         }
     }
@@ -157,18 +158,17 @@ fun ShinkaiNavGraph(
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 },
-                onShortcutToggle = { homeViewModel.toggleShortcut(it) }
+                onShortcutToggle = { homeViewModel.toggleShortcut(it) },
+                onRefresh = homeViewModel::load
             )
         }
 
         composable(Screen.Technieken.route) {
             TechniekScreen(
                 uiState = techniekUiState,
-                onBeltClick = { belt ->
-                    techniekDetailViewModel.loadBelt(belt)
-                    navController.navigate(Screen.TechniekDetail.createRoute(belt))
-                },
-                onKataClick = { navController.navigate(Screen.KataList.route) }
+                onBeltClick = { belt -> navController.navigate(Screen.TechniekDetail.createRoute(belt)) },
+                onKataClick = { navController.navigate(Screen.KataList.route) },
+                onRefresh = techniekViewModel::load
             )
         }
 
@@ -181,7 +181,7 @@ fun ShinkaiNavGraph(
             arguments = listOf(navArgument("belt") { type = NavType.StringType })
         ) { backStack ->
             val belt = backStack.arguments?.getString("belt") ?: "Geel"
-            techniekDetailViewModel.loadBelt(belt)
+            LaunchedEffect(belt) { techniekDetailViewModel.loadBelt(belt) }
             TechniekDetailScreen(
                 uiState = techniekDetailUiState,
                 onNotesChanged = techniekDetailViewModel::onNotesChanged,
@@ -199,7 +199,8 @@ fun ShinkaiNavGraph(
                     navController.navigate(Screen.EventDetail.createRoute(id.toString()))
                 },
                 onManageEventsClick = { navController.navigate(Screen.ManageEvents.route) },
-                onRsvp = eventsViewModel::setRsvp
+                onRsvp = eventsViewModel::setRsvp,
+                onRefresh = eventsViewModel::refresh
             )
         }
 
@@ -232,7 +233,8 @@ fun ShinkaiNavGraph(
         composable(Screen.Lexicon.route) {
             LexiconScreen(
                 uiState = lexiconUiState,
-                onSearchQueryChanged = lexiconViewModel::onSearchQueryChanged
+                onSearchQueryChanged = lexiconViewModel::onSearchQueryChanged,
+                onRefresh = lexiconViewModel::load
             )
         }
 
@@ -280,7 +282,8 @@ fun ShinkaiNavGraph(
                 onLogClick = trainingHistoryViewModel::showLogSheet,
                 onLogSave = trainingHistoryViewModel::logTraining,
                 onLogDismiss = trainingHistoryViewModel::dismissLogSheet,
-                onBackClick = { navController.popBackStack() }
+                onBackClick = { navController.popBackStack() },
+                onRefresh = trainingHistoryViewModel::refresh
             )
         }
 

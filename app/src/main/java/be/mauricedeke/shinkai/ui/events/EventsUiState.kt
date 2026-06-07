@@ -10,5 +10,6 @@ data class EventsUiState(
     val inboxEvents: List<Event> = emptyList(),
     val rsvp: Map<UUID, Boolean?> = emptyMap(),
     val selectedDate: LocalDate? = null,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isRefreshing: Boolean = false
 )

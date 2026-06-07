@@ -5,7 +5,8 @@ import be.mauricedeke.shinkai.domain.model.LexiconEntry
 data class LexiconUiState(
     val entries: List<LexiconEntry> = emptyList(),
     val searchQuery: String = "",
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isRefreshing: Boolean = false
 ) {
     val filteredEntries: List<LexiconEntry> get() = entries.filter {
         searchQuery.isBlank() ||

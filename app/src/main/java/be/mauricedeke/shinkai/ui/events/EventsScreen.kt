@@ -39,6 +39,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -75,6 +76,7 @@ fun EventsScreen(
     onEventClick: (java.util.UUID) -> Unit = {},
     onManageEventsClick: () -> Unit = {},
     onRsvp: (eventId: java.util.UUID, attending: Boolean) -> Unit = { _, _ -> },
+    onRefresh: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val events = uiState.upcomingEvents
@@ -143,9 +145,11 @@ fun EventsScreen(
         }
     }
 
-    Box(modifier = modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
+    PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
+    ) {
 
         Column(modifier = Modifier
             .fillMaxSize()

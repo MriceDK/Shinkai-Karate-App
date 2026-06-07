@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ fun HomeScreen(
     onNavigate: (String) -> Unit = {},
     onEventClick: (java.util.UUID) -> Unit = {},
     onShortcutToggle: (ShortcutId) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     var showEditSheet by remember { mutableStateOf(false) }
 
@@ -68,8 +70,13 @@ fun HomeScreen(
         date = LocalDate.of(2025, 3, 18)
     )
 
+    PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
+    ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
@@ -166,6 +173,7 @@ fun HomeScreen(
         }
 
         Spacer(Modifier.height(16.dp))
+    }
     }
 }
 

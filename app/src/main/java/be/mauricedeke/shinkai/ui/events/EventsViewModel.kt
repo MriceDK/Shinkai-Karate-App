@@ -36,13 +36,13 @@ class EventsViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isError = false) }
+            _uiState.update { it.copy(isError = false, isRefreshing = true) }
             val today = LocalDate.now()
             val events = getEvents()
             val inbox = getInboxEvents()
 
             if (events == null || inbox == null) {
-                _uiState.update { it.copy(isError = true, selectedDate = it.selectedDate ?: today) }
+                _uiState.update { it.copy(isError = true, isRefreshing = false, selectedDate = it.selectedDate ?: today) }
                 return@launch
             }
 
@@ -50,7 +50,7 @@ class EventsViewModel @Inject constructor(
             cachedInboxEvents = inbox
 
             val rsvp = (events + inbox).associate { it.id to it.rsvp }
-            _uiState.update { it.copy(rsvp = rsvp, selectedDate = today, isError = false) }
+            _uiState.update { it.copy(rsvp = rsvp, selectedDate = today, isError = false, isRefreshing = false) }
             applyEventLists(rsvp)
         }
     }

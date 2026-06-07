@@ -43,8 +43,10 @@ class TechniekDetailViewModel @Inject constructor(
     }
 
     fun onNotesFocusLost() {
+        val belt = _uiState.value.belt
+        if (belt.isBlank()) return
         viewModelScope.launch {
-            saveNote(_uiState.value.belt, _uiState.value.notes)
+            saveNote(belt, _uiState.value.notes)
         }
     }
 }

@@ -26,14 +26,25 @@ class TechniekViewModel @Inject constructor(
 
     fun load() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isError = false, isKataError = false) }
+            _uiState.update { it.copy(isError = false, isRefreshing = true) }
             val belts = getBelts()
-            val katas = getKatas()
             _uiState.update {
                 it.copy(
                     belts = belts ?: emptyList(),
-                    katas = katas ?: emptyList(),
                     isError = belts == null,
+                    isRefreshing = false
+                )
+            }
+        }
+    }
+
+    fun loadKatas() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isKataError = false) }
+            val katas = getKatas()
+            _uiState.update {
+                it.copy(
+                    katas = katas ?: emptyList(),
                     isKataError = katas == null
                 )
             }

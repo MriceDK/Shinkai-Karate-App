@@ -11,5 +11,6 @@ data class TrainingHistoryUiState(
     val selectedTrainingId: UUID? = null,
     val notes: String = "",
     val showLogSheet: Boolean = false,
-    val isError: Boolean = false
+    val isError: Boolean = false,
+    val isRefreshing: Boolean = false
 )

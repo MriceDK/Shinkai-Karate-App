@@ -7,5 +7,6 @@ data class HomeUiState(
     val upcomingEvents: List<Event> = emptyList(),
     val nextTraining: Training? = null,
     val isEventsError: Boolean = false,
+    val isRefreshing: Boolean = false,
     val shortcuts: List<ShortcutId> = defaultShortcuts
 )

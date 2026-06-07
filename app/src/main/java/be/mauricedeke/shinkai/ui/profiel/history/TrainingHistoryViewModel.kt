@@ -79,6 +79,9 @@ class TrainingHistoryViewModel @Inject constructor(
 
     fun onTrainingSelected(id: UUID) {
         val current = _uiState.value.selectedTrainingId
+        if (current != null) {
+            saveTrainingNote(current, _uiState.value.notes)
+        }
         if (current == id) {
             _uiState.update { it.copy(selectedTrainingId = null, notes = "") }
         } else {
@@ -93,6 +96,27 @@ class TrainingHistoryViewModel @Inject constructor(
     fun onNotesFocusLost() {
         val id = _uiState.value.selectedTrainingId ?: return
         saveTrainingNote(id, _uiState.value.notes)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        val id = _uiState.value.selectedTrainingId ?: return
+        saveTrainingNote(id, _uiState.value.notes)
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isRefreshing = true) }
+            val date = _uiState.value.selectedDate
+            val trainings = getTrainingsByDate(date)
+            _uiState.update {
+                it.copy(
+                    selectedTrainings = trainings ?: emptyList(),
+                    isError = trainings == null,
+                    isRefreshing = false
+                )
+            }
+        }
     }
 
     fun showLogSheet() = _uiState.update { it.copy(showLogSheet = true) }

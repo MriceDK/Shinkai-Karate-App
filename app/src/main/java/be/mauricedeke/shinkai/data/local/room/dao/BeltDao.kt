@@ -11,6 +11,9 @@ interface BeltDao {
     @Query("SELECT * FROM belts")
     suspend fun getAll(): List<BeltEntity>
 
+    @Query("SELECT * FROM belts WHERE name = :name LIMIT 1")
+    suspend fun getByName(name: String): BeltEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(belts: List<BeltEntity>)
 

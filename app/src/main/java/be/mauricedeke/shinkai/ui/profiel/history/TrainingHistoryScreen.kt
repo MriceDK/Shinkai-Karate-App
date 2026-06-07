@@ -26,11 +26,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +50,7 @@ import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrainingHistoryScreen(
     uiState: TrainingHistoryUiState,
@@ -60,6 +63,7 @@ fun TrainingHistoryScreen(
     onLogClick: () -> Unit = {},
     onLogSave: (type: String, startTime: String, endTime: String, sensei: String, injuries: String) -> Unit = { _, _, _, _, _ -> },
     onLogDismiss: () -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     val displayTrainings = uiState.selectedTrainings
 
@@ -71,7 +75,11 @@ fun TrainingHistoryScreen(
         )
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
+    PullToRefreshBox(
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = onRefresh,
+        modifier = modifier.fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
