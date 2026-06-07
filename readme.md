@@ -82,6 +82,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 ## Sunday, June 8th, 2026
 - Added geofencing for events and training sessions (enter/exit triggers)
 - Fixed loading of events from the API
+- Implemented Android Keystore key vault: `KeyVaultManager` generates a hardware-backed AES-256-GCM key and encrypts the JWT access token before it is persisted to DataStore
 
 ---
 
@@ -135,7 +136,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 | Status | Requirement | Implementation |
 |---|---|---|
-| ❌ | Key vault | AMQP credentials stored in BuildConfig, no EncryptedSharedPreferences or Android Keystore |
+| ✅ | Key vault | `KeyVaultManager` wraps Android Keystore (AES-256-GCM, hardware-backed); JWT access token is encrypted before being written to DataStore and decrypted on read |
 | ✅ | Filtering MessageBroker data | `isEnabled()` in `AmqpNotificationService` filters by message type and user notification settings |
 | ✅ | GPS navigation | Mapbox Navigation SDK is a dependency but unused — no turn-by-turn routing implemented |
 
@@ -155,8 +156,7 @@ Ordered by priority / effort:
 
 1. **Tests** — write unit tests for use cases (`GetEventsUseCase`, `ReminderScheduler`, date formatting), and at least one instrumented test
 2. **Automatic sensor action** — trigger a real action when a sensor threshold is crossed (e.g. vibrate or play a sound when kiai peaks, or disable screen when punch is detected)
-3. **Key vault** — move AMQP credentials / auth token into `EncryptedSharedPreferences` backed by the Android Keystore
-4. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
+3. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
 
 ---
 

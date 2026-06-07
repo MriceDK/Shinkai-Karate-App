@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import be.mauricedeke.shinkai.security.KeyVaultManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -18,7 +19,10 @@ import javax.inject.Singleton
 private val Context.appDataStore: DataStore<Preferences> by preferencesDataStore(name = "shinkai_app")
 
 @Singleton
-class AppDataStore @Inject constructor(@ApplicationContext private val context: Context) {
+class AppDataStore @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val keyVaultManager: KeyVaultManager
+) {
 
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("access_token")
@@ -29,10 +33,12 @@ class AppDataStore @Inject constructor(@ApplicationContext private val context: 
 
     // --- Token ---
 
-    val accessToken: Flow<String?> = context.appDataStore.data.map { it[TOKEN_KEY] }
+    val accessToken: Flow<String?> = context.appDataStore.data.map { prefs ->
+        prefs[TOKEN_KEY]?.let { runCatching { keyVaultManager.decrypt(it) }.getOrNull() }
+    }
 
     suspend fun setAccessToken(token: String) {
-        context.appDataStore.edit { it[TOKEN_KEY] = token }
+        context.appDataStore.edit { it[TOKEN_KEY] = keyVaultManager.encrypt(token) }
     }
 
     suspend fun clearAccessToken() {
