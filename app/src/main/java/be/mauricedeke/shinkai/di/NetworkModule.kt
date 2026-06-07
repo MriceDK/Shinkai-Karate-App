@@ -20,6 +20,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -40,6 +41,14 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(tokenStore: AuthTokenStore, sessionEventBus: SessionEventBus): OkHttpClient =
         OkHttpClient.Builder()
+            .certificatePinner(
+                CertificatePinner.Builder()
+                    // Leaf certificate — shinkai.ktsd.dscloud.me
+                    .add("shinkai.ktsd.dscloud.me", "sha256/j8IW9C5CvzfSXbKo7CSKqBpqOpsIgft7Bdkg2BqUn4o=")
+                    // Intermediate CA — Let's Encrypt E7 (backup pin: survives leaf renewal)
+                    .add("shinkai.ktsd.dscloud.me", "sha256/y7xVm0TVJNahMr2sZydE2jQH8SquXV9yLF9seROHHHU=")
+                    .build()
+            )
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
