@@ -37,6 +37,11 @@ class TrainingRepositoryImpl @Inject constructor(
         return trainingsCache
     }
 
+    override suspend fun refreshTrainings(): List<Training>? {
+        trainingsCache = null
+        return getTrainings()
+    }
+
     override suspend fun getNextTraining(): Training? =
         trainingClient.getNextTraining().getOrNull()?.toDomain()
 

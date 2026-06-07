@@ -83,7 +83,7 @@ object FakeDataSource {
             LocalDate.now().plusDays(10).format(DateTimeFormatter.ofPattern("dd/MM")),
             "", "Limburg",
             "Speciaal vriendenkamp georganiseerd door de regionale federatie.",
-            isInbox = true, localDate = LocalDate.now().plusDays(10),
+            localDate = LocalDate.now().plusDays(10),
             rsvp = false
         ),
         Event(
@@ -91,7 +91,7 @@ object FakeDataSource {
             LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd/MM")),
             "Gemeenteplein", "Aalst",
             "Publieke demonstratie ter gelegenheid van de openingsdag van het sportseizoen.",
-            isInbox = true, localDate = LocalDate.now().plusDays(5),
+            localDate = LocalDate.now().plusDays(5),
             rsvp = null
         ),
     )

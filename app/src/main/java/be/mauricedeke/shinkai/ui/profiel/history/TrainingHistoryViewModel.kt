@@ -7,6 +7,7 @@ import be.mauricedeke.shinkai.domain.usecase.AddTrainingUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetAllTrainingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetTrainingNoteUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetTrainingsByDateUseCase
+import be.mauricedeke.shinkai.domain.usecase.RefreshTrainingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.SaveTrainingNoteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class TrainingHistoryViewModel @Inject constructor(
     private val getAllTrainings: GetAllTrainingsUseCase,
     private val getTrainingsByDate: GetTrainingsByDateUseCase,
+    private val refreshTrainings: RefreshTrainingsUseCase,
     private val addTraining: AddTrainingUseCase,
     private val getTrainingNote: GetTrainingNoteUseCase,
     private val saveTrainingNote: SaveTrainingNoteUseCase
@@ -108,11 +110,13 @@ class TrainingHistoryViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
             val date = _uiState.value.selectedDate
-            val trainings = getTrainingsByDate(date)
+            val all = refreshTrainings()
+            val trainings = all?.filter { it.date == date }
             _uiState.update {
                 it.copy(
                     selectedTrainings = trainings ?: emptyList(),
-                    isError = trainings == null,
+                    trainingDates = all?.map { it.date }?.toSet() ?: _uiState.value.trainingDates,
+                    isError = all == null,
                     isRefreshing = false
                 )
             }

@@ -212,7 +212,8 @@ fun ShinkaiNavGraph(
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id.toString()))
-                }
+                },
+                onRefresh = manageEventsViewModel::refresh
             )
         }
 

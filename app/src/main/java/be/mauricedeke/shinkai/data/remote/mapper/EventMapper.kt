@@ -14,7 +14,6 @@ fun EventDto.toDomain() = Event(
     location = location,
     city = city,
     description = description,
-    isInbox = isInbox,
     localDate = runCatching { LocalDate.parse(localDate) }.getOrNull(),
     rsvp = rsvp,
     lat = lat,

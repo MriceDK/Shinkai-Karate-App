@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,7 +32,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -52,6 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
@@ -81,7 +80,7 @@ fun EventsScreen(
 ) {
     val events = uiState.upcomingEvents
     val inboxEvents = uiState.inboxEvents
-    val dateToEvents: Map<LocalDate, List<Event>> = (uiState.allUpcomingEvents + inboxEvents)
+    val dateToEvents: Map<LocalDate, List<Event>> = uiState.allUpcomingEvents
         .filter { it.localDate != null }
         .groupBy { it.localDate!! }
     val eventDates = dateToEvents.keys
@@ -150,13 +149,18 @@ fun EventsScreen(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
     ) {
-
         Column(modifier = Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())) {
-            Text("Toekomstige Events", modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 16.dp), fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primaryContainer)
+            Text(
+                "Toekomstige Events",
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 16.dp),
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primaryContainer
+            )
             if (uiState.isError) {
                 Text(
                     "Kon events niet laden. Probeer opnieuw.",
@@ -166,6 +170,8 @@ fun EventsScreen(
                 )
             }
             Spacer(Modifier.height(8.dp))
+
+            // Upcoming events list
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.background)
@@ -245,15 +251,24 @@ fun EventsScreen(
                     }
                 }
             }
+
             Spacer(Modifier.height(8.dp))
+
+            // Inbox: upcoming events without an RSVP
             Column(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)) {
-                Text("Inbox ( ${inboxEvents.size} )", modifier = Modifier.align(Alignment.CenterHorizontally), fontSize = 16.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.primaryContainer)
+                Text(
+                    "Inbox ( ${inboxEvents.size} )",
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
                 Spacer(Modifier.height(6.dp))
                 if (inboxEvents.isEmpty()) {
                     Text(
-                        "Geen inbox events.",
+                        "Geen events zonder antwoord.",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp)
@@ -333,6 +348,7 @@ fun EventsScreen(
                     }
                 }
             }
+
             Spacer(Modifier.height(8.dp))
             Button(
                 onClick = onManageEventsClick,
@@ -445,7 +461,7 @@ private val previewInboxEvent = Event(
     id = previewId3, title = "Zomerstage 2026",
     startTime = "09:00", endTime = "18:00",
     date = "2026-07-01", location = "Sporthal Kortrijk", city = "Kortrijk",
-    isInbox = true, localDate = java.time.LocalDate.of(2026, 7, 1)
+    localDate = java.time.LocalDate.of(2026, 7, 1)
 )
 
 @Preview(name = "Empty", showBackground = true, showSystemUi = true)

@@ -12,9 +12,6 @@ interface EventApi {
     @GET("events")
     suspend fun getEvents(): List<EventDto>
 
-    @GET("events/inbox")
-    suspend fun getInboxEvents(): List<EventDto>
-
     @GET("events/{id}")
     suspend fun getEventById(@Path("id") id: String): EventDto
 

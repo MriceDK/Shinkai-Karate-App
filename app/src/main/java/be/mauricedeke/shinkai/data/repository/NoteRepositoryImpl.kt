@@ -13,16 +13,25 @@ class NoteRepositoryImpl @Inject constructor(
     private val beltClient: BeltClient
 ) : NoteRepository {
 
+    private val lastSaved = mutableMapOf<String, String>()
+
     override suspend fun getNote(beltName: String): String {
         val local = noteDao.getNote(beltName)
-        if (local != null) return local
+        if (local != null) {
+            lastSaved[beltName] = local
+            return local
+        }
         val remote = beltClient.getBeltNote(beltName).getOrNull()?.note ?: return ""
         if (remote.isNotEmpty()) noteDao.upsertNote(BeltNoteEntity(beltName, remote))
+        lastSaved[beltName] = remote
         return remote
     }
 
     override suspend fun saveNote(beltName: String, note: String) {
         noteDao.upsertNote(BeltNoteEntity(beltName, note))
-        beltClient.updateBeltNote(beltName, note)
+        if (note != lastSaved[beltName]) {
+            lastSaved[beltName] = note
+            beltClient.updateBeltNote(beltName, note)
+        }
     }
 }

@@ -12,7 +12,6 @@ data class Event(
     val location: String = "",
     val city: String = "",
     val description: String = "",
-    val isInbox: Boolean = false,
     val localDate: LocalDate? = null,
     val rsvp: Boolean? = null,
     val lat: Double? = null,

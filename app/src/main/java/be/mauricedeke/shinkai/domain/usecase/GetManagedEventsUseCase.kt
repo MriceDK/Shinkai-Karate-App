@@ -16,12 +16,10 @@ class GetManagedEventsUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): ManagedEventsResult? {
         val events = eventRepository.getEvents() ?: return null
-        val inboxEvents = eventRepository.getInboxEvents() ?: return null
 
         val today = LocalDate.now()
         val cutoff = today.minusMonths(1)
-        val filtered = (events + inboxEvents)
-            .filter { it.localDate == null || !it.localDate.isBefore(cutoff) }
+        val filtered = events.filter { it.localDate == null || !it.localDate.isBefore(cutoff) }
         val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
         val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
                      past.sortedByDescending { it.localDate }

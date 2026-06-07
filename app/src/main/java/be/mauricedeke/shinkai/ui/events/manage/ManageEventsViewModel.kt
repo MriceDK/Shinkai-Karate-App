@@ -28,13 +28,13 @@ class ManageEventsViewModel @Inject constructor(
 
     fun refresh() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isError = false) }
+            _uiState.update { it.copy(isError = false, isRefreshing = true) }
             val result = getManagedEvents()
             if (result == null) {
-                _uiState.update { it.copy(isError = true) }
+                _uiState.update { it.copy(isError = true, isRefreshing = false) }
                 return@launch
             }
-            _uiState.update { it.copy(events = result.events, rsvp = result.rsvp, isError = false) }
+            _uiState.update { it.copy(events = result.events, rsvp = result.rsvp, isError = false, isRefreshing = false) }
         }
     }
 

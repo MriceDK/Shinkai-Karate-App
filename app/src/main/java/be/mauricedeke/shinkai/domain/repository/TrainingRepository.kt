@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 interface TrainingRepository {
     suspend fun getTrainings(): List<Training>?
+    suspend fun refreshTrainings(): List<Training>?
     suspend fun getNextTraining(): Training?
     suspend fun getTrainingsByDate(date: LocalDate): List<Training>?
     suspend fun addTraining(training: Training)

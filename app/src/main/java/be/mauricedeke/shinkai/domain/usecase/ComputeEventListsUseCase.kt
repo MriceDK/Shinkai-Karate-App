@@ -13,22 +13,20 @@ data class EventListsResult(
 
 class ComputeEventListsUseCase @Inject constructor() {
     operator fun invoke(
-        regularEvents: List<Event>,
-        inboxEvents: List<Event>,
+        events: List<Event>,
         rsvp: Map<UUID, Boolean?>
     ): EventListsResult {
         val today = LocalDate.now()
-        fun isUpcoming(date: LocalDate?) = date == null || !date.isBefore(today)
-
-        val allUpcoming = (regularEvents.filter { isUpcoming(it.localDate) } +
-                inboxEvents.filter { isUpcoming(it.localDate) })
+        val upcoming = events
+            .filter { it.localDate == null || !it.localDate.isBefore(today) }
             .sortedWith(compareBy(nullsLast()) { it.localDate })
-        val pendingInbox = allUpcoming.filter { rsvp[it.id] == null }
+
+        val pending = upcoming.filter { rsvp[it.id] == null }
 
         return EventListsResult(
-            upcomingEvents = allUpcoming.take(4),
-            allUpcomingEvents = allUpcoming,
-            inboxEvents = pendingInbox
+            upcomingEvents = upcoming.take(4),
+            allUpcomingEvents = upcoming,
+            inboxEvents = pending
         )
     }
 }

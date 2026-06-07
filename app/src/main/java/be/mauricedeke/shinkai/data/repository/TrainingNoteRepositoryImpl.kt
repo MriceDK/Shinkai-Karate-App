@@ -17,17 +17,24 @@ class TrainingNoteRepositoryImpl @Inject constructor(
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private val notes = mutableMapOf<UUID, String>()
+    private val savedNotes = mutableMapOf<UUID, String>()
 
     fun seedNote(id: UUID, note: String) {
-        if (!notes.containsKey(id)) notes[id] = note
+        if (!notes.containsKey(id)) {
+            notes[id] = note
+            savedNotes[id] = note
+        }
     }
 
     override fun getNote(id: UUID): String = notes[id] ?: ""
 
     override fun saveNote(id: UUID, note: String) {
         notes[id] = note
-        scope.launch {
-            trainingClient.updateNote(id.toString(), note)
+        if (note != savedNotes[id]) {
+            savedNotes[id] = note
+            scope.launch {
+                trainingClient.updateNote(id.toString(), note)
+            }
         }
     }
 }

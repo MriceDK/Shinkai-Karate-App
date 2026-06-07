@@ -12,9 +12,6 @@ class EventClient @Inject constructor(private val api: EventApi) {
     suspend fun getEvents(): Result<List<EventDto>> =
         runCatching { api.getEvents() }
 
-    suspend fun getInboxEvents(): Result<List<EventDto>> =
-        runCatching { api.getInboxEvents() }
-
     suspend fun getEventById(id: String): Result<EventDto> =
         runCatching { api.getEventById(id) }
 

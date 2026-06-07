@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.usecase.ComputeEventListsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetEventsUseCase
-import be.mauricedeke.shinkai.domain.usecase.GetInboxEventsUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetRsvpUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class EventsViewModel @Inject constructor(
     private val getEvents: GetEventsUseCase,
-    private val getInboxEvents: GetInboxEventsUseCase,
     private val setRsvpUseCase: SetRsvpUseCase,
     private val computeEventLists: ComputeEventListsUseCase
 ) : ViewModel() {
@@ -27,8 +25,7 @@ class EventsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(EventsUiState())
     val uiState: StateFlow<EventsUiState> = _uiState
 
-    private var cachedRegularEvents: List<Event> = emptyList()
-    private var cachedInboxEvents: List<Event> = emptyList()
+    private var cachedEvents: List<Event> = emptyList()
 
     init {
         refresh()
@@ -39,17 +36,14 @@ class EventsViewModel @Inject constructor(
             _uiState.update { it.copy(isError = false, isRefreshing = true) }
             val today = LocalDate.now()
             val events = getEvents()
-            val inbox = getInboxEvents()
 
-            if (events == null || inbox == null) {
+            if (events == null) {
                 _uiState.update { it.copy(isError = true, isRefreshing = false, selectedDate = it.selectedDate ?: today) }
                 return@launch
             }
 
-            cachedRegularEvents = events
-            cachedInboxEvents = inbox
-
-            val rsvp = (events + inbox).associate { it.id to it.rsvp }
+            cachedEvents = events
+            val rsvp = events.associate { it.id to it.rsvp }
             _uiState.update { it.copy(rsvp = rsvp, selectedDate = today, isError = false, isRefreshing = false) }
             applyEventLists(rsvp)
         }
@@ -69,7 +63,7 @@ class EventsViewModel @Inject constructor(
     }
 
     private fun applyEventLists(rsvp: Map<UUID, Boolean?>) {
-        val result = computeEventLists(cachedRegularEvents, cachedInboxEvents, rsvp)
+        val result = computeEventLists(cachedEvents, rsvp)
         _uiState.update { state ->
             state.copy(
                 upcomingEvents = result.upcomingEvents,
