@@ -42,6 +42,7 @@ import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.ui.components.EventRow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,7 +106,7 @@ fun HomeScreen(
                 upcomingEvents.forEach { event ->
                     EventRow(
                         "${event.startTime} - ${event.endTime}",
-                        event.date,
+                        event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date,
                         event.title,
                         event.location,
                         onClick = { onEventClick(event.id) })
@@ -118,7 +119,7 @@ fun HomeScreen(
         EventSection(title = "VOLGENDE TRAINING") {
             EventRow(
                 "${fallbackTraining.startTime} - ${fallbackTraining.endTime}",
-                fallbackTraining.date.toString(),
+                fallbackTraining.date.format(DateTimeFormatter.ofPattern("dd/MM")),
                 fallbackTraining.type,
                 "",
                 onClick = { onEventClick(fallbackTraining.id) },

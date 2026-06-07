@@ -130,7 +130,7 @@ fun EventsScreen(
                 ) {
                     Column(modifier = Modifier.width(100.dp)) {
                         Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                        Text(event.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Spacer(Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
@@ -195,7 +195,7 @@ fun EventsScreen(
                         ) {
                             Column(modifier = Modifier.width(110.dp)) {
                                 Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-                                Text(event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                                Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
                             }
                             Box(modifier = Modifier
                                 .width(1.dp)
@@ -289,7 +289,7 @@ fun EventsScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(horizontalAlignment = Alignment.End) {
                                     Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
-                                    Text(event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                                    Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
                                 }
                                 Box(modifier = Modifier
                                     .padding(horizontal = 12.dp)
