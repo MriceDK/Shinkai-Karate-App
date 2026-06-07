@@ -131,6 +131,7 @@ fun ShinkaiNavGraph(
             Screen.Technieken.route -> techniekViewModel.load()
             Screen.KataList.route -> techniekViewModel.loadKatas()
             Screen.Lexicon.route -> lexiconViewModel.load()
+            Screen.Kaart.route -> kaartViewModel.load()
         }
     }
 

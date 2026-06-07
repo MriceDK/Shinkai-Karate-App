@@ -13,7 +13,6 @@ data class EventDto(
     val location: String,
     val city: String,
     val description: String,
-    val isInbox: Boolean,
     val rsvp: Boolean?,
     val lat: Double?,
     val lng: Double?

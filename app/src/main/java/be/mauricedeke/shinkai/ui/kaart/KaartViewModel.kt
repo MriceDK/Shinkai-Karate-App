@@ -30,6 +30,10 @@ class KaartViewModel @Inject constructor(
                 _uiState.update { it.copy(userLocation = point) }
             }
         }
+        load()
+    }
+
+    fun load() {
         viewModelScope.launch {
             val events = eventRepository.getEvents() ?: emptyList()
             _uiState.update { it.copy(events = events) }
