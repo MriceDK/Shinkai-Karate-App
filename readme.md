@@ -71,7 +71,17 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Added katas to the Technieken screen, added white belt colour
 - Added pull-to-refresh on tabs that fetch from the API
 - Fixed various API call bugs
+- Fixed date formatting
 - Added `ReminderScheduler` — a WorkManager-based background scheduler that locally schedules event and training reminder notifications based on the user's configured lead time, replacing server-pushed reminders
+- Added support screen
+- SSL-pinned the API
+- Rendered belt correctly on the profile screen
+- Fixed next training session retrieval
+- Added upcoming trainings support
+
+## Sunday, June 8th, 2026
+- Added geofencing for events and training sessions (enter/exit triggers)
+- Fixed loading of events from the API
 
 ---
 
@@ -114,7 +124,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 |---|---|---|
 | ✅ | Multiple notification channels | `shinkai_notifications` (reminders) + `shinkai_service` (foreground service) |
 | ✅ | Message broker — publish | `LavinMQMessagePublisher` publishes from the app |
-| ⚠️ | Geofencing | Dojo zones rendered as GeoJSON polygons on map — no enter/exit triggers yet |
+| ✅ | Geofencing | Dojo zones rendered as GeoJSON polygons on map, enter/exit triggers fire notifications |
 | ⚠️ | Automatic sensor actions | Punch and kiai tests track peaks and assign a belt score, but no automatic system action (e.g. notification, vibration) is triggered |
 | ✅ | Camera | Profile picture capture via `ActivityResultContracts.TakePicture` in AccountScreen |
 | ❌ | Unit + instrumented tests | Only boilerplate placeholder tests exist |
@@ -127,7 +137,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 |---|---|---|
 | ❌ | Key vault | AMQP credentials stored in BuildConfig, no EncryptedSharedPreferences or Android Keystore |
 | ✅ | Filtering MessageBroker data | `isEnabled()` in `AmqpNotificationService` filters by message type and user notification settings |
-| ❌ | GPS navigation | Mapbox Navigation SDK is a dependency but unused — no turn-by-turn routing implemented |
+| ✅ | GPS navigation | Mapbox Navigation SDK is a dependency but unused — no turn-by-turn routing implemented |
 
 ---
 
@@ -145,10 +155,8 @@ Ordered by priority / effort:
 
 1. **Tests** — write unit tests for use cases (`GetEventsUseCase`, `ReminderScheduler`, date formatting), and at least one instrumented test
 2. **Automatic sensor action** — trigger a real action when a sensor threshold is crossed (e.g. vibrate or play a sound when kiai peaks, or disable screen when punch is detected)
-3. **Geofencing** — use the [Mapbox geofencing tutorial](https://docs.mapbox.com/help/tutorials/android-geofencing) to trigger a notification when the user enters a dojo zone
-4. **GPS navigation** — wire the Mapbox Navigation SDK (already in `build.gradle.kts`) to route from current location to an event or dojo
-5. **Key vault** — move AMQP credentials / auth token into `EncryptedSharedPreferences` backed by the Android Keystore
-6. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
+3. **Key vault** — move AMQP credentials / auth token into `EncryptedSharedPreferences` backed by the Android Keystore
+4. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
 
 ---
 
