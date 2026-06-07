@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
+import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
 import be.mauricedeke.shinkai.messaging.InAppNotification
 import be.mauricedeke.shinkai.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
@@ -23,7 +24,8 @@ class MainViewModel @Inject constructor(
     private val notificationEventBus: NotificationEventBus,
     private val restoreSession: RestoreSessionUseCase,
     private val clearSession: ClearSessionUseCase,
-    private val sessionEventBus: SessionEventBus
+    private val sessionEventBus: SessionEventBus,
+    private val scheduleReminders: ScheduleRemindersUseCase
 ) : ViewModel() {
 
     private val _inAppNotification = MutableSharedFlow<InAppNotification>()
@@ -38,7 +40,9 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _isAuthenticated.value = restoreSession()
+            val authenticated = restoreSession()
+            _isAuthenticated.value = authenticated
+            if (authenticated == true) scheduleReminders()
         }
         viewModelScope.launch {
             notificationEventBus.events.collect { notification ->

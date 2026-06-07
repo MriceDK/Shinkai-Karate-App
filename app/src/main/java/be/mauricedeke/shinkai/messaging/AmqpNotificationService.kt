@@ -83,14 +83,11 @@ class AmqpNotificationService : Service() {
 
     private fun isEnabled(type: String, settings: NotificationSettings): Boolean = when (type) {
         "event" -> settings.eventNotifications
-        "event-reminder" -> settings.eventNotifications && settings.eventReminderEnabled
         "training" -> settings.trainingNotifications
-        "training-reminder" -> settings.trainingNotifications && settings.trainingReminderEnabled
         "exam" -> settings.examNotifications
-        "exam-reminder" -> settings.examNotifications && settings.examReminderEnabled
         "change" -> settings.changeNotifications
         "update" -> settings.updateNotifications
-        else -> false
+        else -> false  // *-reminder types are scheduled locally by ReminderScheduler
     }
 
     private fun buildForegroundNotification(): Notification {

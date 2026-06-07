@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import be.mauricedeke.shinkai.domain.usecase.GetNotificationSettingsUseCase
+import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
 import be.mauricedeke.shinkai.domain.usecase.UpdateNotificationSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class NotificationsViewModel @Inject constructor(
     private val getNotificationSettings: GetNotificationSettingsUseCase,
-    private val updateNotificationSettings: UpdateNotificationSettingsUseCase
+    private val updateNotificationSettings: UpdateNotificationSettingsUseCase,
+    private val scheduleReminders: ScheduleRemindersUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NotificationsUiState())
@@ -29,6 +31,9 @@ class NotificationsViewModel @Inject constructor(
 
     fun onSettingsChanged(settings: NotificationSettings) {
         _uiState.update { it.copy(settings = settings) }
-        viewModelScope.launch { updateNotificationSettings(settings) }
+        viewModelScope.launch {
+            updateNotificationSettings(settings)
+            scheduleReminders()
+        }
     }
 }
