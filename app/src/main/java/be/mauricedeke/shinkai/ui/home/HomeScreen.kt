@@ -38,7 +38,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.domain.model.Training
+import be.mauricedeke.shinkai.domain.model.TrainingSession
 import be.mauricedeke.shinkai.ui.components.EventRow
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
@@ -51,6 +51,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onNavigate: (String) -> Unit = {},
     onEventClick: (java.util.UUID) -> Unit = {},
+    onTrainingClick: (java.util.UUID) -> Unit = {},
     onShortcutToggle: (ShortcutId) -> Unit = {},
     onRefresh: () -> Unit = {},
 ) {
@@ -65,11 +66,7 @@ fun HomeScreen(
     }
     val upcomingEvents = uiState.upcomingEvents
 
-    val fallbackTraining = uiState.nextTraining ?: Training(
-        type = "Technieken",
-        startTime = "20:00", endTime = "22:00",
-        date = LocalDate.of(2025, 3, 18)
-    )
+    val nextTraining = uiState.nextTraining
 
     PullToRefreshBox(
         isRefreshing = uiState.isRefreshing,
@@ -117,13 +114,29 @@ fun HomeScreen(
         Spacer(Modifier.height(8.dp))
 
         EventSection(title = "VOLGENDE TRAINING") {
-            EventRow(
-                "${fallbackTraining.startTime} - ${fallbackTraining.endTime}",
-                fallbackTraining.date.format(DateTimeFormatter.ofPattern("dd/MM")),
-                fallbackTraining.type,
-                "",
-                onClick = { onEventClick(fallbackTraining.id) },
-            )
+            when {
+                uiState.isTrainingError -> Text(
+                    "Kon training niet laden. Probeer opnieuw.",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                )
+                nextTraining == null -> Text(
+                    "Geen aankomende trainingen.",
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                )
+                else -> EventRow(
+                    "${nextTraining.startTime} - ${nextTraining.endTime}",
+                    nextTraining.date.format(DateTimeFormatter.ofPattern("dd/MM")),
+                    nextTraining.type,
+                    nextTraining.location,
+                    onClick = { onTrainingClick(nextTraining.id) },
+                )
+            }
         }
 
         Spacer(Modifier.height(16.dp))
@@ -254,7 +267,7 @@ fun HomeScreenWithDataPreview() {
                     date = "2026-06-22", location = "Dojo Gent"
                 )
             ),
-            nextTraining = Training(
+            nextTraining = TrainingSession(
                 type = "Technieken",
                 startTime = "20:00", endTime = "22:00",
                 date = java.time.LocalDate.now(),
@@ -285,7 +298,7 @@ fun HomeScreenDarkPreview() {
                     date = "2026-06-15", location = "Sporthal Brugge"
                 )
             ),
-            nextTraining = Training(
+            nextTraining = TrainingSession(
                 type = "Kata", startTime = "19:00", endTime = "21:00",
                 date = java.time.LocalDate.now()
             )

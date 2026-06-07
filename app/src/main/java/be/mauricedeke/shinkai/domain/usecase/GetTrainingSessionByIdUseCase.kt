@@ -5,9 +5,9 @@ import be.mauricedeke.shinkai.data.remote.mapper.toDomain
 import be.mauricedeke.shinkai.domain.model.TrainingSession
 import javax.inject.Inject
 
-class GetNextTrainingSessionUseCase @Inject constructor(
+class GetTrainingSessionByIdUseCase @Inject constructor(
     private val trainingSessionClient: TrainingSessionClient
 ) {
-    suspend operator fun invoke(): Result<TrainingSession?> =
-        trainingSessionClient.getUpcomingTrainingSession().map { it?.toDomain() }
+    suspend operator fun invoke(id: String): TrainingSession? =
+        trainingSessionClient.getTrainingSessionById(id).getOrNull()?.toDomain()
 }

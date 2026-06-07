@@ -9,6 +9,7 @@ data class TrainingSessionDto(
     val startTime: String,
     val endTime: String,
     val date: String,
-    val sensei: String,
-    val location: String
+    val location: String,
+    val sensei: String? = null,
+    val note: String? = null
 )

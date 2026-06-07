@@ -51,6 +51,8 @@ import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestViewModel
+import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailScreen
+import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailViewModel
 import be.mauricedeke.shinkai.ui.technieken.KataListScreen
 import be.mauricedeke.shinkai.ui.technieken.TechniekViewModel
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailScreen
@@ -159,6 +161,9 @@ fun ShinkaiNavGraph(
                 onEventClick = { id ->
                     eventDetailViewModel.loadEvent(id)
                     navController.navigate(Screen.EventDetail.createRoute(id.toString()))
+                },
+                onTrainingClick = { id ->
+                    navController.navigate(Screen.TrainingSessionDetail.createRoute(id.toString()))
                 },
                 onShortcutToggle = { homeViewModel.toggleShortcut(it) },
                 onRefresh = homeViewModel::load
@@ -361,6 +366,15 @@ fun ShinkaiNavGraph(
                 onMessageChanged = vm::onMessageChanged,
                 onSend = vm::onSend,
                 onSuccessDismissed = { vm.onSuccessDismissed(); navController.popBackStack() },
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.TrainingSessionDetail.route) {
+            val vm: TrainingSessionDetailViewModel = hiltViewModel()
+            val uiState by vm.uiState.collectAsStateWithLifecycle()
+            TrainingSessionDetailScreen(
+                uiState = uiState,
                 onBackClick = { navController.popBackStack() }
             )
         }

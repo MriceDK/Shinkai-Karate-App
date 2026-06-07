@@ -38,6 +38,9 @@ sealed class Screen(
     data object KataList : Screen("technieken/katas")
     data object Login : Screen("login")
     data object Support : Screen("support")
+    data object TrainingSessionDetail : Screen("training-session/{sessionId}") {
+        fun createRoute(id: String) = "training-session/$id"
+    }
 }
 
 val bottomNavScreens = listOf(

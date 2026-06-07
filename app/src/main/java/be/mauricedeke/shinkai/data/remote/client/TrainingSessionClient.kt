@@ -11,6 +11,9 @@ class TrainingSessionClient @Inject constructor(private val api: TrainingSession
     suspend fun getTrainingSessions(): Result<List<TrainingSessionDto>> =
         runCatching { api.getTrainingSessions() }
 
-    suspend fun getUpcomingTrainingSession(): Result<TrainingSessionDto> =
-        runCatching { api.getUpcomingTrainingSession() }
+    suspend fun getUpcomingTrainingSession(): Result<TrainingSessionDto?> =
+        runCatching { api.getUpcomingTrainingSession().firstOrNull() }
+
+    suspend fun getTrainingSessionById(id: String): Result<TrainingSessionDto> =
+        runCatching { api.getTrainingSessionById(id) }
 }
