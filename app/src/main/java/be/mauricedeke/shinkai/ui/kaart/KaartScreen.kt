@@ -230,6 +230,22 @@ fun KaartScreen(
                 onViewDetails = {
                     onTrainingSelected(null)
                     onViewTrainingDetails(uiState.selectedTrainingPoint.id)
+                },
+                onNavigate = {
+                    val destination = Point.fromLngLat(
+                        uiState.selectedTrainingPoint.lng,
+                        uiState.selectedTrainingPoint.lat
+                    )
+                    onTrainingSelected(null)
+                    onFetchRoute(destination)
+                    scope.launch {
+                        mapViewportState.flyTo(
+                            CameraOptions.Builder()
+                                .center(destination)
+                                .zoom(14.0)
+                                .build()
+                        )
+                    }
                 }
             )
         }
@@ -239,7 +255,8 @@ fun KaartScreen(
 @Composable
 private fun TrainingSessionDetailSheet(
     point: TrainingSessionPoint,
-    onViewDetails: () -> Unit
+    onViewDetails: () -> Unit,
+    onNavigate: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -300,6 +317,15 @@ private fun TrainingSessionDetailSheet(
         }
 
         Spacer(Modifier.height(24.dp))
+
+        Button(
+            onClick = onNavigate,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Navigate")
+        }
+
+        Spacer(Modifier.height(8.dp))
 
         OutlinedButton(
             onClick = onViewDetails,
