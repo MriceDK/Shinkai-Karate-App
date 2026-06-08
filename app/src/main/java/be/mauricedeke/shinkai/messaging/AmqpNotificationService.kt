@@ -113,7 +113,7 @@ class AmqpNotificationService : Service() {
         return NotificationCompat.Builder(this, SERVICE_CHANNEL_ID)
             .setContentTitle("ShinKai")
             .setContentText("Listening for reminders")
-            .setSmallIcon(R.drawable.shinkai_logo)
+            .setSmallIcon(R.drawable.shinkai_logo_clear)
             .setOngoing(true)
             .setSilent(true)
             .setTimeoutAfter(2_000L)

@@ -81,7 +81,7 @@ fun LoginScreen(
             Spacer(Modifier.height(48.dp))
 
             Image(
-                painter = painterResource(R.drawable.shinkai_logo),
+                painter = painterResource(R.drawable.shinkai_logo_clear),
                 contentDescription = "ShinKai logo",
                 modifier = Modifier.size(180.dp),
                 contentScale = ContentScale.Fit

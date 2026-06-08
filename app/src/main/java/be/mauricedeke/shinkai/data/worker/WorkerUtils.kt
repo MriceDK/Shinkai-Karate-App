@@ -30,7 +30,7 @@ object NotificationHelper {
             NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.shinkai_logo)
+                .setSmallIcon(R.drawable.shinkai_logo_clear)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setVibrate(LongArray(0))
                 .setContentIntent(pendingIntent)
