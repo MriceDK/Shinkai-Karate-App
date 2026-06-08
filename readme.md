@@ -134,11 +134,11 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 ## Experienced — 16/20
 
-| Status | Requirement | Implementation |
-|---|---|---|
+| Status | Requirement | Implementation                                                                                                                                                 |
+|---|---|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | ✅ | Key vault | `KeyVaultManager` wraps Android Keystore (AES-256-GCM, hardware-backed); JWT access token is encrypted before being written to DataStore and decrypted on read |
-| ✅ | Filtering MessageBroker data | `isEnabled()` in `AmqpNotificationService` filters by message type and user notification settings |
-| ✅ | GPS navigation | Mapbox Navigation SDK is a dependency but unused — no turn-by-turn routing implemented |
+| ✅ | Filtering MessageBroker data | `isEnabled()` in `AmqpNotificationService` filters by message type and user notification settings                                                              |
+| ✅ | GPS navigation | Mapbox Navigation SDK is a dependency and is used when navigating to a dynamically generated marker on the map for events or training sessions                 |
 
 ---
 
