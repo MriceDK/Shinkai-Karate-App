@@ -29,6 +29,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -188,6 +189,9 @@ fun AccountScreen(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
+        if (uiState.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -320,17 +324,21 @@ private fun FormField(
 @Preview(name = "Pre-filled profile", showBackground = true, showSystemUi = true)
 @Composable
 fun AccountScreenPreview() {
-    ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState()) }
+    ShinkaikarateappTheme {
+        AccountScreen(uiState = AccountUiState(naam = "Maurice De Kegel", email = "maurice@example.com", isLoading = false))
+    }
 }
 
-@Preview(name = "Empty fields", showBackground = true, showSystemUi = true)
+@Preview(name = "Loading", showBackground = true, showSystemUi = true)
 @Composable
-fun AccountScreenEmptyPreview() {
-    ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState(naam = "", email = "")) }
+fun AccountScreenLoadingPreview() {
+    ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState(isLoading = true)) }
 }
 
 @Preview(name = "Dark — pre-filled", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun AccountScreenDarkPreview() {
-    ShinkaikarateappTheme(darkTheme = true) { AccountScreen(uiState = AccountUiState()) }
+    ShinkaikarateappTheme(darkTheme = true) {
+        AccountScreen(uiState = AccountUiState(naam = "Maurice De Kegel", email = "maurice@example.com", isLoading = false))
+    }
 }

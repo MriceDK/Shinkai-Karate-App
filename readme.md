@@ -11,7 +11,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 # Daily Status
 
-## Sunday, June 1st, 2026
+## Monday, June 1st, 2026
 - Set up project: renamed package, configured build, added dependency catalog
 - Added domain models, repositories, use cases and Hilt DI modules
 - Wired all screens to ViewModels with UiState
@@ -22,7 +22,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Made technieken per belt render dynamically from FakeDataSource
 - Added BeltColor enum and all belt definitions
 
-## Monday, June 2nd, 2026
+## Tuestday, June 2nd, 2026
 - Added `localDate` and `rsvp` fields to the Event model, updated FakeDataSource with future-dated events
 - Wired events and home screen to FakeDataSource, limited displayed events, added placeholders
 - Added manage events screen with per-event RSVP, past events restricted
@@ -31,7 +31,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Persisted notification and location settings in Room instead of in-memory storage
 - Wired manage events to the nav graph, scoped settings ViewModels to backstack entry
 
-## Tuesday, June 3rd, 2026
+## Wednesday, June 3rd, 2026
 - Fixed calendar: viewing a day with multiple events and styling
 - Added profile picture selector (camera + gallery), persisted URI in Room
 - Added punch force test (accelerometer) and kiai strength test (microphone)
@@ -44,7 +44,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Added local functionality for logging trainings
 - Added custom app icon and applied colour theme throughout
 
-## Wednesday, June 4th, 2026
+## Thursday, June 4th, 2026
 - Added Mapbox to the Kaart screen with event markers
 - Added GeoJSON dojo zone polygons on the map
 - Added navigation to an event location from the map
@@ -55,17 +55,17 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Replaced Room theme storage with Preferences DataStore
 - Updated camera/gallery profile picture chooser with a proper camera intent
 
-## Thursday, June 5th, 2026
+## Friday, June 5th, 2026
 - Added login screen with authentication flow
 - Created all remote DTOs for Auth, User, Events, Trainings, Belts, Katas, Lexicon, Strength, Support
 - Created all Retrofit API interfaces for every endpoint
 - Changed all string IDs to UUIDs across models, repositories, nav graph
 
-## Friday, June 6th, 2026
+## Saturday, June 6th, 2026
 - Wired all Retrofit API interfaces to their repository implementations
 - Replaced FakeDataSource calls with live API data across all features
 
-## Saturday, June 7th, 2026
+## Sunday, June 7th, 2026
 - Fixed errors on first login
 - Moved logic from ViewModels to use cases
 - Added katas to the Technieken screen, added white belt colour
@@ -79,7 +79,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Fixed next training session retrieval
 - Added upcoming trainings support
 
-## Sunday, June 8th, 2026
+## Monday, June 8th, 2026
 - Added geofencing for events and training sessions (enter/exit triggers)
 - Fixed loading of events from the API
 - Implemented Android Keystore key vault: `KeyVaultManager` generates a hardware-backed AES-256-GCM key and encrypts the JWT access token before it is persisted to DataStore
@@ -201,7 +201,8 @@ UI (Composables)
 # Repositories
 
 ## Code Repository
-- [GitHub — st-client-mobile-Maurice-De-Kegel](https://github.com)
+- [GitHub — st-client-mobile-Maurice-De-Kegel](https://github.com/Howest-TI-Project-BnD/st-client-mobile-Maurice-De-Kegel)
+- 
 
 ## APK
 - [Link to APK]

@@ -26,10 +26,15 @@ class AccountViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val profile = getUserProfile()
-            if (profile != null) {
-                _uiState.update {
-                    it.copy(naam = profile.name, email = profile.email, profilePictureUri = profile.profilePictureUri)
-                }
+            _uiState.update {
+                it.copy(
+                    userId = profile?.userId,
+                    naam = profile?.name ?: "",
+                    email = profile?.email ?: "",
+                    belt = profile?.belt ?: "Yellow belt",
+                    profilePictureUri = profile?.profilePictureUri,
+                    isLoading = false
+                )
             }
         }
     }
@@ -43,14 +48,14 @@ class AccountViewModel @Inject constructor(
         _uiState.update { it.copy(profilePictureUri = uri) }
         viewModelScope.launch {
             val s = _uiState.value
-            updateUserProfile(UserProfile(name = s.naam, email = s.email, profilePictureUri = uri))
+            updateUserProfile(UserProfile(userId = s.userId, name = s.naam, email = s.email, belt = s.belt, profilePictureUri = uri))
         }
     }
 
     fun onSave() {
         viewModelScope.launch {
             val s = _uiState.value
-            updateUserProfile(UserProfile(name = s.naam, email = s.email, profilePictureUri = s.profilePictureUri))
+            updateUserProfile(UserProfile(userId = s.userId, name = s.naam, email = s.email, belt = s.belt, profilePictureUri = s.profilePictureUri))
         }
     }
 
