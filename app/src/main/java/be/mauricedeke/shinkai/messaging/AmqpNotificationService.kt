@@ -73,7 +73,7 @@ class AmqpNotificationService : Service() {
         if (parts.size < 3) return
         val (type, title, body) = parts
 
-        if (!isEnabled(type, settings)) return
+        if (!isNotificationEnabled(type, settings)) return
 
         flashLight()
 
@@ -103,15 +103,6 @@ class AmqpNotificationService : Service() {
         } catch (e: Exception) {
             Log.w("AmqpNotificationService", "Flashlight unavailable: ${e.message}")
         }
-    }
-
-    private fun isEnabled(type: String, settings: NotificationSettings): Boolean = when (type) {
-        "event" -> settings.eventNotifications
-        "training" -> settings.trainingNotifications
-        "exam" -> settings.examNotifications
-        "change" -> settings.changeNotifications
-        "update" -> settings.updateNotifications
-        else -> false  // *-reminder types are scheduled locally by ReminderScheduler
     }
 
     private fun buildForegroundNotification(): Notification {
