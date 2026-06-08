@@ -83,6 +83,8 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Added geofencing for events and training sessions (enter/exit triggers)
 - Fixed loading of events from the API
 - Implemented Android Keystore key vault: `KeyVaultManager` generates a hardware-backed AES-256-GCM key and encrypts the JWT access token before it is persisted to DataStore
+- Added unit tests: `ComputeEventListsUseCase`, `ToggleShortcutUseCase`, `GetHomeUpcomingEventsUseCase`, `LoginViewModel`, `MainViewModel`
+- Added instrumented tests: `NotificationSettingsDao`, `ShortcutsDao`, `UserProfileDao` (in-memory Room database)
 
 ---
 
@@ -115,7 +117,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 | ✅ | GPS + Mapbox | Live user location on Kaart screen, event markers, dojo zone polygons |
 | ✅ | 2 sensors | Accelerometer (punch force test) + Microphone (kiai dB test) |
 | ✅ | Notifications | Local scheduled notifications via WorkManager, push via AMQP |
-| ❌ | Tests — unit tests | Only boilerplate placeholder tests exist |
+| ✅ | Tests — unit tests | 5 unit test classes covering use cases and ViewModels; 3 instrumented DAO tests with in-memory Room database |
 
 ---
 
@@ -128,7 +130,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 | ✅ | Geofencing | Dojo zones rendered as GeoJSON polygons on map, enter/exit triggers fire notifications |
 | ✅ | Automatic sensor actions | Flashlight flashes when getting a notification                                         |
 | ✅ | Camera | Profile picture capture via `ActivityResultContracts.TakePicture` in AccountScreen     |
-| ❌ | Unit + instrumented tests | Only boilerplate placeholder tests exist                                               |
+| ✅ | Unit + instrumented tests | 5 unit test classes (use cases + ViewModels with MockK), 3 instrumented DAO tests with in-memory Room database |
 
 ---
 
@@ -154,9 +156,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 Ordered by priority / effort:
 
-1. **Tests** — write unit tests for use cases (`GetEventsUseCase`, `ReminderScheduler`, date formatting), and at least one instrumented test
-2. **Automatic sensor action** — trigger a real action when a sensor threshold is crossed (e.g. vibrate or play a sound when kiai peaks, or disable screen when punch is detected)
-3. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
+1. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
 
 ---
 
