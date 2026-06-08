@@ -121,14 +121,14 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 ## Intermediate — 14/20
 
-| Status | Requirement | Implementation |
-|---|---|---|
-| ✅ | Multiple notification channels | `shinkai_notifications` (reminders) + `shinkai_service` (foreground service) |
-| ✅ | Message broker — publish | `LavinMQMessagePublisher` publishes from the app |
+| Status | Requirement | Implementation                                                                         |
+|---|---|----------------------------------------------------------------------------------------|
+| ✅ | Multiple notification channels | `shinkai_notifications` (reminders) + `shinkai_service` (foreground service)           |
+| ✅ | Message broker — publish | `LavinMQMessagePublisher` publishes from the app                                       |
 | ✅ | Geofencing | Dojo zones rendered as GeoJSON polygons on map, enter/exit triggers fire notifications |
-| ⚠️ | Automatic sensor actions | Punch and kiai tests track peaks and assign a belt score, but no automatic system action (e.g. notification, vibration) is triggered |
-| ✅ | Camera | Profile picture capture via `ActivityResultContracts.TakePicture` in AccountScreen |
-| ❌ | Unit + instrumented tests | Only boilerplate placeholder tests exist |
+| ✅ | Automatic sensor actions | Flashlight flashes when getting a notification                                         |
+| ✅ | Camera | Profile picture capture via `ActivityResultContracts.TakePicture` in AccountScreen     |
+| ❌ | Unit + instrumented tests | Only boilerplate placeholder tests exist                                               |
 
 ---
 

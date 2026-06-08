@@ -4,7 +4,10 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import androidx.work.OneTimeWorkRequestBuilder
@@ -26,6 +29,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -71,6 +75,8 @@ class AmqpNotificationService : Service() {
 
         if (!isEnabled(type, settings)) return
 
+        flashLight()
+
         when (type) {
             "change", "update" -> notificationEventBus.emit(InAppNotification(type, title, body))
             else -> WorkManager.getInstance(applicationContext).enqueue(
@@ -78,6 +84,24 @@ class AmqpNotificationService : Service() {
                     .setInputData(workDataOf(KEY_TITLE to title, KEY_BODY to body))
                     .build()
             )
+        }
+    }
+
+    private suspend fun flashLight() {
+        try {
+            val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val cameraId = cameraManager.cameraIdList.firstOrNull { id ->
+                cameraManager.getCameraCharacteristics(id)
+                    .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
+            } ?: return
+            repeat(3) {
+                cameraManager.setTorchMode(cameraId, true)
+                delay(200)
+                cameraManager.setTorchMode(cameraId, false)
+                delay(150)
+            }
+        } catch (e: Exception) {
+            Log.w("AmqpNotificationService", "Flashlight unavailable: ${e.message}")
         }
     }
 
