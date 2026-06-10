@@ -8,4 +8,5 @@ interface UserRepository {
     fun observeUserProfile(): Flow<UserProfile?>
     suspend fun updateUserProfile(profile: UserProfile)
     suspend fun updatePassword(newPassword: String)
+    suspend fun clearUserProfile()
 }

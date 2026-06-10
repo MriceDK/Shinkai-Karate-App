@@ -65,11 +65,6 @@ fun ShinkaiApp() {
         ) {
             mainViewModel.requestPermission(AppPermission.Notifications)
         }
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            mainViewModel.requestPermission(AppPermission.BackgroundLocation)
-        }
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current

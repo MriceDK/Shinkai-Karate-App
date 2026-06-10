@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -56,6 +57,7 @@ fun ProfielScreen(
     uiState: ProfielUiState,
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit = {},
+    onLoginClick: () -> Unit = {},
     onStrengthTestClick: () -> Unit = {},
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
@@ -122,13 +124,13 @@ fun ProfielScreen(
                     )
                     Spacer(Modifier.height(4.dp))
                     Button(
-                        onClick = onEditClick,
+                        onClick = if (loggedIn) onEditClick else onLoginClick,
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         modifier = Modifier.height(28.dp),
                         shape = RoundedCornerShape(4.dp),
                         contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 12.dp)
                     ) {
-                        Text("Edit", fontSize = 12.sp)
+                        Text(if (loggedIn) "Edit" else "Log in", fontSize = 12.sp)
                     }
                 }
             }
@@ -211,7 +213,11 @@ fun ProfielScreen(
         Column(modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)) {
-            SettingsListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
+            if (loggedIn) {
+                SettingsListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
+            } else {
+                SettingsListItem(Icons.AutoMirrored.Filled.Login, "Log in", onClick = onLoginClick)
+            }
         }
         Spacer(Modifier.height(16.dp))
     }

@@ -1,5 +1,7 @@
 package be.mauricedeke.shinkai
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
@@ -9,10 +11,12 @@ import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
 import be.mauricedeke.shinkai.geofence.PendingLogPrompt
 import be.mauricedeke.shinkai.geofence.PendingLogStore
+import be.mauricedeke.shinkai.messaging.AmqpNotificationService
 import be.mauricedeke.shinkai.messaging.InAppNotification
 import be.mauricedeke.shinkai.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,6 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val notificationEventBus: NotificationEventBus,
     private val restoreSession: RestoreSessionUseCase,
     private val clearSession: ClearSessionUseCase,
@@ -53,6 +58,7 @@ class MainViewModel @Inject constructor(
             if (authenticated == true) {
                 scheduleReminders()
                 setupGeofences()
+                startAmqpService()
             }
         }
         viewModelScope.launch {
@@ -66,6 +72,10 @@ class MainViewModel @Inject constructor(
                 _isAuthenticated.value = false
             }
         }
+    }
+
+    fun startAmqpService() {
+        context.startForegroundService(Intent(context, AmqpNotificationService::class.java))
     }
 
     fun requestPermission(permission: AppPermission) {

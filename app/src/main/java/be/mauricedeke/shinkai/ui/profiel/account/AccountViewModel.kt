@@ -59,6 +59,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 
+    fun resetProfile() {
+        _uiState.value = AccountUiState()
+    }
+
     fun onSavePassword() {
         val s = _uiState.value
         if (s.currentPassword.isBlank() || s.newPassword.isBlank() || s.newPassword != s.confirmPassword) return

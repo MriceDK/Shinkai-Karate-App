@@ -140,6 +140,7 @@ fun ShinkaiNavGraph(
     LaunchedEffect(loginUiState.loginSuccess) {
         if (loginUiState.loginSuccess) {
             loginViewModel.onLoginHandled()
+            mainViewModel.startAmqpService()
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
             }
@@ -174,6 +175,7 @@ fun ShinkaiNavGraph(
                 onPasswordChanged = loginViewModel::onPasswordChanged,
                 onLoginClick = loginViewModel::onLoginClick,
                 onGuestClick = {
+                    loginViewModel.clearLoginForm()
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Login.route) { inclusive = true }
                     }
@@ -277,6 +279,7 @@ fun ShinkaiNavGraph(
             ProfielScreen(
                 uiState = profielUiState,
                 onEditClick = { navController.navigate(Screen.Account.route) },
+                onLoginClick = { navController.navigate(Screen.Login.route) },
                 onStrengthTestClick = { navController.navigate(Screen.StrengthTest.route) },
                 onTrainingHistoryClick = { navController.navigate(Screen.TrainingHistory.route) },
                 onNotificationsClick = { navController.navigate(Screen.Notifications.route) },
@@ -284,6 +287,7 @@ fun ShinkaiNavGraph(
                 onSupportClick = { navController.navigate(Screen.Support.route) },
                 onLogoutClick = {
                     profielViewModel.logout()
+                    accountViewModel.resetProfile()
                     navController.navigate(Screen.Login.route) {
                         popUpTo(0) { inclusive = true }
                     }

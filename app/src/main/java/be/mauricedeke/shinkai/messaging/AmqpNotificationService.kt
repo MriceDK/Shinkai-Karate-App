@@ -24,7 +24,6 @@ import be.mauricedeke.shinkai.data.worker.SERVICE_NOTIFICATION_ID
 import be.mauricedeke.shinkai.domain.usecase.GetNotificationSettingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetUserProfileUseCase
 import android.util.Log
-import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,21 +42,27 @@ class AmqpNotificationService : Service() {
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
+    @Volatile private var isConsuming = false
 
     override fun onCreate() {
         super.onCreate()
         startForeground(SERVICE_NOTIFICATION_ID, buildForegroundNotification())
-        scope.launch {
-            val userId = getUserProfile()?.userId?.toString() ?: return@launch
-            Log.d("Messagebroker", "Binding queue for routing key: user-$userId")
-            messageConsumer.onMessageReceived = { raw ->
-                scope.launch { handleMessage(raw) }
-            }
-            messageConsumer.startConsuming(userId)
-        }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!isConsuming) {
+            scope.launch {
+                val userId = getUserProfile()?.userId?.toString() ?: return@launch
+                Log.d("Messagebroker", "Binding queue for routing key: user-$userId")
+                messageConsumer.onMessageReceived = { raw ->
+                    scope.launch { handleMessage(raw) }
+                }
+                messageConsumer.startConsuming(userId)
+                isConsuming = true
+            }
+        }
+        return START_STICKY
+    }
 
     override fun onDestroy() {
         messageConsumer.stopConsuming()

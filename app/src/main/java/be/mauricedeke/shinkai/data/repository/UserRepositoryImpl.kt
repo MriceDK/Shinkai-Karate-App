@@ -75,4 +75,6 @@ class UserRepositoryImpl @Inject constructor(
         // No-op: password change requires the current password supplied by the caller.
         // Use AuthClient.changePassword(currentPassword, newPassword) directly from the ViewModel.
     }
+
+    override suspend fun clearUserProfile() = userProfileDao.clear()
 }

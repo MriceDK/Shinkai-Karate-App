@@ -54,4 +54,6 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginHandled() = _uiState.update { it.copy(loginSuccess = false) }
+
+    fun clearLoginForm() = _uiState.update { LoginUiState() }
 }

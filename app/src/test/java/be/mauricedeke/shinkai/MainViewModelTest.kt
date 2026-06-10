@@ -56,7 +56,8 @@ class MainViewModelTest {
         sessionEventBus = sessionEventBus,
         scheduleReminders = scheduleReminders,
         setupGeofences = setupGeofences,
-        pendingLogStore = pendingLogStore
+        pendingLogStore = pendingLogStore,
+        context =
     )
 
     @Test
