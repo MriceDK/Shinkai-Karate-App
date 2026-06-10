@@ -86,6 +86,20 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Added unit tests: `ComputeEventListsUseCase`, `ToggleShortcutUseCase`, `GetHomeUpcomingEventsUseCase`, `LoginViewModel`, `MainViewModel`
 - Added instrumented tests: `NotificationSettingsDao`, `ShortcutsDao`, `UserProfileDao` (in-memory Room database)
 
+## Tuesday, June 9th, 2026
+- Fixed login and logout functionality
+- Made edit profile screen load dynamically
+
+## Wednesday, June 10th, 2026
+- Fixed profile screen not reloading after logout/re-login — `ProfielViewModel` now fetches fresh data from the API on each visit to the screen
+- Fixed profile edit screen showing empty fields after logout/re-login — `AccountViewModel` now reloads on each visit to the Account screen
+- Belt badge is now hidden on the profile screen when not logged in
+- Past events are no longer rendered as map markers on the Kaart screen
+- Removed geofencing for training sessions — geofences are now only set up for upcoming events
+- Added Kaart shortcut to the profile screen
+- Shinkai.be link in profile screen now opens the website in the browser
+- Fixed `MainViewModelTest` compilation error caused by missing `context` parameter
+
 ---
 
 # Rubric Status
@@ -127,7 +141,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 |---|---|----------------------------------------------------------------------------------------|
 | ✅ | Multiple notification channels | `shinkai_notifications` (reminders) + `shinkai_service` (foreground service)           |
 | ✅ | Message broker — publish | `LavinMQMessagePublisher` publishes from the app                                       |
-| ✅ | Geofencing | Dojo zones rendered as GeoJSON polygons on map, enter/exit triggers fire notifications |
+| ✅ | Geofencing | Upcoming event locations registered as geofences; enter trigger fires a notification prompt to log attendance |
 | ✅ | Automatic sensor actions | Flashlight flashes when getting a notification                                         |
 | ✅ | Camera | Profile picture capture via `ActivityResultContracts.TakePicture` in AccountScreen     |
 | ✅ | Unit + instrumented tests | 5 unit test classes (use cases + ViewModels with MockK), 3 instrumented DAO tests with in-memory Room database |
