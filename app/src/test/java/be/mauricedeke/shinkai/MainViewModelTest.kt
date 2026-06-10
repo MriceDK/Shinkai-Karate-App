@@ -1,5 +1,6 @@
 package be.mauricedeke.shinkai
 
+import android.content.Context
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
@@ -27,6 +28,7 @@ import org.junit.Test
 
 class MainViewModelTest {
 
+    private val context: Context = mockk(relaxed = true)
     private val restoreSession: RestoreSessionUseCase = mockk(relaxed = true)
     private val clearSession: ClearSessionUseCase = mockk(relaxed = true)
     private val scheduleReminders: ScheduleRemindersUseCase = mockk(relaxed = true)
@@ -50,6 +52,7 @@ class MainViewModelTest {
     }
 
     private fun buildVm() = MainViewModel(
+        context = context,
         notificationEventBus = NotificationEventBus(),
         restoreSession = restoreSession,
         clearSession = clearSession,
@@ -57,7 +60,6 @@ class MainViewModelTest {
         scheduleReminders = scheduleReminders,
         setupGeofences = setupGeofences,
         pendingLogStore = pendingLogStore,
-        context =
     )
 
     @Test

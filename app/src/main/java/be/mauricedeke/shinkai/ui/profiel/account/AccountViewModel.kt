@@ -24,6 +24,10 @@ class AccountViewModel @Inject constructor(
     val uiState: StateFlow<AccountUiState> = _uiState
 
     init {
+        load()
+    }
+
+    fun load() {
         viewModelScope.launch {
             val profile = getUserProfile()
             _uiState.update {

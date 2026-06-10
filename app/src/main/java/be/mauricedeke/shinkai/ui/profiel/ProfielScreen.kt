@@ -38,6 +38,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -80,7 +82,7 @@ fun ProfielScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
+                .background(MaterialTheme.colorScheme.background)
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -157,7 +159,7 @@ fun ProfielScreen(
         Spacer(Modifier.height(8.dp))
         Column(modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)) {
+            .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
                 Icons.Default.FitnessCenter,
                 "Strength Test",
@@ -173,7 +175,7 @@ fun ProfielScreen(
         SectionHeader("Privacy Settings")
         Column(modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)) {
+            .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
                 Icons.Default.Notifications,
                 "Notifications",
@@ -185,7 +187,7 @@ fun ProfielScreen(
         SectionHeader("General Settings")
         Column(modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)) {
+            .background(MaterialTheme.colorScheme.background)) {
             ProfileToggleItem(
                 icon = Icons.Default.WbSunny,
                 checked = isDarkTheme,
@@ -197,7 +199,7 @@ fun ProfielScreen(
         SectionHeader("Socials")
         Column(modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)) {
+            .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
                 Icons.Default.Link,
                 "Shinkai.be",
@@ -212,7 +214,7 @@ fun ProfielScreen(
         Spacer(Modifier.height(8.dp))
         Column(modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)) {
+            .background(MaterialTheme.colorScheme.background)) {
             if (loggedIn) {
                 SettingsListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
             } else {
@@ -233,7 +235,7 @@ private fun ProfileToggleItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 14.dp),
+            .padding(horizontal = 16.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -260,7 +262,6 @@ private fun ProfileToggleItem(
             )
         )
     }
-    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }
 
 
