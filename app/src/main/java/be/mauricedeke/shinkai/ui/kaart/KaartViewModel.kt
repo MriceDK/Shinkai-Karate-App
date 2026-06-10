@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.data.remote.client.TrainingSessionClient
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.repository.EventRepository
-import java.time.LocalDate
-import be.mauricedeke.shinkai.domain.repository.GeocodingRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
+import java.time.LocalDate
 import com.mapbox.geojson.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +22,6 @@ class KaartViewModel @Inject constructor(
     private val routeRepository: RouteRepository,
     private val eventRepository: EventRepository,
     private val trainingSessionClient: TrainingSessionClient,
-    private val geocodingRepository: GeocodingRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(KaartUiState())
@@ -48,8 +46,8 @@ class KaartViewModel @Inject constructor(
         viewModelScope.launch {
             val sessions = trainingSessionClient.getTrainingSessions().getOrNull() ?: emptyList()
             val points = sessions.mapNotNull { dto ->
-                if (dto.location.isBlank()) return@mapNotNull null
-                val coords = geocodingRepository.geocode(dto.location) ?: return@mapNotNull null
+                val lat = dto.lat ?: return@mapNotNull null
+                val lng = dto.lng ?: return@mapNotNull null
                 TrainingSessionPoint(
                     id = dto.id,
                     type = dto.type,
@@ -57,8 +55,8 @@ class KaartViewModel @Inject constructor(
                     startTime = dto.startTime,
                     endTime = dto.endTime,
                     location = dto.location,
-                    lat = coords.first,
-                    lng = coords.second
+                    lat = lat,
+                    lng = lng
                 )
             }
             _uiState.update { it.copy(trainingPoints = points) }

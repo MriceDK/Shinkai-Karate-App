@@ -52,7 +52,11 @@ class AmqpNotificationService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (!isConsuming) {
             scope.launch {
-                val userId = getUserProfile()?.userId?.toString() ?: return@launch
+                val userId = getUserProfile()?.userId?.toString()
+                if (userId == null) {
+                    stopSelf()
+                    return@launch
+                }
                 Log.d("Messagebroker", "Binding queue for routing key: user-$userId")
                 messageConsumer.onMessageReceived = { raw ->
                     scope.launch { handleMessage(raw) }
@@ -61,7 +65,7 @@ class AmqpNotificationService : Service() {
                 isConsuming = true
             }
         }
-        return START_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {

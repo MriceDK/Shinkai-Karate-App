@@ -11,5 +11,7 @@ data class TrainingSessionDto(
     val date: String,
     val location: String,
     val sensei: String? = null,
-    val note: String? = null
+    val note: String? = null,
+    val lat: Double? = null,
+    val lng: Double? = null
 )
