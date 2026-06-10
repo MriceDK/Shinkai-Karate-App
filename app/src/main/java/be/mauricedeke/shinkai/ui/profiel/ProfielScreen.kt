@@ -36,6 +36,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -73,6 +74,7 @@ fun ProfielScreen(
 ) {
     val profile = uiState.userProfile
     val loggedIn = profile != null
+    val uriHandler = LocalUriHandler.current
 
     Column(
         modifier = modifier
@@ -213,7 +215,7 @@ fun ProfielScreen(
                 Icons.Default.Link,
                 "Shinkai.be",
                 labelColor = Color(0xFF1565C0),
-                onClick = {})
+                onClick = { uriHandler.openUri("https://www.shinkai.be") })
         }
         Spacer(Modifier.height(8.dp))
         Column(modifier = Modifier
