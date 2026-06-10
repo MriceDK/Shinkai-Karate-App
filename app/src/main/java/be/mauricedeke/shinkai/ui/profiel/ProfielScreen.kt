@@ -136,24 +136,26 @@ fun ProfielScreen(
                     }
                 }
             }
-            Spacer(Modifier.height(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val beltName = profile?.belt?.ifBlank { "Geel" } ?: "Geel"
-                val beltColor = beltName.toBeltColor().toColor(isDark = isDarkTheme)
-                Box(contentAlignment = Alignment.Center) {
-                    Box(
-                        modifier = Modifier
-                            .size(width = 48.dp, height = 16.dp)
-                            .clip(RoundedCornerShape(50))
-                            .background(beltColor)
+            if (loggedIn) {
+                Spacer(Modifier.height(12.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val beltName = profile!!.belt.ifBlank { "Geel" }
+                    val beltColor = beltName.toBeltColor().toColor(isDark = isDarkTheme)
+                    Box(contentAlignment = Alignment.Center) {
+                        Box(
+                            modifier = Modifier
+                                .size(width = 48.dp, height = 16.dp)
+                                .clip(RoundedCornerShape(50))
+                                .background(beltColor)
+                        )
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        beltName,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    beltName,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
             }
         }
         Spacer(Modifier.height(8.dp))
