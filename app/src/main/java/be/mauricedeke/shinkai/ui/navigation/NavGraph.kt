@@ -282,6 +282,7 @@ fun ShinkaiNavGraph(
                 uiState = profielUiState,
                 onEditClick = { navController.navigate(Screen.Account.route) },
                 onLoginClick = { navController.navigate(Screen.Login.route) },
+                onKaartClick = { navController.navigate(Screen.Kaart.route) },
                 onStrengthTestClick = { navController.navigate(Screen.StrengthTest.route) },
                 onTrainingHistoryClick = { navController.navigate(Screen.TrainingHistory.route) },
                 onNotificationsClick = { navController.navigate(Screen.Notifications.route) },

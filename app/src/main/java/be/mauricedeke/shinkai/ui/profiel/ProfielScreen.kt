@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.WbSunny
@@ -60,6 +61,7 @@ fun ProfielScreen(
     modifier: Modifier = Modifier,
     onEditClick: () -> Unit = {},
     onLoginClick: () -> Unit = {},
+    onKaartClick: () -> Unit = {},
     onStrengthTestClick: () -> Unit = {},
     onTrainingHistoryClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
@@ -172,6 +174,11 @@ fun ProfielScreen(
                 "Training History",
                 onClick = onTrainingHistoryClick
             )
+            SettingsListItem(
+                Icons.Default.Map,
+                "Kaart",
+                onClick = onKaartClick
+            )
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Privacy Settings")
@@ -206,11 +213,6 @@ fun ProfielScreen(
                 Icons.Default.Link,
                 "Shinkai.be",
                 labelColor = Color(0xFF1565C0),
-                onClick = {})
-            SettingsListItem(
-                Icons.Default.Link,
-                "Shinkai.be",
-                labelColor = Color(0xFF4267B2),
                 onClick = {})
         }
         Spacer(Modifier.height(8.dp))
