@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.data.remote.client.TrainingSessionClient
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.repository.EventRepository
+import java.time.LocalDate
 import be.mauricedeke.shinkai.domain.repository.GeocodingRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
@@ -39,7 +40,9 @@ class KaartViewModel @Inject constructor(
 
     fun load() {
         viewModelScope.launch {
-            val events = eventRepository.getEvents() ?: emptyList()
+            val today = LocalDate.now()
+            val events = (eventRepository.getEvents() ?: emptyList())
+                .filter { it.localDate == null || !it.localDate.isBefore(today) }
             _uiState.update { it.copy(events = events) }
         }
         viewModelScope.launch {
