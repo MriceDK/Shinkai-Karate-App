@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.LocationSettings
 import be.mauricedeke.shinkai.domain.usecase.GetLocationSettingsUseCase
+import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
 import be.mauricedeke.shinkai.domain.usecase.UpdateLocationSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LocationViewModel @Inject constructor(
     private val getLocationSettings: GetLocationSettingsUseCase,
-    private val updateLocationSettings: UpdateLocationSettingsUseCase
+    private val updateLocationSettings: UpdateLocationSettingsUseCase,
+    private val setupGeofences: SetupGeofencesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LocationUiState())
@@ -34,6 +36,7 @@ class LocationViewModel @Inject constructor(
     fun onSave() {
         viewModelScope.launch {
             updateLocationSettings(_uiState.value.settings)
+            setupGeofences()
         }
     }
 }

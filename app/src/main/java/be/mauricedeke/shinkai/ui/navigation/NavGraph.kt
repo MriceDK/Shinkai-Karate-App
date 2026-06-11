@@ -140,7 +140,7 @@ fun ShinkaiNavGraph(
     LaunchedEffect(loginUiState.loginSuccess) {
         if (loginUiState.loginSuccess) {
             loginViewModel.onLoginHandled()
-            mainViewModel.startAmqpService()
+            mainViewModel.onLoginSuccess()
             navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
             }

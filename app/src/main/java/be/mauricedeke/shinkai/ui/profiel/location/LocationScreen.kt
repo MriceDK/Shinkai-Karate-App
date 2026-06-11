@@ -45,18 +45,20 @@ fun LocationScreen(
             )
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             SettingsToggleRow(
-                "Use Location for training locations",
-                s.useForTrainingLocations
-            ) { onSettingsChanged(s.copy(useForTrainingLocations = it)) }
+                label = "Show my location on the map",
+                checked = s.showOnMap,
+                subtitle = "Displays your live position on the Kaart screen"
+            ) { onSettingsChanged(s.copy(showOnMap = it)) }
             SettingsToggleRow(
-                "Use Location for improvements",
-                s.useForImprovements
-            ) { onSettingsChanged(s.copy(useForImprovements = it)) }
+                label = "Use location for geofencing",
+                checked = s.useForGeofencing,
+                subtitle = "Automatically prompts you to log attendance when you arrive at an event"
+            ) { onSettingsChanged(s.copy(useForGeofencing = it)) }
             SettingsToggleRow(
-                label = "Use Location for tracking trainings",
-                checked = s.useForTrackingTrainings,
-                subtitle = "Automatically logs when you go to the dojo on a training day"
-            ) { onSettingsChanged(s.copy(useForTrackingTrainings = it)) }
+                label = "Use location for global statistics",
+                checked = s.useForStatistics,
+                subtitle = "Contributes anonymous location data to club-wide training statistics"
+            ) { onSettingsChanged(s.copy(useForStatistics = it)) }
             Spacer(Modifier.weight(1f))
             Button(
                 onClick = onSave,
@@ -92,9 +94,9 @@ fun LocationScreenAllDisabledPreview() {
         LocationScreen(
             uiState = LocationUiState(
                 settings = LocationSettings(
-                    useForTrainingLocations = false,
-                    useForImprovements = false,
-                    useForTrackingTrainings = false
+                    showOnMap = false,
+                    useForGeofencing = false,
+                    useForStatistics = false
                 )
             )
         )
@@ -108,9 +110,9 @@ fun LocationScreenDarkPreview() {
         LocationScreen(
             uiState = LocationUiState(
                 settings = LocationSettings(
-                    useForTrainingLocations = true,
-                    useForImprovements = false,
-                    useForTrackingTrainings = true
+                    showOnMap = true,
+                    useForGeofencing = false,
+                    useForStatistics = true
                 )
             )
         )

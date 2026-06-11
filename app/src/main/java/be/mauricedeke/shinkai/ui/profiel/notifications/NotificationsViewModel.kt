@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import be.mauricedeke.shinkai.domain.model.NotificationSettings
 import be.mauricedeke.shinkai.domain.usecase.GetNotificationSettingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
+import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
 import be.mauricedeke.shinkai.domain.usecase.UpdateNotificationSettingsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class NotificationsViewModel @Inject constructor(
     private val getNotificationSettings: GetNotificationSettingsUseCase,
     private val updateNotificationSettings: UpdateNotificationSettingsUseCase,
-    private val scheduleReminders: ScheduleRemindersUseCase
+    private val scheduleReminders: ScheduleRemindersUseCase,
+    private val setupGeofences: SetupGeofencesUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NotificationsUiState())
@@ -34,6 +36,7 @@ class NotificationsViewModel @Inject constructor(
         viewModelScope.launch {
             updateNotificationSettings(settings)
             scheduleReminders()
+            setupGeofences()
         }
     }
 }

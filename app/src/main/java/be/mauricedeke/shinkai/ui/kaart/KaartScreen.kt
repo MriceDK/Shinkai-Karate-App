@@ -81,15 +81,17 @@ fun KaartScreen(
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        if (!isPreview && !locationPermissionGranted) {
+        if (!isPreview && !locationPermissionGranted && uiState.showOnMap) {
             onRequestLocationPermission()
         }
     }
 
-    LaunchedEffect(locationPermissionGranted) {
-        if (locationPermissionGranted) {
+    LaunchedEffect(locationPermissionGranted, uiState.showOnMap) {
+        if (locationPermissionGranted && uiState.showOnMap) {
             onLocationStart()
             mapViewportState.transitionToFollowPuckState()
+        } else {
+            onLocationStop()
         }
     }
 
@@ -106,10 +108,10 @@ fun KaartScreen(
         modifier = modifier.fillMaxSize(),
         mapViewportState = mapViewportState
     ) {
-        MapEffect(locationPermissionGranted) { mapView ->
-            if (locationPermissionGranted) {
-                mapView.location.updateSettings {
-                    enabled = true
+        MapEffect(locationPermissionGranted, uiState.showOnMap) { mapView ->
+            mapView.location.updateSettings {
+                enabled = locationPermissionGranted && uiState.showOnMap
+                if (enabled) {
                     locationPuck = createDefault2DPuck(withBearing = true)
                     puckBearing = PuckBearing.COURSE
                     pulsingEnabled = true
@@ -195,6 +197,7 @@ fun KaartScreen(
         ) {
             EventDetailSheet(
                 event = uiState.selectedEvent,
+                locationEnabled = uiState.showOnMap,
                 onViewDetails = {
                     onEventSelected(null)
                     onViewEventDetails(uiState.selectedEvent.id)
@@ -227,6 +230,7 @@ fun KaartScreen(
         ) {
             TrainingSessionDetailSheet(
                 point = uiState.selectedTrainingPoint,
+                locationEnabled = uiState.showOnMap,
                 onViewDetails = {
                     onTrainingSelected(null)
                     onViewTrainingDetails(uiState.selectedTrainingPoint.id)
@@ -255,6 +259,7 @@ fun KaartScreen(
 @Composable
 private fun TrainingSessionDetailSheet(
     point: TrainingSessionPoint,
+    locationEnabled: Boolean,
     onViewDetails: () -> Unit,
     onNavigate: () -> Unit = {}
 ) {
@@ -320,6 +325,7 @@ private fun TrainingSessionDetailSheet(
 
         Button(
             onClick = onNavigate,
+            enabled = locationEnabled,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Navigate")
@@ -341,6 +347,7 @@ private fun TrainingSessionDetailSheet(
 @Composable
 private fun EventDetailSheet(
     event: Event,
+    locationEnabled: Boolean,
     onViewDetails: () -> Unit,
     onNavigate: () -> Unit = {}
 ) {
@@ -423,6 +430,7 @@ private fun EventDetailSheet(
 
         Button(
             onClick = onNavigate,
+            enabled = locationEnabled,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Navigate")

@@ -74,6 +74,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onLoginSuccess() {
+        viewModelScope.launch {
+            scheduleReminders()
+            setupGeofences()
+        }
+        startAmqpService()
+    }
+
     fun startAmqpService() {
         context.startForegroundService(Intent(context, AmqpNotificationService::class.java))
     }

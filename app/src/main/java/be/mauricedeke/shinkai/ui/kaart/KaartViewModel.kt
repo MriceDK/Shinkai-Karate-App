@@ -7,6 +7,7 @@ import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
+import be.mauricedeke.shinkai.domain.usecase.GetLocationSettingsUseCase
 import java.time.LocalDate
 import com.mapbox.geojson.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ class KaartViewModel @Inject constructor(
     private val routeRepository: RouteRepository,
     private val eventRepository: EventRepository,
     private val trainingSessionClient: TrainingSessionClient,
+    private val getLocationSettings: GetLocationSettingsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(KaartUiState())
@@ -37,6 +39,10 @@ class KaartViewModel @Inject constructor(
     }
 
     fun load() {
+        viewModelScope.launch {
+            val showOnMap = getLocationSettings().showOnMap
+            _uiState.update { it.copy(showOnMap = showOnMap) }
+        }
         viewModelScope.launch {
             val today = LocalDate.now()
             val events = (eventRepository.getEvents() ?: emptyList())

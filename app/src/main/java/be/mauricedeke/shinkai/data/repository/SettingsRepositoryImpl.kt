@@ -57,18 +57,18 @@ class SettingsRepositoryImpl @Inject constructor(
     override suspend fun getLocationSettings(): LocationSettings {
         val entity = locationSettingsDao.get() ?: return LocationSettings()
         return LocationSettings(
-            useForTrainingLocations = entity.useForTrainingLocations,
-            useForImprovements = entity.useForImprovements,
-            useForTrackingTrainings = entity.useForTrackingTrainings
+            showOnMap = entity.showOnMap,
+            useForGeofencing = entity.useForGeofencing,
+            useForStatistics = entity.useForStatistics
         )
     }
 
     override suspend fun updateLocationSettings(settings: LocationSettings) {
         locationSettingsDao.upsert(
             LocationSettingsEntity(
-                useForTrainingLocations = settings.useForTrainingLocations,
-                useForImprovements = settings.useForImprovements,
-                useForTrackingTrainings = settings.useForTrackingTrainings
+                showOnMap = settings.showOnMap,
+                useForGeofencing = settings.useForGeofencing,
+                useForStatistics = settings.useForStatistics
             )
         )
     }

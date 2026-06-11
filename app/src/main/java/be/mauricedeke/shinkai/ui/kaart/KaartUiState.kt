@@ -21,5 +21,6 @@ data class KaartUiState(
     val userLocation: Point? = null,
     val selectedEvent: Event? = null,
     val selectedTrainingPoint: TrainingSessionPoint? = null,
-    val routeGeometry: LineString? = null
+    val routeGeometry: LineString? = null,
+    val showOnMap: Boolean = true
 )

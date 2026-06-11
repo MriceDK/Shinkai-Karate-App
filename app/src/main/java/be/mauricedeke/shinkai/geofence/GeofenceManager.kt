@@ -32,7 +32,11 @@ class GeofenceManager @Inject constructor(
 
     @SuppressLint("MissingPermission")
     fun setup(items: List<GeofenceItem>) {
-        if (items.isEmpty()) return
+        if (items.isEmpty()) {
+            client.removeGeofences(pendingIntent)
+                .addOnSuccessListener { Log.d("GeofenceManager", "Cleared all geofences") }
+            return
+        }
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             Log.w("GeofenceManager", "Location permission not granted, skipping")

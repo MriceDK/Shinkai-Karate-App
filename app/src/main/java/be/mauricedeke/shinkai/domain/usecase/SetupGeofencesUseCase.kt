@@ -8,9 +8,18 @@ import javax.inject.Inject
 
 class SetupGeofencesUseCase @Inject constructor(
     private val eventRepository: EventRepository,
+    private val getNotificationSettings: GetNotificationSettingsUseCase,
+    private val getLocationSettings: GetLocationSettingsUseCase,
     private val geofenceManager: GeofenceManager
 ) {
     suspend operator fun invoke() {
+        val notifSettings = getNotificationSettings()
+        val locationSettings = getLocationSettings()
+        if (!notifSettings.eventNotifications || !locationSettings.useForGeofencing) {
+            geofenceManager.setup(emptyList())
+            return
+        }
+
         val today = LocalDate.now()
         val items = eventRepository.getEvents()
             ?.filter { event ->
