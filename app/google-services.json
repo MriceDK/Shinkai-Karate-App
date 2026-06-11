@@ -7,9 +7,28 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:426255286558:android:30bae2236cbad6b19c890f",
+        "mobilesdk_app_id": "1:426255286558:android:6258a247dd30664d9c890f",
         "android_client_info": {
           "package_name": "be.mauricedeke.shinkai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfYgNPEVdYg71o-4s54fc5hXY0KutgLT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426255286558:android:30bae2236cbad6b19c890f",
+        "android_client_info": {
+          "package_name": "be.mauricedk.shinkaiapp"
         }
       },
       "oauth_client": [],
