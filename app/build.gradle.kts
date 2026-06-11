@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.gradle)
     alias(libs.plugins.ksp)
@@ -15,8 +17,8 @@ android {
         applicationId = "be.mauricedeke.shinkai"
         minSdk = 34
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = (project.findProperty("versionCode") as? String)?.toInt() ?: 1        // Firebase
+        versionName = "1.0-b${(project.findProperty("versionCode") as? String) ?: "local"}" // Humans
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -128,4 +130,10 @@ dependencies {
     implementation(libs.mapbox.maps.compose)
     implementation(libs.mapbox.search)
     implementation(libs.mapbox.navigation)
+
+    // FireBase
+    implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.google.firebase.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,5 +16,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             ShinkaiApp()
         }
+//        if (!BuildConfig.VERSION_NAME.contains("local")) {
+//            setupAppDistribution()
+//        }
     }
 }
+
+
+//private fun setupAppDistribution() {
+//    val appDist = Firebase.appDistribution
+//
+//    if (!appDist.isTesterSignedIn) {
+//        appDist.signInTester().addOnSuccessListener { }
+//    } else {
+//        appDist.updateIfNewReleaseAvailable()
+//    }
+//}
