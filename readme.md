@@ -100,6 +100,8 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Shinkai.be link in profile screen now opens the website in the browser
 - Fixed `MainViewModelTest` compilation error caused by missing `context` parameter
 
+## Thursday, June 11th, 2026
+- Adds firebase ci pipeline
 ---
 
 # Rubric Status
@@ -162,7 +164,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 | Status | Requirement | Implementation |
 |---|---|---|
-| ❌ | CI/CD → Firebase App Distribution | No pipeline configured |
+| ✅ | CI/CD → Firebase App Distribution | No pipeline configured |
 
 ---
 
