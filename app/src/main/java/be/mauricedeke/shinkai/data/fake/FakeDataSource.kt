@@ -2,10 +2,6 @@ package be.mauricedeke.shinkai.data.fake
 
 import be.mauricedeke.shinkai.domain.model.Belt
 import be.mauricedeke.shinkai.domain.model.BeltColor
-import com.mapbox.geojson.Feature
-import com.mapbox.geojson.LineString
-import com.mapbox.geojson.Point
-import com.mapbox.geojson.Polygon
 import be.mauricedeke.shinkai.domain.model.BeltProgram
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
@@ -14,6 +10,9 @@ import be.mauricedeke.shinkai.domain.model.StrengthResult
 import be.mauricedeke.shinkai.domain.model.Techniek
 import be.mauricedeke.shinkai.domain.model.Training
 import be.mauricedeke.shinkai.domain.model.UserProfile
+import com.mapbox.geojson.Feature
+import com.mapbox.geojson.Point
+import com.mapbox.geojson.Polygon
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID

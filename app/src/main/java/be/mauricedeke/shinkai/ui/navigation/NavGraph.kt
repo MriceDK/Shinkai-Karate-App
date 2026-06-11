@@ -1,8 +1,10 @@
 package be.mauricedeke.shinkai.ui.navigation
 
-import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
 import android.Manifest
 import android.content.pm.PackageManager
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,12 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.Text
 import be.mauricedeke.shinkai.MainViewModel
-import be.mauricedeke.shinkai.ui.permissions.AppPermission
-import java.util.UUID
 import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailScreen
@@ -36,6 +33,7 @@ import be.mauricedeke.shinkai.ui.kaart.KaartScreen
 import be.mauricedeke.shinkai.ui.kaart.KaartViewModel
 import be.mauricedeke.shinkai.ui.lexicon.LexiconScreen
 import be.mauricedeke.shinkai.ui.lexicon.LexiconViewModel
+import be.mauricedeke.shinkai.ui.permissions.AppPermission
 import be.mauricedeke.shinkai.ui.profiel.ProfielScreen
 import be.mauricedeke.shinkai.ui.profiel.ProfielViewModel
 import be.mauricedeke.shinkai.ui.profiel.account.AccountScreen
@@ -46,20 +44,22 @@ import be.mauricedeke.shinkai.ui.profiel.location.LocationScreen
 import be.mauricedeke.shinkai.ui.profiel.location.LocationViewModel
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsScreen
 import be.mauricedeke.shinkai.ui.profiel.notifications.NotificationsViewModel
-import be.mauricedeke.shinkai.ui.profiel.support.SupportScreen
-import be.mauricedeke.shinkai.ui.profiel.support.SupportViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.StrengthTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.kiai.KiaiTestViewModel
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestScreen
 import be.mauricedeke.shinkai.ui.profiel.strength.punch.PunchTestViewModel
-import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailScreen
-import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailViewModel
+import be.mauricedeke.shinkai.ui.profiel.support.SupportScreen
+import be.mauricedeke.shinkai.ui.profiel.support.SupportViewModel
 import be.mauricedeke.shinkai.ui.technieken.KataListScreen
+import be.mauricedeke.shinkai.ui.technieken.TechniekScreen
 import be.mauricedeke.shinkai.ui.technieken.TechniekViewModel
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailScreen
 import be.mauricedeke.shinkai.ui.technieken.detail.TechniekDetailViewModel
+import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailScreen
+import be.mauricedeke.shinkai.ui.training.TrainingSessionDetailViewModel
+import java.util.UUID
 
 @Composable
 fun ShinkaiNavGraph(

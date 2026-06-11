@@ -1,7 +1,6 @@
 package be.mauricedeke.shinkai.data.remote.mapper
 
 import be.mauricedeke.shinkai.domain.model.BeltColor
-import be.mauricedeke.shinkai.domain.model.StrengthResult
 
 fun String?.toBeltColor(): BeltColor? = when (this?.uppercase()) {
     "WHITE" -> BeltColor.WHITE

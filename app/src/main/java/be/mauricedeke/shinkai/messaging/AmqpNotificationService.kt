@@ -9,6 +9,7 @@ import android.content.Intent
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -23,7 +24,6 @@ import be.mauricedeke.shinkai.data.worker.SERVICE_CHANNEL_NAME
 import be.mauricedeke.shinkai.data.worker.SERVICE_NOTIFICATION_ID
 import be.mauricedeke.shinkai.domain.usecase.GetNotificationSettingsUseCase
 import be.mauricedeke.shinkai.domain.usecase.GetUserProfileUseCase
-import android.util.Log
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

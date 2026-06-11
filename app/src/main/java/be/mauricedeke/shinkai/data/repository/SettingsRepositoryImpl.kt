@@ -1,10 +1,10 @@
 package be.mauricedeke.shinkai.data.repository
 
 import be.mauricedeke.shinkai.data.local.room.dao.LocationSettingsDao
-import be.mauricedeke.shinkai.data.local.room.entity.LocationSettingsEntity
 import be.mauricedeke.shinkai.data.local.room.dao.NotificationSettingsDao
-import be.mauricedeke.shinkai.data.local.room.entity.NotificationSettingsEntity
 import be.mauricedeke.shinkai.data.local.room.dao.ShortcutsDao
+import be.mauricedeke.shinkai.data.local.room.entity.LocationSettingsEntity
+import be.mauricedeke.shinkai.data.local.room.entity.NotificationSettingsEntity
 import be.mauricedeke.shinkai.data.local.room.entity.ShortcutsEntity
 import be.mauricedeke.shinkai.domain.model.LocationSettings
 import be.mauricedeke.shinkai.domain.model.NotificationSettings

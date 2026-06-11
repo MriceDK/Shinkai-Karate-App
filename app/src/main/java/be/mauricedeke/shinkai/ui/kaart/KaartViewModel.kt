@@ -8,13 +8,13 @@ import be.mauricedeke.shinkai.domain.repository.EventRepository
 import be.mauricedeke.shinkai.domain.repository.LocationRepository
 import be.mauricedeke.shinkai.domain.repository.RouteRepository
 import be.mauricedeke.shinkai.domain.usecase.GetLocationSettingsUseCase
-import java.time.LocalDate
 import com.mapbox.geojson.Point
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel

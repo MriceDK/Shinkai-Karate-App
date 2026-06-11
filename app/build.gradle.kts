@@ -128,8 +128,6 @@ dependencies {
     // MapBox
     implementation(libs.mapbox.maps)
     implementation(libs.mapbox.maps.compose)
-    implementation(libs.mapbox.search)
-    implementation(libs.mapbox.navigation)
 
     // FireBase
     implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
