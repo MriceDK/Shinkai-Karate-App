@@ -16,17 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.filled.Login
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.Link
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -39,13 +29,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.components.SectionHeader
 import be.mauricedeke.shinkai.ui.components.SettingsListItem
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -164,17 +156,17 @@ fun ProfielScreen(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
-                Icons.Default.FitnessCenter,
+                painterResource(R.drawable.ic_fitness_center),
                 "Strength Test",
                 onClick = onStrengthTestClick
             )
             SettingsListItem(
-                Icons.Default.CalendarMonth,
+                painterResource(R.drawable.ic_calendar_month),
                 "Training History",
                 onClick = onTrainingHistoryClick
             )
             SettingsListItem(
-                Icons.Default.Map,
+                painterResource(R.drawable.ic_map),
                 "Kaart",
                 onClick = onKaartClick
             )
@@ -185,11 +177,11 @@ fun ProfielScreen(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
-                Icons.Default.Notifications,
+                painterResource(R.drawable.ic_notifications),
                 "Notifications",
                 onClick = onNotificationsClick
             )
-            SettingsListItem(Icons.Default.LocationOn, "Location", onClick = onLocationClick)
+            SettingsListItem(painterResource(R.drawable.ic_location_on), "Location", onClick = onLocationClick)
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("General Settings")
@@ -197,11 +189,11 @@ fun ProfielScreen(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)) {
             ProfileToggleItem(
-                icon = Icons.Default.WbSunny,
+                painter = painterResource(R.drawable.ic_wb_sunny),
                 checked = isDarkTheme,
                 onCheckedChange = onDarkThemeToggle
             )
-            SettingsListItem(Icons.Default.Chat, "Contact Support", onClick = onSupportClick)
+            SettingsListItem(painterResource(R.drawable.ic_chat), "Contact Support", onClick = onSupportClick)
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Socials")
@@ -209,7 +201,7 @@ fun ProfielScreen(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)) {
             SettingsListItem(
-                Icons.Default.Link,
+                painterResource(R.drawable.ic_link),
                 "Shinkai.be",
                 labelColor = Color(0xFF1565C0),
                 onClick = { uriHandler.openUri("https://www.shinkai.be") })
@@ -219,9 +211,9 @@ fun ProfielScreen(
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.background)) {
             if (loggedIn) {
-                SettingsListItem(Icons.AutoMirrored.Filled.ExitToApp, "Log out", onClick = onLogoutClick)
+                SettingsListItem(painterResource(R.drawable.ic_exit_to_app), "Log out", onClick = onLogoutClick)
             } else {
-                SettingsListItem(Icons.AutoMirrored.Filled.Login, "Log in", onClick = onLoginClick)
+                SettingsListItem(painterResource(R.drawable.ic_login), "Log in", onClick = onLoginClick)
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -231,7 +223,7 @@ fun ProfielScreen(
 
 @Composable
 private fun ProfileToggleItem(
-    icon: ImageVector,
+    painter: Painter,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -242,7 +234,7 @@ private fun ProfileToggleItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            icon,
+            painter,
             null,
             modifier = Modifier.size(22.dp),
             tint = MaterialTheme.colorScheme.onSurface

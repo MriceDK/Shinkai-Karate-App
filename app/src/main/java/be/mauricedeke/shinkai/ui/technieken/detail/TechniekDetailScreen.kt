@@ -15,9 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -36,8 +33,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.domain.model.ProgramSection
 import be.mauricedeke.shinkai.domain.model.Techniek
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
@@ -186,7 +185,7 @@ private fun AccordionHeader(title: String, expanded: Boolean, onClick: () -> Uni
             modifier = Modifier.weight(1f)
         )
         Icon(
-            if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+            painterResource(if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more),
             null,
             tint = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.size(20.dp)

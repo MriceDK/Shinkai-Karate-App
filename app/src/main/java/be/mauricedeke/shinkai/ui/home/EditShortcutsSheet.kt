@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -119,7 +120,7 @@ private fun ShortcutPickerItem(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                shortcut.icon,
+                painterResource(shortcut.iconRes),
                 contentDescription = shortcut.label,
                 modifier = Modifier.size(28.dp),
                 tint = if (isSelected) primary else if (enabled) onSurface else onSurfaceVariant.copy(alpha = 0.4f)

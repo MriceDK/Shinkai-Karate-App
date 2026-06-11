@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -32,6 +31,7 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.data.fake.FakeDataSource
@@ -284,7 +284,7 @@ private fun TrainingSessionDetailSheet(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Schedule,
+                painter = painterResource(R.drawable.ic_schedule),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )
@@ -372,7 +372,7 @@ private fun EventDetailSheet(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Schedule,
+                painter = painterResource(R.drawable.ic_schedule),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary
             )

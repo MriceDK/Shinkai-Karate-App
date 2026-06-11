@@ -18,10 +18,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.MedicalServices
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,13 +34,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.components.ShinkaiCalendar
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -255,21 +253,21 @@ private fun TrainingCard(
                 )
             }
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                TrainingCardRow(Icons.Default.AccessTime, "${training.startTime} – ${training.endTime}")
+                TrainingCardRow(painterResource(R.drawable.ic_access_time), "${training.startTime} – ${training.endTime}")
                 Spacer(Modifier.height(6.dp))
-                TrainingCardRow(Icons.Default.Person, training.sensei)
+                TrainingCardRow(painterResource(R.drawable.ic_person), training.sensei)
                 Spacer(Modifier.height(6.dp))
-                TrainingCardRow(Icons.Default.MedicalServices, training.injuries)
+                TrainingCardRow(painterResource(R.drawable.ic_medical_services), training.injuries)
             }
         }
     }
 }
 
 @Composable
-private fun TrainingCardRow(icon: ImageVector, value: String) {
+private fun TrainingCardRow(painter: Painter, value: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-            icon,
+            painter,
             contentDescription = null,
             modifier = Modifier.size(14.dp),
             tint = MaterialTheme.colorScheme.primary

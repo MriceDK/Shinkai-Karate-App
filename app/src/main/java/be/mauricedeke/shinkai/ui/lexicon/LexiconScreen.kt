@@ -16,8 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandLess
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -37,8 +35,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.domain.model.LexiconEntry
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
@@ -131,7 +131,7 @@ private fun LexiconRow(entry: LexiconEntry) {
                 color = MaterialTheme.colorScheme.onSurface
             )
             Icon(
-                if (expanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                painterResource(if (expanded) R.drawable.ic_expand_less else R.drawable.ic_expand_more),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(20.dp)

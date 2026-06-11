@@ -20,8 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,8 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.domain.model.Event
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
@@ -155,7 +155,7 @@ fun EventDetailScreen(
                 if (event.location.isNotBlank()) {
                     Spacer(Modifier.width(4.dp))
                     Icon(
-                        Icons.Default.Navigation,
+                        painterResource(R.drawable.ic_navigation),
                         contentDescription = "Navigeer",
                         modifier = Modifier.size(14.dp),
                         tint = MaterialTheme.colorScheme.primary
@@ -218,7 +218,7 @@ fun EventDetailScreen(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                Icons.Default.FitnessCenter,
+                painterResource(R.drawable.ic_fitness_center),
                 null,
                 modifier = Modifier.size(80.dp),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant

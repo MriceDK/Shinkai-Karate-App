@@ -1,32 +1,27 @@
 package be.mauricedeke.shinkai.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.PanTool
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import be.mauricedeke.shinkai.R
 
 sealed class Screen(
     val route: String,
     val label: String = "",
-    val icon: ImageVector = Icons.Default.PanTool
+    @DrawableRes val iconRes: Int = R.drawable.ic_pan_tool
 ) {
-    data object Home : Screen("home", "Home", Icons.Default.PanTool)
-    data object Technieken : Screen("technieken", "Technieken", Icons.Default.DirectionsWalk)
+    data object Home : Screen("home", "Home", R.drawable.ic_pan_tool)
+    data object Technieken : Screen("technieken", "Technieken", R.drawable.ic_directions_walk)
     data object TechniekDetail : Screen("technieken/{belt}") {
         fun createRoute(belt: String) = "technieken/$belt"
     }
 
-    data object Events : Screen("events", "Events", Icons.Default.Event)
+    data object Events : Screen("events", "Events", R.drawable.ic_event)
     data object EventDetail : Screen("events/{eventId}") {
         fun createRoute(id: String) = "events/$id"
     }
     data object ManageEvents : Screen("events/manage")
 
-    data object Lexicon : Screen("lexicon", "Lexicon", Icons.AutoMirrored.Filled.MenuBook)
-    data object Profiel : Screen("profiel", "Profiel", Icons.Default.AccountCircle)
+    data object Lexicon : Screen("lexicon", "Lexicon", R.drawable.ic_menu_book)
+    data object Profiel : Screen("profiel", "Profiel", R.drawable.ic_account_circle)
     data object Account : Screen("account")
     data object TrainingHistory : Screen("training_history")
     data object StrengthTest : Screen("strength_test")

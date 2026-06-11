@@ -1,26 +1,18 @@
 package be.mauricedeke.shinkai.ui.home
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
-import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Event
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.navigation.Screen
 
-enum class ShortcutId(val label: String, val icon: ImageVector, val route: String) {
-    EVENTS("Events", Icons.Default.Event, Screen.Events.route),
-    KAART("Kaart", Icons.Default.Map, Screen.Kaart.route),
-    LEXICON("Lexicon", Icons.AutoMirrored.Filled.MenuBook, Screen.Lexicon.route),
-    TECHNIEKEN("Technieken", Icons.AutoMirrored.Filled.DirectionsWalk, Screen.Technieken.route),
-    PROFIEL("Profiel", Icons.Default.AccountCircle, Screen.Profiel.route),
-    NOTIFICATIONS("Meldingen", Icons.Default.Notifications, Screen.Notifications.route),
-    STRENGTH_TEST("Kracht", Icons.Default.FitnessCenter, Screen.StrengthTest.route),
-    TRAINING_HISTORY("Training", Icons.Default.History, Screen.TrainingHistory.route),
+enum class ShortcutId(val label: String, @DrawableRes val iconRes: Int, val route: String) {
+    EVENTS("Events", R.drawable.ic_event, Screen.Events.route),
+    KAART("Kaart", R.drawable.ic_map, Screen.Kaart.route),
+    LEXICON("Lexicon", R.drawable.ic_menu_book, Screen.Lexicon.route),
+    TECHNIEKEN("Technieken", R.drawable.ic_directions_walk, Screen.Technieken.route),
+    PROFIEL("Profiel", R.drawable.ic_account_circle, Screen.Profiel.route),
+    NOTIFICATIONS("Meldingen", R.drawable.ic_notifications, Screen.Notifications.route),
+    STRENGTH_TEST("Kracht", R.drawable.ic_fitness_center, Screen.StrengthTest.route),
+    TRAINING_HISTORY("Training", R.drawable.ic_history, Screen.TrainingHistory.route),
 }
 
 val defaultShortcuts = listOf(

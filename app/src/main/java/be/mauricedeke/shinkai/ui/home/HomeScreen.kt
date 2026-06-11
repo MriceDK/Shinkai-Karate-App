@@ -31,7 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -172,7 +173,7 @@ fun HomeScreen(
                         if (index > 0) Spacer(Modifier.width(8.dp))
                         ShortcutCard(
                             shortcut.label,
-                            shortcut.icon,
+                            painterResource(shortcut.iconRes),
                             Modifier.weight(1f)
                         ) { onNavigate(shortcut.route) }
                     }
@@ -212,7 +213,7 @@ private fun EventSection(title: String, content: @Composable () -> Unit) {
 @Composable
 private fun ShortcutCard(
     label: String,
-    icon: ImageVector,
+    painter: Painter,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
@@ -230,7 +231,7 @@ private fun ShortcutCard(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                icon,
+                painter,
                 contentDescription = label,
                 modifier = Modifier.size(56.dp),
                 tint = MaterialTheme.colorScheme.onSurface

@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,8 +40,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -89,10 +89,10 @@ fun ShinkaiCalendar(
                 Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
             }
             IconButton(onClick = { goPrev() }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.ChevronLeft, contentDescription = "Previous", tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(painterResource(R.drawable.ic_chevron_left), contentDescription = "Previous", tint = MaterialTheme.colorScheme.onPrimary)
             }
             IconButton(onClick = { goNext() }, modifier = Modifier.size(32.dp)) {
-                Icon(Icons.Default.ChevronRight, contentDescription = "Next", tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = "Next", tint = MaterialTheme.colorScheme.onPrimary)
             }
         }
 

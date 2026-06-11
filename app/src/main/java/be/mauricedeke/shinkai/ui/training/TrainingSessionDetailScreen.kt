@@ -18,8 +18,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsWalk
-import androidx.compose.material.icons.filled.Navigation
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -34,8 +32,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import java.time.format.DateTimeFormatter
 
@@ -121,7 +121,7 @@ fun TrainingSessionDetailScreen(
                                 )
                                 Spacer(Modifier.width(4.dp))
                                 Icon(
-                                    Icons.Default.Navigation,
+                                    painterResource(R.drawable.ic_navigation),
                                     contentDescription = "Navigeer",
                                     modifier = Modifier.size(14.dp),
                                     tint = MaterialTheme.colorScheme.primary
@@ -140,7 +140,7 @@ fun TrainingSessionDetailScreen(
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            Icons.Default.DirectionsWalk,
+                            painterResource(R.drawable.ic_directions_walk),
                             null,
                             modifier = Modifier.size(80.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
