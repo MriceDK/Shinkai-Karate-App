@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.security
+package be.mauricedeke.shinkai.data.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
