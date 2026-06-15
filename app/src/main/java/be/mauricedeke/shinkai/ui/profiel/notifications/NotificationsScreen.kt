@@ -69,78 +69,90 @@ fun NotificationsScreen(
                 .padding(top = 64.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                Text(
-                    "Manage Notifications",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                SettingsToggleRow("Event Notifications", s.eventNotifications) {
-                    onSettingsChanged(s.copy(eventNotifications = it))
-                }
-                AnimatedVisibility(visible = s.eventNotifications) {
-                    Column {
-                        SettingsToggleRow("Event Reminders", s.eventReminderEnabled, "Notify before an event starts") {
-                            onSettingsChanged(s.copy(eventReminderEnabled = it))
-                        }
-                        AnimatedVisibility(visible = s.eventReminderEnabled) {
-                            ReminderPickerRow(
-                                label = "Event Reminder Timing",
-                                subtitle = "How long before the event",
-                                selectedMinutes = s.reminderMinutesBefore,
-                                onSelected = { onSettingsChanged(s.copy(reminderMinutesBefore = it)) }
-                            )
-                        }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            Text(
+                "Manage Notifications",
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+            SettingsToggleRow("Event Notifications", s.eventNotifications) {
+                onSettingsChanged(s.copy(eventNotifications = it))
+            }
+            AnimatedVisibility(visible = s.eventNotifications) {
+                Column {
+                    SettingsToggleRow(
+                        "Event Reminders",
+                        s.eventReminderEnabled,
+                        "Notify before an event starts"
+                    ) {
+                        onSettingsChanged(s.copy(eventReminderEnabled = it))
+                    }
+                    AnimatedVisibility(visible = s.eventReminderEnabled) {
+                        ReminderPickerRow(
+                            label = "Event Reminder Timing",
+                            subtitle = "How long before the event",
+                            selectedMinutes = s.reminderMinutesBefore,
+                            onSelected = { onSettingsChanged(s.copy(reminderMinutesBefore = it)) }
+                        )
                     }
                 }
-                SettingsToggleRow("Training Notifications", s.trainingNotifications) {
-                    onSettingsChanged(s.copy(trainingNotifications = it))
-                }
-                AnimatedVisibility(visible = s.trainingNotifications) {
-                    Column {
-                        SettingsToggleRow("Training Reminders", s.trainingReminderEnabled, "Notify before a training starts") {
-                            onSettingsChanged(s.copy(trainingReminderEnabled = it))
-                        }
-                        AnimatedVisibility(visible = s.trainingReminderEnabled) {
-                            ReminderPickerRow(
-                                label = "Training Reminder Timing",
-                                subtitle = "How long before the training",
-                                selectedMinutes = s.trainingReminderMinutesBefore,
-                                onSelected = { onSettingsChanged(s.copy(trainingReminderMinutesBefore = it)) }
-                            )
-                        }
+            }
+            SettingsToggleRow("Training Notifications", s.trainingNotifications) {
+                onSettingsChanged(s.copy(trainingNotifications = it))
+            }
+            AnimatedVisibility(visible = s.trainingNotifications) {
+                Column {
+                    SettingsToggleRow(
+                        "Training Reminders",
+                        s.trainingReminderEnabled,
+                        "Notify before a training starts"
+                    ) {
+                        onSettingsChanged(s.copy(trainingReminderEnabled = it))
+                    }
+                    AnimatedVisibility(visible = s.trainingReminderEnabled) {
+                        ReminderPickerRow(
+                            label = "Training Reminder Timing",
+                            subtitle = "How long before the training",
+                            selectedMinutes = s.trainingReminderMinutesBefore,
+                            onSelected = { onSettingsChanged(s.copy(trainingReminderMinutesBefore = it)) }
+                        )
                     }
                 }
-                SettingsToggleRow(
-                    "Change Notifications",
-                    s.changeNotifications,
-                    "Notifies you of changes to the techniques"
-                ) { onSettingsChanged(s.copy(changeNotifications = it)) }
-                SettingsToggleRow("Exam Notifications", s.examNotifications) {
-                    onSettingsChanged(s.copy(examNotifications = it))
-                }
-                AnimatedVisibility(visible = s.examNotifications) {
-                    Column {
-                        SettingsToggleRow("Exam Reminders", s.examReminderEnabled, "Notify before an exam starts") {
-                            onSettingsChanged(s.copy(examReminderEnabled = it))
-                        }
-                        AnimatedVisibility(visible = s.examReminderEnabled) {
-                            ReminderPickerRow(
-                                label = "Exam Reminder Timing",
-                                subtitle = "How long before the exam",
-                                selectedMinutes = s.examReminderMinutesBefore,
-                                onSelected = { onSettingsChanged(s.copy(examReminderMinutesBefore = it)) },
-                                options = examReminderOptions
-                            )
-                        }
+            }
+            SettingsToggleRow(
+                "Change Notifications",
+                s.changeNotifications,
+                "Notifies you of changes to the techniques"
+            ) { onSettingsChanged(s.copy(changeNotifications = it)) }
+            SettingsToggleRow("Exam Notifications", s.examNotifications) {
+                onSettingsChanged(s.copy(examNotifications = it))
+            }
+            AnimatedVisibility(visible = s.examNotifications) {
+                Column {
+                    SettingsToggleRow(
+                        "Exam Reminders",
+                        s.examReminderEnabled,
+                        "Notify before an exam starts"
+                    ) {
+                        onSettingsChanged(s.copy(examReminderEnabled = it))
+                    }
+                    AnimatedVisibility(visible = s.examReminderEnabled) {
+                        ReminderPickerRow(
+                            label = "Exam Reminder Timing",
+                            subtitle = "How long before the exam",
+                            selectedMinutes = s.examReminderMinutesBefore,
+                            onSelected = { onSettingsChanged(s.copy(examReminderMinutesBefore = it)) },
+                            options = examReminderOptions
+                        )
                     }
                 }
-                SettingsToggleRow("Update Notifications", s.updateNotifications) {
-                    onSettingsChanged(s.copy(updateNotifications = it))
-                }
+            }
+            SettingsToggleRow("Update Notifications", s.updateNotifications) {
+                onSettingsChanged(s.copy(updateNotifications = it))
+            }
         }
         RoundBackButton(
             onClick = onBackClick,
@@ -229,7 +241,12 @@ fun NotificationsScreenPartialPreview() {
     }
 }
 
-@Preview(name = "Dark — all enabled", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — all enabled",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun NotificationsScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) { NotificationsScreen(uiState = NotificationsUiState()) }

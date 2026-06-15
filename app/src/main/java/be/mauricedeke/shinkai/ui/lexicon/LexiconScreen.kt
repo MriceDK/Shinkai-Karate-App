@@ -32,10 +32,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
@@ -55,47 +55,54 @@ fun LexiconScreen(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp)
-    ) {
-        OutlinedTextField(
-            value = uiState.searchQuery,
-            onValueChange = onSearchQueryChanged,
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("search", color = MaterialTheme.colorScheme.onSurfaceVariant) },
-            trailingIcon = {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
-            shape = RoundedCornerShape(50),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primary
-            ),
-            singleLine = true
-        )
-        if (uiState.isError) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    "Kon lexicon niet laden. Probeer opnieuw.",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 14.sp
-                )
-            }
-        } else {
-            LazyColumn(modifier = Modifier
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 12.dp)) {
-                items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
+                .background(MaterialTheme.colorScheme.background)
+                .padding(16.dp)
+        ) {
+            OutlinedTextField(
+                value = uiState.searchQuery,
+                onValueChange = onSearchQueryChanged,
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = {
+                    Text(
+                        "search",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        Icons.Default.Search,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
+                shape = RoundedCornerShape(50),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                ),
+                singleLine = true
+            )
+            if (uiState.isError) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        "Kon lexicon niet laden. Probeer opnieuw.",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 14.sp
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 12.dp)
+                ) {
+                    items(uiState.filteredEntries) { entry -> LexiconRow(entry) }
+                }
             }
         }
-    }
     }
 }
 
@@ -155,12 +162,36 @@ private fun LexiconRow(entry: LexiconEntry) {
 }
 
 private val previewLexiconEntries = listOf(
-    LexiconEntry(japaneseWord = "Rei", translation = "Buiging", description = "Teken van respect dat voor en na elke training wordt gebracht."),
-    LexiconEntry(japaneseWord = "Dojo", translation = "Trainingsplaats", description = "De ruimte waar karate beoefend wordt."),
-    LexiconEntry(japaneseWord = "Sensei", translation = "Leraar", description = "Iemand die al verder staat op het pad."),
-    LexiconEntry(japaneseWord = "Kiai", translation = "Geestskracht", description = "Krachtige uitroep bij een techniek om energie te focussen."),
-    LexiconEntry(japaneseWord = "Kata", translation = "Vormen", description = "Vaste opeenvolging van technieken die solo worden geoefend."),
-    LexiconEntry(japaneseWord = "Kumite", translation = "Vrij gevecht", description = "Oefengevecht met partner.")
+    LexiconEntry(
+        japaneseWord = "Rei",
+        translation = "Buiging",
+        description = "Teken van respect dat voor en na elke training wordt gebracht."
+    ),
+    LexiconEntry(
+        japaneseWord = "Dojo",
+        translation = "Trainingsplaats",
+        description = "De ruimte waar karate beoefend wordt."
+    ),
+    LexiconEntry(
+        japaneseWord = "Sensei",
+        translation = "Leraar",
+        description = "Iemand die al verder staat op het pad."
+    ),
+    LexiconEntry(
+        japaneseWord = "Kiai",
+        translation = "Geestskracht",
+        description = "Krachtige uitroep bij een techniek om energie te focussen."
+    ),
+    LexiconEntry(
+        japaneseWord = "Kata",
+        translation = "Vormen",
+        description = "Vaste opeenvolging van technieken die solo worden geoefend."
+    ),
+    LexiconEntry(
+        japaneseWord = "Kumite",
+        translation = "Vrij gevecht",
+        description = "Oefengevecht met partner."
+    )
 )
 
 @Preview(name = "With entries", showBackground = true, showSystemUi = true)
@@ -196,7 +227,12 @@ fun LexiconScreenErrorPreview() {
     ShinkaikarateappTheme { LexiconScreen(uiState = LexiconUiState(isError = true)) }
 }
 
-@Preview(name = "Dark — with entries", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — with entries",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun LexiconScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {

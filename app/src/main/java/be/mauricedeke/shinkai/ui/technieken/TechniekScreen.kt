@@ -69,7 +69,12 @@ fun TechniekScreen(
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 8.dp, vertical = 8.dp),
-                contentPadding = PaddingValues(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
+                contentPadding = PaddingValues(
+                    top = 16.dp,
+                    start = 8.dp,
+                    end = 8.dp,
+                    bottom = 8.dp
+                ),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
@@ -86,7 +91,13 @@ fun TechniekScreen(
 
 @Composable
 private fun KataSquare(onClick: () -> Unit) {
-    val colors = listOf(BeltColor.YELLOW, BeltColor.GREEN, BeltColor.BLUE, BeltColor.BROWN_I, BeltColor.BLACK)
+    val colors = listOf(
+        BeltColor.YELLOW,
+        BeltColor.GREEN,
+        BeltColor.BLUE,
+        BeltColor.BROWN_I,
+        BeltColor.BLACK
+    )
     val isDark = isSystemInDarkTheme()
     Card(
         modifier = Modifier
@@ -122,7 +133,12 @@ private fun KataSquare(onClick: () -> Unit) {
                 }
             }
             Spacer(Modifier.height(12.dp))
-            Text("Kata's", fontSize = 15.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                "Kata's",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
@@ -146,24 +162,37 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Box(contentAlignment = Alignment.Center) {
-                Box(modifier = Modifier
-                    .size(width = 80.dp, height = 26.dp)
-                    .clip(RoundedCornerShape(50))
-                    .background(beltColor))
-                Box(modifier = Modifier
-                    .size(26.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(beltColor.copy(alpha = 0.7f))
-                    .border(
-                        2.dp,
-                        MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
-                        RoundedCornerShape(4.dp)
-                    ))
+                Box(
+                    modifier = Modifier
+                        .size(width = 80.dp, height = 26.dp)
+                        .clip(RoundedCornerShape(50))
+                        .background(beltColor)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(beltColor.copy(alpha = 0.7f))
+                        .border(
+                            2.dp,
+                            MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                            RoundedCornerShape(4.dp)
+                        )
+                )
             }
             Spacer(Modifier.height(12.dp))
-            Text(belt.name, fontSize = 15.sp, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                belt.name,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Medium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
@@ -186,7 +215,12 @@ fun TechniekScreenPreview() {
     ShinkaikarateappTheme { TechniekScreen(uiState = TechniekUiState(belts = previewBelts)) }
 }
 
-@Preview(name = "Technieken Dark", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Technieken Dark",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun TechniekScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) { TechniekScreen(uiState = TechniekUiState(belts = previewBelts)) }

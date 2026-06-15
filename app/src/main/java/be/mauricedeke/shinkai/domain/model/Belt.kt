@@ -6,5 +6,5 @@ data class Belt(
     val pogramma: BeltProgram = BeltProgram(),
     val technieken: List<Techniek> = emptyList(),
     val lexiconEntries: List<LexiconEntry> = emptyList(),
-    val notes : String = ""
+    val notes: String = ""
 )

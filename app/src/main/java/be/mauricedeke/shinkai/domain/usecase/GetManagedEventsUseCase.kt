@@ -20,9 +20,13 @@ class GetManagedEventsUseCase @Inject constructor(
         val today = LocalDate.now()
         val cutoff = today.minusMonths(1)
         val filtered = events.filter { it.localDate == null || !it.localDate.isBefore(cutoff) }
-        val (upcoming, past) = filtered.partition { it.localDate == null || !it.localDate.isBefore(today) }
+        val (upcoming, past) = filtered.partition {
+            it.localDate == null || !it.localDate.isBefore(
+                today
+            )
+        }
         val sorted = upcoming.sortedWith(compareBy(nullsLast()) { it.localDate }) +
-                     past.sortedByDescending { it.localDate }
+                past.sortedByDescending { it.localDate }
 
         return ManagedEventsResult(
             events = sorted,

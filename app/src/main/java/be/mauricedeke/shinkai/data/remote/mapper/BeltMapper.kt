@@ -12,7 +12,12 @@ import java.util.UUID
 fun BeltDto.toDomain(notes: String = "") = Belt(
     name = name,
     beltColor = runCatching { BeltColor.valueOf(beltColor) }.getOrElse { BeltColor.YELLOW },
-    pogramma = BeltProgram(sections = programme.sections.map { ProgramSection(it.title, it.items) }),
+    pogramma = BeltProgram(sections = programme.sections.map {
+        ProgramSection(
+            it.title,
+            it.items
+        )
+    }),
     technieken = technieken.map { it.toDomain() },
     notes = notes
 )

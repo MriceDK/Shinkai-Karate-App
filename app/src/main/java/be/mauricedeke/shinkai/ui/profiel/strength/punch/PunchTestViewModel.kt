@@ -35,7 +35,14 @@ class PunchTestViewModel @Inject constructor(
         val startTime = System.currentTimeMillis()
         var peakImpact = 0f
 
-        _uiState.update { it.copy(phase = MeasurementPhase.MEASURING, score = 0, resultBelt = null, progress = 0f) }
+        _uiState.update {
+            it.copy(
+                phase = MeasurementPhase.MEASURING,
+                score = 0,
+                resultBelt = null,
+                progress = 0f
+            )
+        }
         accelerometerRepository.start()
 
         measurementJob = viewModelScope.launch {
@@ -46,7 +53,12 @@ class PunchTestViewModel @Inject constructor(
                     val progress = (elapsed / durationMs.toFloat()).coerceIn(0f, 1f)
                     if (impact > peakImpact) {
                         peakImpact = impact
-                        _uiState.update { it.copy(score = (impact * 5).roundToInt(), progress = progress) }
+                        _uiState.update {
+                            it.copy(
+                                score = (impact * 5).roundToInt(),
+                                progress = progress
+                            )
+                        }
                     } else {
                         _uiState.update { it.copy(progress = progress) }
                     }
@@ -76,7 +88,14 @@ class PunchTestViewModel @Inject constructor(
     fun onReset() {
         measurementJob?.cancel()
         accelerometerRepository.stop()
-        _uiState.update { it.copy(phase = MeasurementPhase.IDLE, score = 0, resultBelt = null, progress = 0f) }
+        _uiState.update {
+            it.copy(
+                phase = MeasurementPhase.IDLE,
+                score = 0,
+                resultBelt = null,
+                progress = 0f
+            )
+        }
     }
 
     override fun onCleared() {

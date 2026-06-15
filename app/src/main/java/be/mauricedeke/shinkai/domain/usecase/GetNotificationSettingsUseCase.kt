@@ -7,5 +7,6 @@ import javax.inject.Inject
 class GetNotificationSettingsUseCase @Inject constructor(
     private val settingsRepository: SettingsRepository
 ) {
-    suspend operator fun invoke(): NotificationSettings = settingsRepository.getNotificationSettings()
+    suspend operator fun invoke(): NotificationSettings =
+        settingsRepository.getNotificationSettings()
 }

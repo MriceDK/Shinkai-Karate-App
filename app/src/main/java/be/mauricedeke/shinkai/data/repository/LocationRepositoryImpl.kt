@@ -20,7 +20,8 @@ class LocationRepositoryImpl @Inject constructor(
     @ApplicationContext context: Context
 ) : LocationRepository {
 
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager =
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     private val _location = MutableStateFlow<Point?>(null)
     override val location: Flow<Point> = _location.filterNotNull()
@@ -39,7 +40,8 @@ class LocationRepositoryImpl @Inject constructor(
                 listener,
                 Looper.getMainLooper()
             )
-        } catch (e: SecurityException) { /* permission not granted */ }
+        } catch (e: SecurityException) { /* permission not granted */
+        }
     }
 
     override fun stop() {

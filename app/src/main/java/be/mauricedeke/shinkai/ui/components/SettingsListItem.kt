@@ -34,7 +34,12 @@ fun SettingsListItem(
             .padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(painter, null, modifier = Modifier.size(22.dp), tint = MaterialTheme.colorScheme.onSurface)
+        Icon(
+            painter,
+            null,
+            modifier = Modifier.size(22.dp),
+            tint = MaterialTheme.colorScheme.onSurface
+        )
         Spacer(Modifier.width(16.dp))
         Text(
             label,
@@ -42,6 +47,10 @@ fun SettingsListItem(
             color = labelColor ?: MaterialTheme.colorScheme.onSurface,
             fontSize = 15.sp
         )
-        Icon(painterResource(R.drawable.ic_chevron_right), null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(
+            painterResource(R.drawable.ic_chevron_right),
+            null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }

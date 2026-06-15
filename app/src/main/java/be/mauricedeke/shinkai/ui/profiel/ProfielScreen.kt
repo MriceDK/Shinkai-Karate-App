@@ -30,9 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -152,9 +152,11 @@ fun ProfielScreen(
             }
         }
         Spacer(Modifier.height(8.dp))
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             SettingsListItem(
                 painterResource(R.drawable.ic_fitness_center),
                 "Strength Test",
@@ -173,33 +175,47 @@ fun ProfielScreen(
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Privacy Settings")
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             SettingsListItem(
                 painterResource(R.drawable.ic_notifications),
                 "Notifications",
                 onClick = onNotificationsClick
             )
-            SettingsListItem(painterResource(R.drawable.ic_location_on), "Location", onClick = onLocationClick)
+            SettingsListItem(
+                painterResource(R.drawable.ic_location_on),
+                "Location",
+                onClick = onLocationClick
+            )
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("General Settings")
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             ProfileToggleItem(
                 painter = painterResource(R.drawable.ic_wb_sunny),
                 checked = isDarkTheme,
                 onCheckedChange = onDarkThemeToggle
             )
-            SettingsListItem(painterResource(R.drawable.ic_chat), "Contact Support", onClick = onSupportClick)
+            SettingsListItem(
+                painterResource(R.drawable.ic_chat),
+                "Contact Support",
+                onClick = onSupportClick
+            )
         }
         Spacer(Modifier.height(8.dp))
         SectionHeader("Socials")
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             SettingsListItem(
                 painterResource(R.drawable.ic_link),
                 "Shinkai.be",
@@ -207,13 +223,23 @@ fun ProfielScreen(
                 onClick = { uriHandler.openUri("https://www.shinkai.be") })
         }
         Spacer(Modifier.height(8.dp))
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             if (loggedIn) {
-                SettingsListItem(painterResource(R.drawable.ic_exit_to_app), "Log out", onClick = onLogoutClick)
+                SettingsListItem(
+                    painterResource(R.drawable.ic_exit_to_app),
+                    "Log out",
+                    onClick = onLogoutClick
+                )
             } else {
-                SettingsListItem(painterResource(R.drawable.ic_login), "Log in", onClick = onLoginClick)
+                SettingsListItem(
+                    painterResource(R.drawable.ic_login),
+                    "Log in",
+                    onClick = onLoginClick
+                )
             }
         }
         Spacer(Modifier.height(16.dp))
@@ -282,7 +308,12 @@ fun ProfielScreenWithProfilePreview() {
     }
 }
 
-@Preview(name = "Dark — with profile", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — with profile",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun ProfielScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {

@@ -27,7 +27,16 @@ class TrainingClient @Inject constructor(private val api: TrainingApi) {
         injuries: String,
         sensei: String
     ): Result<TrainingDto> = runCatching {
-        api.createTraining(CreateTrainingRequestDto(type, startTime, endTime, date, injuries, sensei))
+        api.createTraining(
+            CreateTrainingRequestDto(
+                type,
+                startTime,
+                endTime,
+                date,
+                injuries,
+                sensei
+            )
+        )
     }
 
     suspend fun updateNote(id: String, note: String): Result<Unit> =

@@ -123,14 +123,18 @@ private fun ShortcutPickerItem(
                 painterResource(shortcut.iconRes),
                 contentDescription = shortcut.label,
                 modifier = Modifier.size(28.dp),
-                tint = if (isSelected) primary else if (enabled) onSurface else onSurfaceVariant.copy(alpha = 0.4f)
+                tint = if (isSelected) primary else if (enabled) onSurface else onSurfaceVariant.copy(
+                    alpha = 0.4f
+                )
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 shortcut.label,
                 fontSize = 10.sp,
                 textAlign = TextAlign.Center,
-                color = if (isSelected) primary else if (enabled) onSurface else onSurfaceVariant.copy(alpha = 0.4f),
+                color = if (isSelected) primary else if (enabled) onSurface else onSurfaceVariant.copy(
+                    alpha = 0.4f
+                ),
                 maxLines = 1
             )
         }

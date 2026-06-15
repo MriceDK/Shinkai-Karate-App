@@ -61,7 +61,7 @@ fun ShinkaiApp() {
     LaunchedEffect(Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
+            != PackageManager.PERMISSION_GRANTED
         ) {
             mainViewModel.requestPermission(AppPermission.Notifications)
         }
@@ -99,7 +99,8 @@ private fun ShinkaiAppContent(
         if (!view.isInEditMode) {
             SideEffect {
                 val window = (view.context as Activity).window
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkThemeEnabled
+                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                    !darkThemeEnabled
             }
         }
 

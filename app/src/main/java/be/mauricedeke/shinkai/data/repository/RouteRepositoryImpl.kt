@@ -28,9 +28,9 @@ class RouteRepositoryImpl @Inject constructor(
     override suspend fun fetchRoute(origin: Point, destination: Point): LineString? {
         val token = MapboxOptions.accessToken
         val coords = "${origin.longitude()},${origin.latitude()}" +
-            ";${destination.longitude()},${destination.latitude()}"
+                ";${destination.longitude()},${destination.latitude()}"
         val url = "https://api.mapbox.com/directions/v5/mapbox/driving/$coords" +
-            "?access_token=$token&geometries=geojson&overview=full"
+                "?access_token=$token&geometries=geojson&overview=full"
 
         return suspendCancellableCoroutine { cont ->
             val call = client.newCall(Request.Builder().url(url).build())

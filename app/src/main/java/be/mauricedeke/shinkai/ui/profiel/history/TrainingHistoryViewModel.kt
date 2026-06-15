@@ -138,7 +138,13 @@ class TrainingHistoryViewModel @Inject constructor(
 
     fun dismissLogSheet() = _uiState.update { it.copy(showLogSheet = false) }
 
-    fun logTraining(type: String, startTime: String, endTime: String, sensei: String, injuries: String) {
+    fun logTraining(
+        type: String,
+        startTime: String,
+        endTime: String,
+        sensei: String,
+        injuries: String
+    ) {
         val date = _uiState.value.selectedDate
         val training = Training(
             id = UUID.randomUUID(),

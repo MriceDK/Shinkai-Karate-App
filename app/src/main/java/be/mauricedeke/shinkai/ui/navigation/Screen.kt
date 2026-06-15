@@ -18,6 +18,7 @@ sealed class Screen(
     data object EventDetail : Screen("events/{eventId}") {
         fun createRoute(id: String) = "events/$id"
     }
+
     data object ManageEvents : Screen("events/manage")
 
     data object Lexicon : Screen("lexicon", "Lexicon", R.drawable.ic_menu_book)

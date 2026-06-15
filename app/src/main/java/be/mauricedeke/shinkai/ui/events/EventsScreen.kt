@@ -129,14 +129,27 @@ fun EventsScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(modifier = Modifier.width(100.dp)) {
-                        Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                        Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "${event.startTime} - ${event.endTime}",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 13.sp
+                        )
+                        Text(
+                            event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM"))
+                                ?: event.date,
+                            fontSize = 12.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                     Spacer(Modifier.width(12.dp))
                     Column(modifier = Modifier.weight(1f)) {
                         Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp)
                         if (event.location.isNotBlank())
-                            Text(event.location, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(
+                                event.location,
+                                fontSize = 12.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                     }
                 }
             }
@@ -147,11 +160,15 @@ fun EventsScreen(
     PullToRefreshBox(
         isRefreshing = uiState.isRefreshing,
         onRefresh = onRefresh,
-        modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)
-    ) {
-        Column(modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())) {
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
             Text(
                 "Toekomstige Events",
                 modifier = Modifier
@@ -166,22 +183,28 @@ fun EventsScreen(
                     "Kon events niet laden. Probeer opnieuw.",
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 4.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 4.dp)
                 )
             }
             Spacer(Modifier.height(8.dp))
 
             // Upcoming events list
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 24.dp, vertical = 4.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
+            ) {
                 if (events.isEmpty()) {
                     Text(
                         "Geen aankomende events.",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp)
                     )
                 } else {
                     events.forEach { event ->
@@ -194,17 +217,38 @@ fun EventsScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Column(modifier = Modifier.width(110.dp)) {
-                                Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-                                Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                                Text(
+                                    "${event.startTime} - ${event.endTime}",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM"))
+                                        ?: event.date,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 12.sp
+                                )
                             }
-                            Box(modifier = Modifier
-                                .width(1.dp)
-                                .height(36.dp)
-                                .background(MaterialTheme.colorScheme.outlineVariant))
+                            Box(
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(36.dp)
+                                    .background(MaterialTheme.colorScheme.outlineVariant)
+                            )
                             Spacer(Modifier.width(12.dp))
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(event.title, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
-                                Text(event.location, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
+                                Text(
+                                    event.title,
+                                    fontWeight = FontWeight.Medium,
+                                    fontSize = 14.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    event.location,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    fontSize = 12.sp
+                                )
                             }
                             Row {
                                 Box(
@@ -212,7 +256,9 @@ fun EventsScreen(
                                         .size(32.dp)
                                         .clip(CircleShape)
                                         .background(
-                                            if (rsvp == false) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                            if (rsvp == false) MaterialTheme.colorScheme.primary.copy(
+                                                alpha = 0.15f
+                                            )
                                             else Color.Transparent
                                         )
                                         .clickable { onRsvp(event.id, false) },
@@ -223,7 +269,7 @@ fun EventsScreen(
                                         contentDescription = "Ik kan niet",
                                         modifier = Modifier.size(16.dp),
                                         tint = if (rsvp == false) MaterialTheme.colorScheme.primary
-                                               else MaterialTheme.colorScheme.onSurfaceVariant
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                                 Spacer(Modifier.width(4.dp))
@@ -243,7 +289,7 @@ fun EventsScreen(
                                         contentDescription = "Ik kan",
                                         modifier = Modifier.size(16.dp),
                                         tint = if (rsvp == true) Color.White
-                                               else MaterialTheme.colorScheme.onSurfaceVariant
+                                        else MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
@@ -255,9 +301,11 @@ fun EventsScreen(
             Spacer(Modifier.height(8.dp))
 
             // Inbox: upcoming events without an RSVP
-            Column(modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
                 Text(
                     "Inbox ( ${inboxEvents.size} )",
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -271,7 +319,9 @@ fun EventsScreen(
                         "Geen events zonder antwoord.",
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 8.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 8.dp)
                     )
                 } else {
                     inboxEvents.firstOrNull()?.let { event ->
@@ -284,21 +334,46 @@ fun EventsScreen(
                                 .padding(16.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(event.title, color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+                            Text(
+                                event.title,
+                                color = MaterialTheme.colorScheme.onPrimary,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp
+                            )
                             Spacer(Modifier.height(6.dp))
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Column(horizontalAlignment = Alignment.End) {
-                                    Text("${event.startTime} - ${event.endTime}", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
-                                    Text(event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                                    Text(
+                                        "${event.startTime} - ${event.endTime}",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                    Text(
+                                        event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM"))
+                                            ?: event.date,
+                                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                                        fontSize = 12.sp
+                                    )
                                 }
-                                Box(modifier = Modifier
-                                    .padding(horizontal = 12.dp)
-                                    .width(1.dp)
-                                    .height(36.dp)
-                                    .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f)))
+                                Box(
+                                    modifier = Modifier
+                                        .padding(horizontal = 12.dp)
+                                        .width(1.dp)
+                                        .height(36.dp)
+                                        .background(MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.4f))
+                                )
                                 Column {
-                                    if (event.location.isNotBlank()) Text(event.location, fontSize = 14.sp, color = MaterialTheme.colorScheme.onPrimary)
-                                    if (event.city.isNotBlank()) Text(event.city, color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f), fontSize = 12.sp)
+                                    if (event.location.isNotBlank()) Text(
+                                        event.location,
+                                        fontSize = 14.sp,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                    if (event.city.isNotBlank()) Text(
+                                        event.city,
+                                        color = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
+                                        fontSize = 12.sp
+                                    )
                                 }
                             }
                             Spacer(Modifier.height(8.dp))
@@ -318,12 +393,18 @@ fun EventsScreen(
                                         }
                                     },
                                     colors = SegmentedButtonDefaults.colors(
-                                        activeContainerColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.15f),
+                                        activeContainerColor = MaterialTheme.colorScheme.onPrimary.copy(
+                                            alpha = 0.15f
+                                        ),
                                         activeContentColor = MaterialTheme.colorScheme.onPrimary,
                                         activeBorderColor = MaterialTheme.colorScheme.onPrimary,
                                         inactiveContainerColor = MaterialTheme.colorScheme.primary,
-                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(
+                                            alpha = 0.8f
+                                        ),
+                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(
+                                            alpha = 0.5f
+                                        ),
                                     )
                                 ) {
                                     Text("Ik kan niet", fontSize = 13.sp)
@@ -337,8 +418,12 @@ fun EventsScreen(
                                         activeContentColor = MaterialTheme.colorScheme.primary,
                                         activeBorderColor = MaterialTheme.colorScheme.onPrimary,
                                         inactiveContainerColor = MaterialTheme.colorScheme.primary,
-                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.8f),
-                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.5f),
+                                        inactiveContentColor = MaterialTheme.colorScheme.onPrimary.copy(
+                                            alpha = 0.8f
+                                        ),
+                                        inactiveBorderColor = MaterialTheme.colorScheme.onPrimary.copy(
+                                            alpha = 0.5f
+                                        ),
                                     )
                                 ) {
                                     Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
@@ -393,13 +478,17 @@ fun EventsScreen(
                     }
                 )
         ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 1.dp), contentAlignment = Alignment.Center) {
-                Box(modifier = Modifier
-                    .size(width = 40.dp, height = 4.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 1.dp), contentAlignment = Alignment.Center
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 40.dp, height = 4.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f))
+                )
             }
             Column(
                 modifier = Modifier
@@ -408,11 +497,18 @@ fun EventsScreen(
                     .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     .background(MaterialTheme.colorScheme.primary)
             ) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp)
+                ) {
                     Text(
-                        displayDate.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.ENGLISH)),
+                        displayDate.format(
+                            DateTimeFormatter.ofPattern(
+                                "EEE, MMM d",
+                                Locale.ENGLISH
+                            )
+                        ),
                         color = MaterialTheme.colorScheme.onPrimary,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
@@ -447,13 +543,13 @@ private val previewUpcomingEvents = listOf(
         id = previewId1, title = "Stage Naigairyu",
         startTime = "09:00", endTime = "12:00",
         date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
-        localDate = java.time.LocalDate.of(2026, 6, 15)
+        localDate = LocalDate.of(2026, 6, 15)
     ),
     Event(
         id = previewId2, title = "Examen Geel",
         startTime = "14:00", endTime = "16:00",
         date = "2026-06-22", location = "Dojo Gent", city = "Gent",
-        localDate = java.time.LocalDate.of(2026, 6, 22)
+        localDate = LocalDate.of(2026, 6, 22)
     )
 )
 
@@ -461,7 +557,7 @@ private val previewInboxEvent = Event(
     id = previewId3, title = "Zomerstage 2026",
     startTime = "09:00", endTime = "18:00",
     date = "2026-07-01", location = "Sporthal Kortrijk", city = "Kortrijk",
-    localDate = java.time.LocalDate.of(2026, 7, 1)
+    localDate = LocalDate.of(2026, 7, 1)
 )
 
 @Preview(name = "Empty", showBackground = true, showSystemUi = true)
@@ -503,7 +599,12 @@ fun EventsScreenErrorPreview() {
     ShinkaikarateappTheme { EventsScreen(uiState = EventsUiState(isError = true)) }
 }
 
-@Preview(name = "Dark — with events", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — with events",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun EventsScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {

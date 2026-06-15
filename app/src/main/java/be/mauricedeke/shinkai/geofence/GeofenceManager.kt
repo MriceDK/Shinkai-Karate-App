@@ -38,7 +38,8 @@ class GeofenceManager @Inject constructor(
             return
         }
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             Log.w("GeofenceManager", "Location permission not granted, skipping")
             return
         }
@@ -60,8 +61,19 @@ class GeofenceManager @Inject constructor(
 
         client.removeGeofences(pendingIntent).addOnCompleteListener {
             client.addGeofences(request, pendingIntent)
-                .addOnSuccessListener { Log.d("GeofenceManager", "Registered ${items.size} geofences") }
-                .addOnFailureListener { e -> Log.e("GeofenceManager", "Failed to register geofences", e) }
+                .addOnSuccessListener {
+                    Log.d(
+                        "GeofenceManager",
+                        "Registered ${items.size} geofences"
+                    )
+                }
+                .addOnFailureListener { e ->
+                    Log.e(
+                        "GeofenceManager",
+                        "Failed to register geofences",
+                        e
+                    )
+                }
         }
     }
 

@@ -38,9 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
@@ -68,8 +68,13 @@ fun ShinkaiCalendar(
     val containerColor =
         if (backgroundColor == Color.Unspecified) MaterialTheme.colorScheme.primary else backgroundColor
 
-    fun goNext() { swipeDirection = 1; currentMonth = currentMonth.plusMonths(1) }
-    fun goPrev() { swipeDirection = -1; currentMonth = currentMonth.minusMonths(1) }
+    fun goNext() {
+        swipeDirection = 1; currentMonth = currentMonth.plusMonths(1)
+    }
+
+    fun goPrev() {
+        swipeDirection = -1; currentMonth = currentMonth.minusMonths(1)
+    }
 
     Column(
         modifier = modifier
@@ -81,18 +86,35 @@ fun ShinkaiCalendar(
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
                 Text(
-                    text = currentMonth.format(DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH)),
+                    text = currentMonth.format(
+                        DateTimeFormatter.ofPattern(
+                            "MMMM yyyy",
+                            Locale.ENGLISH
+                        )
+                    ),
                     color = MaterialTheme.colorScheme.onPrimary,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
-                Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(
+                    Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
             IconButton(onClick = { goPrev() }, modifier = Modifier.size(32.dp)) {
-                Icon(painterResource(R.drawable.ic_chevron_left), contentDescription = "Previous", tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(
+                    painterResource(R.drawable.ic_chevron_left),
+                    contentDescription = "Previous",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
             IconButton(onClick = { goNext() }, modifier = Modifier.size(32.dp)) {
-                Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = "Next", tint = MaterialTheme.colorScheme.onPrimary)
+                Icon(
+                    painterResource(R.drawable.ic_chevron_right),
+                    contentDescription = "Next",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
 
@@ -101,7 +123,12 @@ fun ShinkaiCalendar(
         Row(modifier = Modifier.fillMaxWidth()) {
             listOf("S", "M", "T", "W", "T", "F", "S").forEach { day ->
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    Text(day, color = MaterialTheme.colorScheme.onPrimary, fontSize = 12.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        day,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
             }
         }
@@ -133,8 +160,13 @@ fun ShinkaiCalendar(
                                 if (!swipeConsumed) {
                                     dragAccumulator += dragAmount
                                     when {
-                                        dragAccumulator < -swipeThreshold -> { goNext(); swipeConsumed = true }
-                                        dragAccumulator > swipeThreshold -> { goPrev(); swipeConsumed = true }
+                                        dragAccumulator < -swipeThreshold -> {
+                                            goNext(); swipeConsumed = true
+                                        }
+
+                                        dragAccumulator > swipeThreshold -> {
+                                            goPrev(); swipeConsumed = true
+                                        }
                                     }
                                 }
                             }
@@ -146,7 +178,10 @@ fun ShinkaiCalendar(
                         for (col in 0 until 7) {
                             val day = row * 7 + col - firstDayOfWeek + 1
                             Box(
-                                modifier = Modifier.weight(1f).aspectRatio(1f).padding(2.dp),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .aspectRatio(1f)
+                                    .padding(2.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 if (day in 1..daysInMonth) {
@@ -161,7 +196,11 @@ fun ShinkaiCalendar(
                                             .clip(CircleShape)
                                             .background(if (isSelected) MaterialTheme.colorScheme.onPrimary else Color.Transparent)
                                             .then(
-                                                if (isToday && !isSelected) Modifier.border(1.dp, MaterialTheme.colorScheme.onPrimary, CircleShape)
+                                                if (isToday && !isSelected) Modifier.border(
+                                                    1.dp,
+                                                    MaterialTheme.colorScheme.onPrimary,
+                                                    CircleShape
+                                                )
                                                 else Modifier
                                             )
                                             .clickable { onDateSelected(date) },

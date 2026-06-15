@@ -55,7 +55,9 @@ fun PunchTestScreen(
         label = "progress"
     )
 
-    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -89,7 +91,7 @@ fun PunchTestScreen(
                     },
                     fontSize = 14.sp,
                     color = if (uiState.phase == MeasurementPhase.MEASURING) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                    else MaterialTheme.colorScheme.onSurfaceVariant,
                     fontWeight = if (uiState.phase == MeasurementPhase.MEASURING) FontWeight.Bold else FontWeight.Normal,
                     textAlign = TextAlign.Center
                 )
@@ -101,7 +103,8 @@ fun PunchTestScreen(
                         progress = { progressAnim },
                         modifier = Modifier.fillMaxSize(),
                         strokeWidth = 10.dp,
-                        color = uiState.resultBelt?.toColor(isDark) ?: MaterialTheme.colorScheme.primary,
+                        color = uiState.resultBelt?.toColor(isDark)
+                            ?: MaterialTheme.colorScheme.primary,
                         trackColor = MaterialTheme.colorScheme.outlineVariant
                     )
                     Box(
@@ -136,7 +139,10 @@ fun PunchTestScreen(
                         Box(
                             modifier = Modifier
                                 .size(width = 40.dp, height = 14.dp)
-                                .background(uiState.resultBelt.toColor(isDark), RoundedCornerShape(50))
+                                .background(
+                                    uiState.resultBelt.toColor(isDark),
+                                    RoundedCornerShape(50)
+                                )
                         )
                         Text(
                             uiState.resultBelt.displayName(),
@@ -156,11 +162,18 @@ fun PunchTestScreen(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Text("Best:", fontSize = 13.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(
+                            "Best:",
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                         Box(
                             modifier = Modifier
                                 .size(width = 18.dp, height = 8.dp)
-                                .background(uiState.bestBelt.toColor(isDark), RoundedCornerShape(50))
+                                .background(
+                                    uiState.bestBelt.toColor(isDark),
+                                    RoundedCornerShape(50)
+                                )
                         )
                         Text(
                             "${uiState.bestScore} N",
@@ -247,7 +260,12 @@ fun PunchTestScreenDonePreview() {
     }
 }
 
-@Preview(name = "Dark — done", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — done",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun PunchTestScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {

@@ -29,10 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
@@ -59,6 +59,7 @@ fun TrainingSessionDetailScreen(
             uiState.isLoading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
+
             uiState.isError -> {
                 Text(
                     "Kon training niet laden.",
@@ -66,6 +67,7 @@ fun TrainingSessionDetailScreen(
                     color = MaterialTheme.colorScheme.error
                 )
             }
+
             else -> {
                 Column(
                     modifier = Modifier

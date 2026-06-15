@@ -46,15 +46,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import be.mauricedeke.shinkai.R
 import androidx.core.content.FileProvider
+import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.components.RoundBackButton
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import coil.compose.AsyncImage
@@ -252,7 +252,12 @@ fun AccountScreen(
             Spacer(Modifier.height(12.dp))
             FormField("EMAIL:", uiState.email, onEmailChanged, keyboardType = KeyboardType.Email)
             Spacer(Modifier.height(16.dp))
-            FormField("Current Password:", uiState.currentPassword, onCurrentPasswordChanged, password = true)
+            FormField(
+                "Current Password:",
+                uiState.currentPassword,
+                onCurrentPasswordChanged,
+                password = true
+            )
             Spacer(Modifier.height(12.dp))
             FormField("New Password:", uiState.newPassword, onNewPasswordChanged, password = true)
             Spacer(Modifier.height(12.dp))
@@ -325,7 +330,13 @@ private fun FormField(
 @Composable
 fun AccountScreenPreview() {
     ShinkaikarateappTheme {
-        AccountScreen(uiState = AccountUiState(naam = "Maurice De Kegel", email = "maurice@example.com", isLoading = false))
+        AccountScreen(
+            uiState = AccountUiState(
+                naam = "Maurice De Kegel",
+                email = "maurice@example.com",
+                isLoading = false
+            )
+        )
     }
 }
 
@@ -335,10 +346,21 @@ fun AccountScreenLoadingPreview() {
     ShinkaikarateappTheme { AccountScreen(uiState = AccountUiState(isLoading = true)) }
 }
 
-@Preview(name = "Dark — pre-filled", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — pre-filled",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun AccountScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {
-        AccountScreen(uiState = AccountUiState(naam = "Maurice De Kegel", email = "maurice@example.com", isLoading = false))
+        AccountScreen(
+            uiState = AccountUiState(
+                naam = "Maurice De Kegel",
+                email = "maurice@example.com",
+                isLoading = false
+            )
+        )
     }
 }

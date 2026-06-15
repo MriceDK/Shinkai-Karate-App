@@ -35,11 +35,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
@@ -81,171 +81,178 @@ fun EventDetailScreen(
                 .getOrNull()
                 ?.atZone(zone)?.toInstant()?.toEpochMilli()
         }
-        val location = listOf(event.location, event.city).filter { it.isNotBlank() }.joinToString(", ")
+        val location =
+            listOf(event.location, event.city).filter { it.isNotBlank() }.joinToString(", ")
         val intent = Intent(Intent.ACTION_INSERT).apply {
             data = android.provider.CalendarContract.Events.CONTENT_URI
             putExtra(android.provider.CalendarContract.Events.TITLE, event.title)
             putExtra(android.provider.CalendarContract.Events.EVENT_LOCATION, location)
             putExtra(android.provider.CalendarContract.Events.DESCRIPTION, event.description)
-            if (beginMillis != null) putExtra(android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginMillis)
-            if (endMillis != null) putExtra(android.provider.CalendarContract.EXTRA_EVENT_END_TIME, endMillis)
+            if (beginMillis != null) putExtra(
+                android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                beginMillis
+            )
+            if (endMillis != null) putExtra(
+                android.provider.CalendarContract.EXTRA_EVENT_END_TIME,
+                endMillis
+            )
         }
         context.startActivity(intent)
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(Modifier.height(40.dp))
-        Text(
-            event.title,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(Modifier.height(8.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(horizontalAlignment = Alignment.End) {
-                Text(
-                    "${event.startTime} - ${event.endTime}",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(Modifier.height(40.dp))
+            Text(
+                event.title,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        "${event.startTime} - ${event.endTime}",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        event.date,
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .width(1.dp)
+                        .height(36.dp)
+                        .background(MaterialTheme.colorScheme.outlineVariant)
                 )
-                Text(
-                    event.date,
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable(
+                        enabled = event.location.isNotBlank(),
+                        onClick = ::openNavigation
+                    )
+                ) {
+                    Column {
+                        Text(
+                            event.location,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        )
+                        Text(
+                            event.city,
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    }
+                    if (event.location.isNotBlank()) {
+                        Spacer(Modifier.width(4.dp))
+                        Icon(
+                            painterResource(R.drawable.ic_navigation),
+                            contentDescription = "Navigeer",
+                            modifier = Modifier.size(14.dp),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
             }
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = ::addToCalendar,
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                shape = RoundedCornerShape(50)
+            ) {
+                Text("+ Add to calendar", fontSize = 15.sp)
+            }
+            if (isUpcoming) {
+                Spacer(Modifier.height(12.dp))
+                SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth(0.85f)) {
+                    SegmentedButton(
+                        selected = uiState.rsvp == false,
+                        onClick = { onRsvp(false) },
+                        shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                        icon = {
+                            if (uiState.rsvp == false) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
+                                )
+                            }
+                        },
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+                            activeContentColor = MaterialTheme.colorScheme.primary,
+                            activeBorderColor = MaterialTheme.colorScheme.primary,
+                        )
+                    ) {
+                        Text("Ik kan niet", fontSize = 13.sp)
+                    }
+                    SegmentedButton(
+                        selected = uiState.rsvp == true,
+                        onClick = { onRsvp(true) },
+                        shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                        colors = SegmentedButtonDefaults.colors(
+                            activeContainerColor = MaterialTheme.colorScheme.primary,
+                            activeContentColor = Color.White,
+                            activeBorderColor = MaterialTheme.colorScheme.primary,
+                        )
+                    ) {
+                        Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                    }
+                }
+            }
+            Spacer(Modifier.height(24.dp))
             Box(
                 modifier = Modifier
-                    .padding(horizontal = 12.dp)
-                    .width(1.dp)
-                    .height(36.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant)
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable(
-                    enabled = event.location.isNotBlank(),
-                    onClick = ::openNavigation
-                )
+                    .size(160.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
+                contentAlignment = Alignment.Center
             ) {
-                Column {
-                    Text(
-                        event.location,
-                        fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        textDecoration = TextDecoration.Underline
-                    )
-                    Text(
-                        event.city,
-                        fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        textDecoration = TextDecoration.Underline
-                    )
-                }
-                if (event.location.isNotBlank()) {
-                    Spacer(Modifier.width(4.dp))
-                    Icon(
-                        painterResource(R.drawable.ic_navigation),
-                        contentDescription = "Navigeer",
-                        modifier = Modifier.size(14.dp),
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
+                Icon(
+                    painterResource(R.drawable.ic_fitness_center),
+                    null,
+                    modifier = Modifier.size(80.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
-        }
-        Spacer(Modifier.height(16.dp))
-        Button(
-            onClick = ::addToCalendar,
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-            shape = RoundedCornerShape(50)
-        ) {
-            Text("+ Add to calendar", fontSize = 15.sp)
-        }
-        if (isUpcoming) {
-            Spacer(Modifier.height(12.dp))
-            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth(0.85f)) {
-                SegmentedButton(
-                    selected = uiState.rsvp == false,
-                    onClick = { onRsvp(false) },
-                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-                    icon = {
-                        if (uiState.rsvp == false) {
-                            Icon(
-                                Icons.Default.Close,
-                                contentDescription = null,
-                                modifier = Modifier.size(SegmentedButtonDefaults.IconSize)
-                            )
-                        }
-                    },
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
-                        activeContentColor = MaterialTheme.colorScheme.primary,
-                        activeBorderColor = MaterialTheme.colorScheme.primary,
-                    )
-                ) {
-                    Text("Ik kan niet", fontSize = 13.sp)
-                }
-                SegmentedButton(
-                    selected = uiState.rsvp == true,
-                    onClick = { onRsvp(true) },
-                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-                    colors = SegmentedButtonDefaults.colors(
-                        activeContainerColor = MaterialTheme.colorScheme.primary,
-                        activeContentColor = Color.White,
-                        activeBorderColor = MaterialTheme.colorScheme.primary,
-                    )
-                ) {
-                    Text("Ik kan", fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                }
-            }
-        }
-        Spacer(Modifier.height(24.dp))
-        Box(
-            modifier = Modifier
-                .size(160.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painterResource(R.drawable.ic_fitness_center),
-                null,
-                modifier = Modifier.size(80.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            Spacer(Modifier.height(24.dp))
+            Text(
+                "About Evenement",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
             )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                event.description.ifBlank { "Informatie over het evenement." },
+                fontSize = 14.sp,
+                lineHeight = 22.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(Modifier.height(16.dp))
         }
-        Spacer(Modifier.height(24.dp))
-        Text(
-            "About Evenement",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth()
+        RoundBackButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(start = 16.dp, top = 8.dp)
         )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            event.description.ifBlank { "Informatie over het evenement." },
-            fontSize = 14.sp,
-            lineHeight = 22.sp,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-        Spacer(Modifier.height(16.dp))
-    }
-    RoundBackButton(
-        onClick = onBackClick,
-        modifier = Modifier
-            .align(Alignment.TopStart)
-            .padding(start = 16.dp, top = 8.dp)
-    )
     }
 }
 
@@ -256,7 +263,7 @@ private val previewEvent = Event(
     startTime = "09:00", endTime = "12:00",
     date = "2026-06-15", location = "Sporthal Brugge", city = "Brugge",
     description = "Een intensieve stage waarbij alle graden welkom zijn. Breng je eigen drinkwater en een handdoek mee.",
-    localDate = java.time.LocalDate.of(2026, 6, 15)
+    localDate = LocalDate.of(2026, 6, 15)
 )
 
 @Preview(name = "Upcoming — no RSVP", showBackground = true, showSystemUi = true)
@@ -290,7 +297,7 @@ fun EventDetailScreenPastPreview() {
                 event = previewEvent.copy(
                     title = "Najaarsexamen",
                     date = "2025-11-08",
-                    localDate = java.time.LocalDate.of(2025, 11, 8)
+                    localDate = LocalDate.of(2025, 11, 8)
                 ),
                 rsvp = true
             )

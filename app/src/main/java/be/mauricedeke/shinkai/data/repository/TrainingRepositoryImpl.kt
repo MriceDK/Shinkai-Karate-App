@@ -75,8 +75,18 @@ class TrainingRepositoryImpl @Inject constructor(
             val punchScore = entities.firstOrNull { it.type == PUNCH_TYPE }?.bestScore ?: 0
             val kiaiScore = entities.firstOrNull { it.type == KIAI_TYPE }?.bestScore ?: 0
             listOf(
-                StrengthResult(PUNCH_TYPE, punchScore, beltColorFromPunch(punchScore).takeIf { punchScore > 0 }, "N"),
-                StrengthResult(KIAI_TYPE, kiaiScore, beltColorFromDb(kiaiScore).takeIf { kiaiScore > 0 }, "dB")
+                StrengthResult(
+                    PUNCH_TYPE,
+                    punchScore,
+                    beltColorFromPunch(punchScore).takeIf { punchScore > 0 },
+                    "N"
+                ),
+                StrengthResult(
+                    KIAI_TYPE,
+                    kiaiScore,
+                    beltColorFromDb(kiaiScore).takeIf { kiaiScore > 0 },
+                    "dB"
+                )
             )
         }
 
@@ -96,7 +106,7 @@ class TrainingRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun submitPunchTest(score: Int): StrengthResult? {
+    override suspend fun submitPunchTest(score: Int): StrengthResult {
         val dto = strengthClient.submitPunchTest(score.toDouble()).getOrNull()
         val beltColor = dto?.beltColor?.toBeltColor() ?: beltColorFromPunch(score)
         val newBest = maxOf(
@@ -116,7 +126,7 @@ class TrainingRepositoryImpl @Inject constructor(
         return StrengthResult(PUNCH_TYPE, score, beltColor, PUNCH_UNIT)
     }
 
-    override suspend fun submitKiaiTest(score: Int): StrengthResult? {
+    override suspend fun submitKiaiTest(score: Int): StrengthResult {
         val dto = strengthClient.submitKiaiTest(score.toDouble()).getOrNull()
         val beltColor = dto?.beltColor?.toBeltColor() ?: beltColorFromDb(score)
         val newBest = maxOf(

@@ -91,11 +91,13 @@ fun ShinkaiNavGraph(
             true -> navController.navigate(Screen.Home.route) {
                 popUpTo(Screen.Login.route) { inclusive = true }
             }
+
             false -> if (navController.currentDestination?.route != Screen.Login.route) {
                 navController.navigate(Screen.Login.route) {
                     popUpTo(0) { inclusive = true }
                 }
             }
+
             null -> Unit
         }
     }
@@ -204,7 +206,13 @@ fun ShinkaiNavGraph(
         composable(Screen.Technieken.route) {
             TechniekScreen(
                 uiState = techniekUiState,
-                onBeltClick = { belt -> navController.navigate(Screen.TechniekDetail.createRoute(belt)) },
+                onBeltClick = { belt ->
+                    navController.navigate(
+                        Screen.TechniekDetail.createRoute(
+                            belt
+                        )
+                    )
+                },
                 onKataClick = { navController.navigate(Screen.KataList.route) },
                 onRefresh = techniekViewModel::load
             )
@@ -335,8 +343,15 @@ fun ShinkaiNavGraph(
                 uiState = strengthTestUiState,
                 onStartTest = { type ->
                     when {
-                        type.contains("Punch", ignoreCase = true) -> navController.navigate(Screen.PunchTest.route)
-                        type.contains("Kiai", ignoreCase = true) -> navController.navigate(Screen.KiaiTest.route)
+                        type.contains(
+                            "Punch",
+                            ignoreCase = true
+                        ) -> navController.navigate(Screen.PunchTest.route)
+
+                        type.contains(
+                            "Kiai",
+                            ignoreCase = true
+                        ) -> navController.navigate(Screen.KiaiTest.route)
                     }
                 },
                 onBackClick = { navController.popBackStack() }
@@ -358,7 +373,10 @@ fun ShinkaiNavGraph(
             val vm: KiaiTestViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsStateWithLifecycle()
             val micGranted = remember(permissionRequest) {
-                ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.RECORD_AUDIO
+                ) == PackageManager.PERMISSION_GRANTED
             }
             KiaiTestScreen(
                 uiState = uiState,
@@ -415,8 +433,14 @@ fun ShinkaiNavGraph(
 
         composable(Screen.Kaart.route) {
             val locationGranted = remember(permissionRequest) {
-                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
             }
             KaartScreen(
                 uiState = kaartUiState,

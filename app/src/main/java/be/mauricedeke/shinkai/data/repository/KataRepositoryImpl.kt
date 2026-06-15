@@ -50,7 +50,11 @@ class KataRepositoryImpl @Inject constructor(
                 id = dto.id,
                 name = dto.name,
                 belt = dto.belt ?: "",
-                beltColor = runCatching { BeltColor.valueOf(dto.beltColor ?: "") }.getOrElse { BeltColor.YELLOW },
+                beltColor = runCatching {
+                    BeltColor.valueOf(
+                        dto.beltColor ?: ""
+                    )
+                }.getOrElse { BeltColor.YELLOW },
                 description = dto.description,
                 moves = dto.moves
             )

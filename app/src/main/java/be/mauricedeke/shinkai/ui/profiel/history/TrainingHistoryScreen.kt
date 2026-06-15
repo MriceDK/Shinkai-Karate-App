@@ -119,7 +119,12 @@ fun TrainingHistoryScreen(
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        uiState.selectedDate.format(java.time.format.DateTimeFormatter.ofPattern("EEEE dd/MM/yyyy", java.util.Locale("nl"))),
+                        uiState.selectedDate.format(
+                            java.time.format.DateTimeFormatter.ofPattern(
+                                "EEEE dd/MM/yyyy",
+                                java.util.Locale("nl")
+                            )
+                        ),
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -162,7 +167,8 @@ fun TrainingHistoryScreen(
                 }
             }
             Spacer(Modifier.height(16.dp))
-            val selectedTraining = displayTrainings.firstOrNull { it.id == uiState.selectedTrainingId }
+            val selectedTraining =
+                displayTrainings.firstOrNull { it.id == uiState.selectedTrainingId }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -198,7 +204,9 @@ fun TrainingHistoryScreen(
                             unfocusedBorderColor = Color.Transparent,
                             disabledBorderColor = Color.Transparent,
                             disabledTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                alpha = 0.5f
+                            )
                         )
                     )
                 }
@@ -226,7 +234,11 @@ private fun TrainingCard(
             .width(172.dp)
             .clickable(onClick = onClick)
             .then(
-                if (isSelected) Modifier.border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(12.dp))
+                if (isSelected) Modifier.border(
+                    2.dp,
+                    MaterialTheme.colorScheme.primary,
+                    RoundedCornerShape(12.dp)
+                )
                 else Modifier
             ),
         shape = RoundedCornerShape(12.dp),
@@ -253,7 +265,10 @@ private fun TrainingCard(
                 )
             }
             Column(modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp)) {
-                TrainingCardRow(painterResource(R.drawable.ic_access_time), "${training.startTime} – ${training.endTime}")
+                TrainingCardRow(
+                    painterResource(R.drawable.ic_access_time),
+                    "${training.startTime} – ${training.endTime}"
+                )
                 Spacer(Modifier.height(6.dp))
                 TrainingCardRow(painterResource(R.drawable.ic_person), training.sensei)
                 Spacer(Modifier.height(6.dp))

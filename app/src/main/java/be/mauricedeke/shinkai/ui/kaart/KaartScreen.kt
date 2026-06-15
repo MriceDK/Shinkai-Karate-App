@@ -31,7 +31,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.data.fake.FakeDataSource
@@ -125,7 +124,11 @@ fun KaartScreen(
         }
         LaunchedEffect(uiState.routeGeometry) {
             routeSourceState.data = uiState.routeGeometry
-                ?.let { GeoJSONData(FeatureCollection.fromFeature(Feature.fromGeometry(it)).toJson()) }
+                ?.let {
+                    GeoJSONData(
+                        FeatureCollection.fromFeature(Feature.fromGeometry(it)).toJson()
+                    )
+                }
                 ?: GeoJSONData(emptyCollection)
         }
         LineLayer(sourceState = routeSourceState) {
@@ -449,7 +452,12 @@ private fun EventDetailSheet(
     }
 }
 
-private fun geofenceCirclePoints(lat: Double, lng: Double, radiusMeters: Double = 50.0, steps: Int = 64): List<Point> {
+private fun geofenceCirclePoints(
+    lat: Double,
+    lng: Double,
+    radiusMeters: Double = 50.0,
+    steps: Int = 64
+): List<Point> {
     val earthRadius = 6_371_000.0
     val latRad = Math.toRadians(lat)
     return (0..steps).map { i ->
@@ -466,7 +474,12 @@ fun KaartScreenPreview() {
     ShinkaikarateappTheme { KaartScreen(uiState = KaartUiState(events = FakeDataSource.events)) }
 }
 
-@Preview(name = "Dark", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun KaartScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) { KaartScreen(uiState = KaartUiState(events = FakeDataSource.events)) }

@@ -52,14 +52,30 @@ class AccountViewModel @Inject constructor(
         _uiState.update { it.copy(profilePictureUri = uri) }
         viewModelScope.launch {
             val s = _uiState.value
-            updateUserProfile(UserProfile(userId = s.userId, name = s.naam, email = s.email, belt = s.belt, profilePictureUri = uri))
+            updateUserProfile(
+                UserProfile(
+                    userId = s.userId,
+                    name = s.naam,
+                    email = s.email,
+                    belt = s.belt,
+                    profilePictureUri = uri
+                )
+            )
         }
     }
 
     fun onSave() {
         viewModelScope.launch {
             val s = _uiState.value
-            updateUserProfile(UserProfile(userId = s.userId, name = s.naam, email = s.email, belt = s.belt, profilePictureUri = s.profilePictureUri))
+            updateUserProfile(
+                UserProfile(
+                    userId = s.userId,
+                    name = s.naam,
+                    email = s.email,
+                    belt = s.belt,
+                    profilePictureUri = s.profilePictureUri
+                )
+            )
         }
     }
 
@@ -72,7 +88,13 @@ class AccountViewModel @Inject constructor(
         if (s.currentPassword.isBlank() || s.newPassword.isBlank() || s.newPassword != s.confirmPassword) return
         viewModelScope.launch {
             authClient.changePassword(s.currentPassword, s.newPassword)
-            _uiState.update { it.copy(currentPassword = "", newPassword = "", confirmPassword = "") }
+            _uiState.update {
+                it.copy(
+                    currentPassword = "",
+                    newPassword = "",
+                    confirmPassword = ""
+                )
+            }
         }
     }
 }

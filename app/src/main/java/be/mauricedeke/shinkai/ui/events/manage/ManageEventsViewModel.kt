@@ -34,7 +34,14 @@ class ManageEventsViewModel @Inject constructor(
                 _uiState.update { it.copy(isError = true, isRefreshing = false) }
                 return@launch
             }
-            _uiState.update { it.copy(events = result.events, rsvp = result.rsvp, isError = false, isRefreshing = false) }
+            _uiState.update {
+                it.copy(
+                    events = result.events,
+                    rsvp = result.rsvp,
+                    isError = false,
+                    isRefreshing = false
+                )
+            }
         }
     }
 

@@ -8,9 +8,10 @@ data class LexiconUiState(
     val isError: Boolean = false,
     val isRefreshing: Boolean = false
 ) {
-    val filteredEntries: List<LexiconEntry> get() = entries.filter {
-        searchQuery.isBlank() ||
-        it.japaneseWord.contains(searchQuery, ignoreCase = true) ||
-        it.translation.contains(searchQuery, ignoreCase = true)
-    }
+    val filteredEntries: List<LexiconEntry>
+        get() = entries.filter {
+            searchQuery.isBlank() ||
+                    it.japaneseWord.contains(searchQuery, ignoreCase = true) ||
+                    it.translation.contains(searchQuery, ignoreCase = true)
+        }
 }

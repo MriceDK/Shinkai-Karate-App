@@ -34,7 +34,9 @@ fun LocationScreen(
 ) {
     val s = uiState.settings
     Box(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize().padding(top = 64.dp)) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 64.dp)) {
             HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
             Text(
                 "Manage Location Data Usage",
@@ -103,7 +105,12 @@ fun LocationScreenAllDisabledPreview() {
     }
 }
 
-@Preview(name = "Dark — partial", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — partial",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun LocationScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {

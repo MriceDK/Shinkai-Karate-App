@@ -62,8 +62,13 @@ fun LogTrainingSheet(
     val endHour = defaultEnd.substringBefore(":").toIntOrNull() ?: 21
     val endMinute = defaultEnd.substringAfter(":").toIntOrNull() ?: 0
 
-    val startPickerState = rememberTimePickerState(initialHour = startHour, initialMinute = startMinute, is24Hour = true)
-    val endPickerState = rememberTimePickerState(initialHour = endHour, initialMinute = endMinute, is24Hour = true)
+    val startPickerState = rememberTimePickerState(
+        initialHour = startHour,
+        initialMinute = startMinute,
+        is24Hour = true
+    )
+    val endPickerState =
+        rememberTimePickerState(initialHour = endHour, initialMinute = endMinute, is24Hour = true)
 
     if (showStartPicker) {
         AlertDialog(
@@ -134,7 +139,10 @@ fun LogTrainingSheet(
                 singleLine = true
             )
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
                 Box(modifier = Modifier.weight(1f)) {
                     OutlinedTextField(
                         value = startTime,
@@ -143,7 +151,9 @@ fun LogTrainingSheet(
                         label = { Text("Van") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Box(modifier = Modifier.matchParentSize().clickable { showStartPicker = true })
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .clickable { showStartPicker = true })
                 }
                 Box(modifier = Modifier.weight(1f)) {
                     OutlinedTextField(
@@ -153,7 +163,9 @@ fun LogTrainingSheet(
                         label = { Text("Tot") },
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Box(modifier = Modifier.matchParentSize().clickable { showEndPicker = true })
+                    Box(modifier = Modifier
+                        .matchParentSize()
+                        .clickable { showEndPicker = true })
                 }
             }
 

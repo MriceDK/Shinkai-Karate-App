@@ -24,7 +24,7 @@ class GeocodingRepositoryImpl @Inject constructor() : GeocodingRepository {
         val token = MapboxOptions.accessToken
         val encoded = Uri.encode(query)
         val url = "https://api.mapbox.com/geocoding/v5/mapbox.places/$encoded.json" +
-            "?access_token=$token&limit=1"
+                "?access_token=$token&limit=1"
 
         return suspendCancellableCoroutine { cont ->
             val call = client.newCall(Request.Builder().url(url).build())

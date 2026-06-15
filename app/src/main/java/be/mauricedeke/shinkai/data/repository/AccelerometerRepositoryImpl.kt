@@ -34,6 +34,7 @@ class AccelerometerRepositoryImpl @Inject constructor(
             val impact = (magnitude - SensorManager.GRAVITY_EARTH).coerceAtLeast(0f)
             _impact.tryEmit(impact)
         }
+
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 

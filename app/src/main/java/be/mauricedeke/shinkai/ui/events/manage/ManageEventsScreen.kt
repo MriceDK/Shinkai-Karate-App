@@ -52,68 +52,68 @@ fun ManageEventsScreen(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {
-    androidx.compose.foundation.layout.Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp)
-        ) {
-            Spacer(Modifier.height(48.dp))
-            Text(
-                "Beheer Events",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "Beheer je aanwezigheid voor alle geplande events.",
-                fontSize = 13.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-            Spacer(Modifier.height(24.dp))
-
-            if (uiState.isError) {
+        androidx.compose.foundation.layout.Box(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 24.dp)
+            ) {
                 Spacer(Modifier.height(48.dp))
                 Text(
-                    "Kon events niet laden. Probeer opnieuw.",
-                    fontSize = 14.sp,
-                    color = MaterialTheme.colorScheme.primary,
+                    "Beheer Events",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            } else if (uiState.events.isEmpty()) {
-                Spacer(Modifier.height(48.dp))
+                Spacer(Modifier.height(8.dp))
                 Text(
-                    "Geen events gevonden.",
-                    fontSize = 14.sp,
+                    "Beheer je aanwezigheid voor alle geplande events.",
+                    fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
-            } else {
-                uiState.events.forEachIndexed { index, event ->
-                    if (index > 0) HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-                    EventManageRow(
-                        event = event,
-                        rsvp = uiState.rsvp[event.id],
-                        onRsvp = { attending -> onRsvp(event.id, attending) },
-                        onClick = { onEventClick(event.id) }
+                Spacer(Modifier.height(24.dp))
+
+                if (uiState.isError) {
+                    Spacer(Modifier.height(48.dp))
+                    Text(
+                        "Kon events niet laden. Probeer opnieuw.",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
+                } else if (uiState.events.isEmpty()) {
+                    Spacer(Modifier.height(48.dp))
+                    Text(
+                        "Geen events gevonden.",
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                } else {
+                    uiState.events.forEachIndexed { index, event ->
+                        if (index > 0) HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
+                        EventManageRow(
+                            event = event,
+                            rsvp = uiState.rsvp[event.id],
+                            onRsvp = { attending -> onRsvp(event.id, attending) },
+                            onClick = { onEventClick(event.id) }
+                        )
+                    }
                 }
+
+                Spacer(Modifier.height(24.dp))
             }
 
-            Spacer(Modifier.height(24.dp))
+            RoundBackButton(
+                onClick = onBackClick,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(start = 16.dp, top = 8.dp)
+            )
         }
-
-        RoundBackButton(
-            onClick = onBackClick,
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(start = 16.dp, top = 8.dp)
-        )
-    }
     } // PullToRefreshBox
 }
 
@@ -131,7 +131,11 @@ private fun EventManageRow(
         modifier = Modifier
             .fillMaxWidth()
             .then(
-                if (!isUpcoming) Modifier.background(Color(MaterialTheme.colorScheme.primary.value).copy(alpha = 0.20f), RoundedCornerShape(12.dp))
+                if (!isUpcoming) Modifier.background(
+                    Color(MaterialTheme.colorScheme.primary.value).copy(
+                        alpha = 0.20f
+                    ), RoundedCornerShape(12.dp)
+                )
                 else Modifier
             )
             .padding(vertical = 12.dp)
@@ -144,26 +148,28 @@ private fun EventManageRow(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f).clickable(onClick = onClick)) {
+            Column(modifier = Modifier
+                .weight(1f)
+                .clickable(onClick = onClick)) {
                 Text(
                     event.title,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 15.sp,
                     color = if (isUpcoming) MaterialTheme.colorScheme.onSurface
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
                 Text(
                     "${event.date}  •  ${event.startTime} – ${event.endTime}",
                     fontSize = 12.sp,
                     color = if (isUpcoming) MaterialTheme.colorScheme.onSurfaceVariant
-                            else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                    else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
                 )
                 if (event.city.isNotBlank()) {
                     Text(
                         event.city,
                         fontSize = 12.sp,
                         color = if (isUpcoming) MaterialTheme.colorScheme.onSurfaceVariant
-                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
+                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f)
                     )
                 }
             }
@@ -174,7 +180,10 @@ private fun EventManageRow(
                     fontWeight = FontWeight.Medium,
                     color = Color.White,
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.65f), RoundedCornerShape(50))
+                        .background(
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.65f),
+                            RoundedCornerShape(50)
+                        )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 )
             }
@@ -271,7 +280,11 @@ private fun ManageEventsScreenPreview() {
         ManageEventsScreen(
             uiState = ManageEventsUiState(
                 events = previewEvents,
-                rsvp = mapOf(previewEventId1 to true, previewEventId2 to false, previewEventId4 to true),
+                rsvp = mapOf(
+                    previewEventId1 to true,
+                    previewEventId2 to false,
+                    previewEventId4 to true
+                ),
                 isError = false
             ),
             onRsvp = { _, _ -> },

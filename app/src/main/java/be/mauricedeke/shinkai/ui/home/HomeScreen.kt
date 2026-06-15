@@ -73,129 +73,142 @@ fun HomeScreen(
         onRefresh = onRefresh,
         modifier = modifier.fillMaxSize()
     ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-            .padding(vertical = 16.dp)
-    ) {
-        Spacer(Modifier.height(16.dp))
-
-        EventSection(title = "UPCOMING EVENTS") {
-            if (uiState.isEventsError) {
-                Text(
-                    "Kon events niet laden. Probeer opnieuw.",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                )
-            } else if (upcomingEvents.isEmpty()) {
-                Text(
-                    "Geen aankomende events.",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                )
-            } else {
-                upcomingEvents.forEach { event ->
-                    EventRow(
-                        "${event.startTime} - ${event.endTime}",
-                        event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM")) ?: event.date,
-                        event.title,
-                        event.location,
-                        onClick = { onEventClick(event.id) })
-                }
-            }
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        EventSection(title = "VOLGENDE TRAINING") {
-            when {
-                uiState.isTrainingError -> Text(
-                    "Kon training niet laden. Probeer opnieuw.",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                )
-                nextTraining == null -> Text(
-                    "Geen aankomende trainingen.",
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
-                )
-                else -> EventRow(
-                    "${nextTraining.startTime} - ${nextTraining.endTime}",
-                    nextTraining.date.format(DateTimeFormatter.ofPattern("dd/MM")),
-                    nextTraining.type,
-                    nextTraining.location,
-                    onClick = { onTrainingClick(nextTraining.id) },
-                )
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+                .padding(vertical = 16.dp)
         ) {
-            Text(
-                "SHORTCUTS",
-                fontWeight = FontWeight.Bold,
-                textDecoration = TextDecoration.Underline,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.primaryContainer
-            )
-            Spacer(Modifier.weight(1f))
-            Button(
-                onClick = { showEditSheet = true },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                shape = RoundedCornerShape(4.dp),
-                modifier = Modifier.height(32.dp)
-            ) { Text("Edit", fontSize = 13.sp) }
-        }
+            Spacer(Modifier.height(16.dp))
 
-        Spacer(Modifier.height(8.dp))
-
-        Column(modifier = Modifier.padding(horizontal = 8.dp)) {
-            val shortcuts = uiState.shortcuts
-            shortcuts.chunked(2).forEach { rowItems ->
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    rowItems.forEachIndexed { index, shortcut ->
-                        if (index > 0) Spacer(Modifier.width(8.dp))
-                        ShortcutCard(
-                            shortcut.label,
-                            painterResource(shortcut.iconRes),
-                            Modifier.weight(1f)
-                        ) { onNavigate(shortcut.route) }
-                    }
-                    if (rowItems.size == 1) {
-                        Spacer(Modifier.width(8.dp))
-                        Spacer(Modifier.weight(1f))
+            EventSection(title = "UPCOMING EVENTS") {
+                if (uiState.isEventsError) {
+                    Text(
+                        "Kon events niet laden. Probeer opnieuw.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+                } else if (upcomingEvents.isEmpty()) {
+                    Text(
+                        "Geen aankomende events.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+                } else {
+                    upcomingEvents.forEach { event ->
+                        EventRow(
+                            "${event.startTime} - ${event.endTime}",
+                            event.localDate?.format(DateTimeFormatter.ofPattern("dd/MM"))
+                                ?: event.date,
+                            event.title,
+                            event.location,
+                            onClick = { onEventClick(event.id) })
                     }
                 }
-                if (shortcuts.chunked(2).last() != rowItems) Spacer(Modifier.height(8.dp))
             }
-        }
 
-        Spacer(Modifier.height(16.dp))
-    }
+            Spacer(Modifier.height(8.dp))
+
+            EventSection(title = "VOLGENDE TRAINING") {
+                when {
+                    uiState.isTrainingError -> Text(
+                        "Kon training niet laden. Probeer opnieuw.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+
+                    nextTraining == null -> Text(
+                        "Geen aankomende trainingen.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp)
+                    )
+
+                    else -> EventRow(
+                        "${nextTraining.startTime} - ${nextTraining.endTime}",
+                        nextTraining.date.format(DateTimeFormatter.ofPattern("dd/MM")),
+                        nextTraining.type,
+                        nextTraining.location,
+                        onClick = { onTrainingClick(nextTraining.id) },
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    "SHORTCUTS",
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = TextDecoration.Underline,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
+                Spacer(Modifier.weight(1f))
+                Button(
+                    onClick = { showEditSheet = true },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    shape = RoundedCornerShape(4.dp),
+                    modifier = Modifier.height(32.dp)
+                ) { Text("Edit", fontSize = 13.sp) }
+            }
+
+            Spacer(Modifier.height(8.dp))
+
+            Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+                val shortcuts = uiState.shortcuts
+                shortcuts.chunked(2).forEach { rowItems ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        rowItems.forEachIndexed { index, shortcut ->
+                            if (index > 0) Spacer(Modifier.width(8.dp))
+                            ShortcutCard(
+                                shortcut.label,
+                                painterResource(shortcut.iconRes),
+                                Modifier.weight(1f)
+                            ) { onNavigate(shortcut.route) }
+                        }
+                        if (rowItems.size == 1) {
+                            Spacer(Modifier.width(8.dp))
+                            Spacer(Modifier.weight(1f))
+                        }
+                    }
+                    if (shortcuts.chunked(2).last() != rowItems) Spacer(Modifier.height(8.dp))
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
+        }
     }
 }
 
 @Composable
 private fun EventSection(title: String, content: @Composable () -> Unit) {
-    Column(modifier = Modifier
-        .background(MaterialTheme.colorScheme.background)
-        .padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
         Text(
             title,
             fontWeight = FontWeight.Bold,
@@ -254,27 +267,34 @@ fun HomeScreenEmptyPreview() {
 @Composable
 fun HomeScreenWithDataPreview() {
     ShinkaikarateappTheme {
-        HomeScreen(uiState = HomeUiState(
-            upcomingEvents = listOf(
-                be.mauricedeke.shinkai.domain.model.Event(
-                    id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
-                    startTime = "09:00", endTime = "12:00",
-                    date = "2026-06-15", location = "Sporthal Brugge"
+        HomeScreen(
+            uiState = HomeUiState(
+                upcomingEvents = listOf(
+                    be.mauricedeke.shinkai.domain.model.Event(
+                        id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
+                        startTime = "09:00", endTime = "12:00",
+                        date = "2026-06-15", location = "Sporthal Brugge"
+                    ),
+                    be.mauricedeke.shinkai.domain.model.Event(
+                        id = java.util.UUID.randomUUID(), title = "Examen Geel",
+                        startTime = "14:00", endTime = "16:00",
+                        date = "2026-06-22", location = "Dojo Gent"
+                    )
                 ),
-                be.mauricedeke.shinkai.domain.model.Event(
-                    id = java.util.UUID.randomUUID(), title = "Examen Geel",
-                    startTime = "14:00", endTime = "16:00",
-                    date = "2026-06-22", location = "Dojo Gent"
+                nextTraining = TrainingSession(
+                    type = "Technieken",
+                    startTime = "20:00", endTime = "22:00",
+                    date = java.time.LocalDate.now(),
+                    sensei = "Sensei Kim"
+                ),
+                shortcuts = listOf(
+                    ShortcutId.EVENTS,
+                    ShortcutId.TECHNIEKEN,
+                    ShortcutId.STRENGTH_TEST,
+                    ShortcutId.TRAINING_HISTORY
                 )
-            ),
-            nextTraining = TrainingSession(
-                type = "Technieken",
-                startTime = "20:00", endTime = "22:00",
-                date = java.time.LocalDate.now(),
-                sensei = "Sensei Kim"
-            ),
-            shortcuts = listOf(ShortcutId.EVENTS, ShortcutId.TECHNIEKEN, ShortcutId.STRENGTH_TEST, ShortcutId.TRAINING_HISTORY)
-        ))
+            )
+        )
     }
 }
 
@@ -286,22 +306,29 @@ fun HomeScreenErrorPreview() {
     }
 }
 
-@Preview(name = "Dark — with data", showBackground = true, showSystemUi = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    name = "Dark — with data",
+    showBackground = true,
+    showSystemUi = true,
+    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun HomeScreenDarkPreview() {
     ShinkaikarateappTheme(darkTheme = true) {
-        HomeScreen(uiState = HomeUiState(
-            upcomingEvents = listOf(
-                be.mauricedeke.shinkai.domain.model.Event(
-                    id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
-                    startTime = "09:00", endTime = "12:00",
-                    date = "2026-06-15", location = "Sporthal Brugge"
+        HomeScreen(
+            uiState = HomeUiState(
+                upcomingEvents = listOf(
+                    be.mauricedeke.shinkai.domain.model.Event(
+                        id = java.util.UUID.randomUUID(), title = "Stage Naigairyu",
+                        startTime = "09:00", endTime = "12:00",
+                        date = "2026-06-15", location = "Sporthal Brugge"
+                    )
+                ),
+                nextTraining = TrainingSession(
+                    type = "Kata", startTime = "19:00", endTime = "21:00",
+                    date = java.time.LocalDate.now()
                 )
-            ),
-            nextTraining = TrainingSession(
-                type = "Kata", startTime = "19:00", endTime = "21:00",
-                date = java.time.LocalDate.now()
             )
-        ))
+        )
     }
 }

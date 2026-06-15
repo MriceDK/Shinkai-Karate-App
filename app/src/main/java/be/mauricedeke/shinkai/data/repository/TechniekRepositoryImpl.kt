@@ -80,7 +80,13 @@ class TechniekRepositoryImpl @Inject constructor(
 
     override suspend fun getTechnieksByBelt(belt: String): List<Techniek> =
         techniekDao.getByBelt(belt).map { t ->
-            Techniek(id = UUID.randomUUID(), name = t.name, belt = t.beltName, description = t.description, programma = t.programma)
+            Techniek(
+                id = UUID.randomUUID(),
+                name = t.name,
+                belt = t.beltName,
+                description = t.description,
+                programma = t.programma
+            )
         }
 
     private fun BeltDto.toEntity() = BeltEntity(
@@ -94,9 +100,16 @@ class TechniekRepositoryImpl @Inject constructor(
         return Belt(
             name = name,
             beltColor = runCatching { BeltColor.valueOf(beltColor) }.getOrElse { BeltColor.YELLOW },
-            pogramma = BeltProgram(programme?.sections?.map { ProgramSection(it.title, it.items) } ?: emptyList()),
+            pogramma = BeltProgram(programme?.sections?.map { ProgramSection(it.title, it.items) }
+                ?: emptyList()),
             technieken = technieken.map { t ->
-                Techniek(id = UUID.randomUUID(), name = t.name, belt = t.beltName, description = t.description, programma = t.programma)
+                Techniek(
+                    id = UUID.randomUUID(),
+                    name = t.name,
+                    belt = t.beltName,
+                    description = t.description,
+                    programma = t.programma
+                )
             },
             notes = ""
         )

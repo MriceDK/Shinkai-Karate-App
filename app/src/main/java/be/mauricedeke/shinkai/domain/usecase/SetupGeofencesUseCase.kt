@@ -24,7 +24,7 @@ class SetupGeofencesUseCase @Inject constructor(
         val items = eventRepository.getEvents()
             ?.filter { event ->
                 event.lat != null && event.lng != null &&
-                (event.localDate == null || !event.localDate.isBefore(today))
+                        (event.localDate == null || !event.localDate.isBefore(today))
             }
             ?.map { event ->
                 GeofenceItem(

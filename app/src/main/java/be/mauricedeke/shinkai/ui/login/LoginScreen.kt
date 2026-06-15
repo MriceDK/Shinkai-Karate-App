@@ -233,9 +233,11 @@ fun LoginScreenLoadingPreview() {
 @Composable
 fun LoginScreenErrorPreview() {
     ShinkaikarateappTheme {
-        LoginScreen(uiState = LoginUiState(
-            email = "test@test.com",
-            errorMessage = "Ongeldige inloggegevens."
-        ))
+        LoginScreen(
+            uiState = LoginUiState(
+                email = "test@test.com",
+                errorMessage = "Ongeldige inloggegevens."
+            )
+        )
     }
 }

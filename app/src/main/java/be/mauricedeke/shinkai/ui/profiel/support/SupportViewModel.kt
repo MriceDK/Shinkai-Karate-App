@@ -36,7 +36,14 @@ class SupportViewModel @Inject constructor(
         viewModelScope.launch {
             createSupportTicket(state.subject.trim(), state.message.trim())
                 .onSuccess { _uiState.update { it.copy(isSending = false, isSuccess = true) } }
-                .onFailure { _uiState.update { it.copy(isSending = false, errorMessage = "Versturen mislukt. Probeer opnieuw.") } }
+                .onFailure {
+                    _uiState.update {
+                        it.copy(
+                            isSending = false,
+                            errorMessage = "Versturen mislukt. Probeer opnieuw."
+                        )
+                    }
+                }
         }
     }
 

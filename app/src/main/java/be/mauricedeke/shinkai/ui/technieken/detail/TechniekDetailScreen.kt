@@ -30,10 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
@@ -92,7 +92,11 @@ fun TechniekDetailScreen(
                                 MaterialTheme.colorScheme.surface,
                                 RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
                             )
-                            .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
+                            .border(
+                                1.dp,
+                                MaterialTheme.colorScheme.primary,
+                                RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                            )
                             .padding(16.dp)
                     ) {
                         if (t.description.isNotEmpty()) {
@@ -220,9 +224,21 @@ private val previewYellowProgram = listOf(
 )
 
 private val previewYellowTechnieken = listOf(
-    Techniek(name = "Oi-zuki", belt = "Geel", description = "Stap-stoot: stap naar voren en stoot met de voorste hand."),
-    Techniek(name = "Gedan-barai", belt = "Geel", description = "Lage blok: zwaai de onderarm neer om een lage aanval te blokken."),
-    Techniek(name = "Age-uke", belt = "Geel", description = "Hoge opwaartse blok ter bescherming van het hoofd.")
+    Techniek(
+        name = "Oi-zuki",
+        belt = "Geel",
+        description = "Stap-stoot: stap naar voren en stoot met de voorste hand."
+    ),
+    Techniek(
+        name = "Gedan-barai",
+        belt = "Geel",
+        description = "Lage blok: zwaai de onderarm neer om een lage aanval te blokken."
+    ),
+    Techniek(
+        name = "Age-uke",
+        belt = "Geel",
+        description = "Hoge opwaartse blok ter bescherming van het hoofd."
+    )
 )
 
 @Preview(name = "Yellow belt — with techniques", showBackground = true, showSystemUi = true)
@@ -252,8 +268,16 @@ fun TechniekDetailBlackPreview() {
                     ProgramSection("Bunkai", listOf("Toepassingen op alle kata"))
                 ),
                 technieken = listOf(
-                    Techniek(name = "Gyaku-zuki", belt = "Zwart", description = "Tegenstoot: stoot met de achterste hand."),
-                    Techniek(name = "Mawashi-geri", belt = "Zwart", description = "Draaiende trap naar het hoofd of de romp.")
+                    Techniek(
+                        name = "Gyaku-zuki",
+                        belt = "Zwart",
+                        description = "Tegenstoot: stoot met de achterste hand."
+                    ),
+                    Techniek(
+                        name = "Mawashi-geri",
+                        belt = "Zwart",
+                        description = "Draaiende trap naar het hoofd of de romp."
+                    )
                 ),
                 notes = "Focus op heupbeweging bij mawashi-geri. Kata tempo oefenen met sensei."
             )

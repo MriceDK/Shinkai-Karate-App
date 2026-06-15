@@ -18,7 +18,8 @@ class LavinMQMessageConsumer(
 ) : MessageConsumer {
     private var consumerJob: Job? = null
 
-    override var onMessageReceived: (String) -> Unit = { Log.w("Messagebroker", "onMessageReceived not set") }
+    override var onMessageReceived: (String) -> Unit =
+        { Log.w("Messagebroker", "onMessageReceived not set") }
 
     override fun startConsuming(userId: String) {
         consumerJob = CoroutineScope(Dispatchers.IO).launch {

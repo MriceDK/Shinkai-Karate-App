@@ -48,7 +48,9 @@ fun StrengthTestScreen(
     modifier: Modifier = Modifier
 ) {
     val isDark = isSystemInDarkTheme()
-    Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+    Box(modifier = modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)) {
         if (uiState.isError) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(
@@ -67,7 +69,8 @@ fun StrengthTestScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(uiState.results) { result ->
-                    val beltColor = result.beltColor?.toColor(isDark) ?: MaterialTheme.colorScheme.primary
+                    val beltColor =
+                        result.beltColor?.toColor(isDark) ?: MaterialTheme.colorScheme.primary
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -78,7 +81,9 @@ fun StrengthTestScreen(
                     ) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier.padding(24.dp).fillMaxWidth()
+                            modifier = Modifier
+                                .padding(24.dp)
+                                .fillMaxWidth()
                         ) {
                             Text(
                                 result.type,

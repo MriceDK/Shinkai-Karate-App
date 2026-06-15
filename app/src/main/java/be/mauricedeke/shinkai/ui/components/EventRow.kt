@@ -38,7 +38,12 @@ fun EventRow(
         horizontalArrangement = Arrangement.Center
     ) {
         Column(modifier = Modifier.width(100.dp)) {
-            Text(time, fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                time,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Text(date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
         }
         Box(

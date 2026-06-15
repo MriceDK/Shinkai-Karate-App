@@ -38,13 +38,26 @@ class EventsViewModel @Inject constructor(
             val events = getEvents()
 
             if (events == null) {
-                _uiState.update { it.copy(isError = true, isRefreshing = false, selectedDate = it.selectedDate ?: today) }
+                _uiState.update {
+                    it.copy(
+                        isError = true,
+                        isRefreshing = false,
+                        selectedDate = it.selectedDate ?: today
+                    )
+                }
                 return@launch
             }
 
             cachedEvents = events
             val rsvp = events.associate { it.id to it.rsvp }
-            _uiState.update { it.copy(rsvp = rsvp, selectedDate = today, isError = false, isRefreshing = false) }
+            _uiState.update {
+                it.copy(
+                    rsvp = rsvp,
+                    selectedDate = today,
+                    isError = false,
+                    isRefreshing = false
+                )
+            }
             applyEventLists(rsvp)
         }
     }

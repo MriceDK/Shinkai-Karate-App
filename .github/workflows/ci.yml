@@ -6,7 +6,8 @@ on:
     branches: [main]
 
 jobs:
-  # COMMENTED OUT UNIT TEST JOBS CAUSE IT TAKES TO DAMN LONG RUN THEMN LOCALLY
+  # COMMENTED OUT UNIT TEST JOBS CAUSE IT TAKES TO DAMN LONG
+  # RUN THEMN LOCALLY
 #  unit_testing:
 #    name: Run Unit Tests
 #    runs-on: ubuntu-latest

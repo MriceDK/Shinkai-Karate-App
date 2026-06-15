@@ -27,8 +27,9 @@ class HomeViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val storedIds = getShortcuts()
-            val shortcuts = storedIds.mapNotNull { runCatching { ShortcutId.valueOf(it) }.getOrNull() }
-                .ifEmpty { defaultShortcuts }
+            val shortcuts =
+                storedIds.mapNotNull { runCatching { ShortcutId.valueOf(it) }.getOrNull() }
+                    .ifEmpty { defaultShortcuts }
             _uiState.update { it.copy(shortcuts = shortcuts) }
         }
         load()
@@ -36,7 +37,13 @@ class HomeViewModel @Inject constructor(
 
     fun load() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isEventsError = false, isTrainingError = false, isRefreshing = true) }
+            _uiState.update {
+                it.copy(
+                    isEventsError = false,
+                    isTrainingError = false,
+                    isRefreshing = true
+                )
+            }
             val upcomingEvents = getHomeUpcomingEvents()
             val nextTrainingResult = getNextTraining()
             _uiState.update {
@@ -55,7 +62,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val currentIds = _uiState.value.shortcuts.map { it.name }
             val newIds = toggleShortcutUseCase(currentIds, id.name, MAX_SHORTCUTS)
-            val newShortcuts = newIds.mapNotNull { runCatching { ShortcutId.valueOf(it) }.getOrNull() }
+            val newShortcuts =
+                newIds.mapNotNull { runCatching { ShortcutId.valueOf(it) }.getOrNull() }
             _uiState.update { it.copy(shortcuts = newShortcuts) }
         }
     }

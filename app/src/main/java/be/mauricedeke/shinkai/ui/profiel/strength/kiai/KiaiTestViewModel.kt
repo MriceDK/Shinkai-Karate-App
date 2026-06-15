@@ -37,7 +37,15 @@ class KiaiTestViewModel @Inject constructor(
         val startTime = System.currentTimeMillis()
         var sessionPeakRms = 0
 
-        _uiState.update { it.copy(phase = MeasurementPhase.MEASURING, currentDb = 0, peakDb = 0, resultBelt = null, progress = 0f) }
+        _uiState.update {
+            it.copy(
+                phase = MeasurementPhase.MEASURING,
+                currentDb = 0,
+                peakDb = 0,
+                resultBelt = null,
+                progress = 0f
+            )
+        }
         microphoneRepository.start()
 
         measurementJob = viewModelScope.launch {
@@ -82,7 +90,15 @@ class KiaiTestViewModel @Inject constructor(
     fun onReset() {
         measurementJob?.cancel()
         microphoneRepository.stop()
-        _uiState.update { it.copy(phase = MeasurementPhase.IDLE, currentDb = 0, peakDb = 0, resultBelt = null, progress = 0f) }
+        _uiState.update {
+            it.copy(
+                phase = MeasurementPhase.IDLE,
+                currentDb = 0,
+                peakDb = 0,
+                resultBelt = null,
+                progress = 0f
+            )
+        }
     }
 
     override fun onCleared() {

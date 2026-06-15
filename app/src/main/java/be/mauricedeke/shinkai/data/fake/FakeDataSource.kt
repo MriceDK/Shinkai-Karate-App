@@ -104,30 +104,212 @@ object FakeDataSource {
 
     val trainings: MutableList<Training> = mutableListOf(
         // June 2026
-        Training(UUID.randomUUID(),  "Technieken",  "20:00", "22:00", LocalDate.now().plusDays(2),   "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Technieken",  "20:00", "22:00", LocalDate.now().plusDays(2),   "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(),  "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(2),  "Geen",              "Sensei Ludo",  note = "Goede sessie vandaag. Gyaku-zuki combinaties zijn verbeterd."),
-        Training(UUID.randomUUID(),  "Kata",        "20:00", "22:00", LocalDate.now().minusDays(4),  "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(),  "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(7),  "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(),  "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(9),  "Pols — licht",      "Sensei Yuki",  note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."),
-        Training(UUID.randomUUID(), "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(9),  "Pols — licht",      "Sensei Yuki",  note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().plusDays(2),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().plusDays(2),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kumite",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(2),
+            "Geen",
+            "Sensei Ludo",
+            note = "Goede sessie vandaag. Gyaku-zuki combinaties zijn verbeterd."
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kata",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(4),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Conditie",
+            "19:30",
+            "21:00",
+            LocalDate.now().minusDays(7),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(9),
+            "Pols — licht",
+            "Sensei Yuki",
+            note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(9),
+            "Pols — licht",
+            "Sensei Yuki",
+            note = "Pols voelt nog wat stijf. Minder kracht gezet op stoot."
+        ),
         // May 2026
-        Training(UUID.randomUUID(),  "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(12), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(),  "Kata",        "20:00", "22:00", LocalDate.now().minusDays(14), "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(),  "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(16), "Schouder — licht",  "Sensei Ludo",  note = "Schouder blessure tijdens uke-waza. Volgende training voorzichtig zijn."),
-        Training(UUID.randomUUID(),  "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(19), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Kata",        "19:00", "21:00", LocalDate.now().minusDays(21), "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(), "Kumite",      "20:00", "22:00", LocalDate.now().minusDays(23), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(26), "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(), "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(28), "Knie — licht",      "Sensei Ludo",  note = "Kniepijn bij laag gedeelte kata. Vraag naar aanpassingen."),
+        Training(
+            UUID.randomUUID(),
+            "Kumite",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(12),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kata",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(14),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(16),
+            "Schouder — licht",
+            "Sensei Ludo",
+            note = "Schouder blessure tijdens uke-waza. Volgende training voorzichtig zijn."
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Conditie",
+            "19:30",
+            "21:00",
+            LocalDate.now().minusDays(19),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kata",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(21),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kumite",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(23),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(26),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Conditie",
+            "19:30",
+            "21:00",
+            LocalDate.now().minusDays(28),
+            "Knie — licht",
+            "Sensei Ludo",
+            note = "Kniepijn bij laag gedeelte kata. Vraag naar aanpassingen."
+        ),
         // April 2026
-        Training(UUID.randomUUID(), "Kata",        "19:00", "21:00", LocalDate.now().minusDays(33), "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(), "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(35), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Kumite",      "19:00", "21:00", LocalDate.now().minusDays(38), "Geen",              "Sensei Yuki"),
-        Training(UUID.randomUUID(), "Conditie",    "19:30", "21:00", LocalDate.now().minusDays(40), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Technieken",  "20:00", "22:00", LocalDate.now().minusDays(42), "Rug — licht",       "Sensei Yuki",  note = "Rug pijn na conditietraining. Ibuprofen genomen."),
-        Training(UUID.randomUUID(), "Kata",        "19:00", "21:00", LocalDate.now().minusDays(47), "Geen",              "Sensei Ludo"),
-        Training(UUID.randomUUID(), "Kumite",      "20:00", "22:00", LocalDate.now().minusDays(49), "Geen",              "Sensei Yuki"),
+        Training(
+            UUID.randomUUID(),
+            "Kata",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(33),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(35),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kumite",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(38),
+            "Geen",
+            "Sensei Yuki"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Conditie",
+            "19:30",
+            "21:00",
+            LocalDate.now().minusDays(40),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Technieken",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(42),
+            "Rug — licht",
+            "Sensei Yuki",
+            note = "Rug pijn na conditietraining. Ibuprofen genomen."
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kata",
+            "19:00",
+            "21:00",
+            LocalDate.now().minusDays(47),
+            "Geen",
+            "Sensei Ludo"
+        ),
+        Training(
+            UUID.randomUUID(),
+            "Kumite",
+            "20:00",
+            "22:00",
+            LocalDate.now().minusDays(49),
+            "Geen",
+            "Sensei Yuki"
+        ),
     )
 
     val belts = listOf(
@@ -310,13 +492,43 @@ object FakeDataSource {
     )
 
     val lexiconEntries = listOf(
-        LexiconEntry(UUID.randomUUID(), "Rei", "Buiging / Groet", "Rei is de formele buiging die respect uitdrukt tegenover de sensei, de dojo en de trainingspartner."),
-        LexiconEntry(UUID.randomUUID(), "Dojo", "Trainingsplaats", "De dojo is de ruimte waar karate beoefend wordt. Het woord betekent letterlijk 'plaats van de weg'."),
-        LexiconEntry(UUID.randomUUID(), "Sensei", "Leraar / Meester", "Sensei betekent letterlijk 'degene die voor is gegaan'. Het is de titel voor een karate-instructeur."),
-        LexiconEntry(UUID.randomUUID(), "Karate", "Lege hand", "Karate is een Japanse vechtkunst waarbij gevochten wordt zonder wapens, enkel met de lege hand."),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Rei",
+            "Buiging / Groet",
+            "Rei is de formele buiging die respect uitdrukt tegenover de sensei, de dojo en de trainingspartner."
+        ),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Dojo",
+            "Trainingsplaats",
+            "De dojo is de ruimte waar karate beoefend wordt. Het woord betekent letterlijk 'plaats van de weg'."
+        ),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Sensei",
+            "Leraar / Meester",
+            "Sensei betekent letterlijk 'degene die voor is gegaan'. Het is de titel voor een karate-instructeur."
+        ),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Karate",
+            "Lege hand",
+            "Karate is een Japanse vechtkunst waarbij gevochten wordt zonder wapens, enkel met de lege hand."
+        ),
         LexiconEntry(UUID.randomUUID(), "Kiai", "Strijdkreet"),
-        LexiconEntry(UUID.randomUUID(), "Kata", "Patroon / Vorm", "Een kata is een vaste reeks van technieken die solo uitgevoerd wordt en een gesimuleerde gevechtsscenario voorstelt."),
-        LexiconEntry(UUID.randomUUID(), "Kumite", "Gevecht / Sparring", "Kumite is het vrije of vaste sparren met een partner, waarbij aanvals- en afweertechnieken worden gecombineerd."),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Kata",
+            "Patroon / Vorm",
+            "Een kata is een vaste reeks van technieken die solo uitgevoerd wordt en een gesimuleerde gevechtsscenario voorstelt."
+        ),
+        LexiconEntry(
+            UUID.randomUUID(),
+            "Kumite",
+            "Gevecht / Sparring",
+            "Kumite is het vrije of vaste sparren met een partner, waarbij aanvals- en afweertechnieken worden gecombineerd."
+        ),
         LexiconEntry(UUID.randomUUID(), "Mawashi", "Cirkelbeweging"),
         LexiconEntry(UUID.randomUUID(), "Tsuki", "Stoot"),
         LexiconEntry(UUID.randomUUID(), "Geri", "Trap"),
@@ -341,49 +553,69 @@ object FakeDataSource {
     // GeoJSON: polygons roughly covering each event city
     val dojoZones: List<Feature> = listOf(
         Feature.fromGeometry(
-            Polygon.fromLngLats(listOf(listOf(
-                Point.fromLngLat(3.7077, 51.0919), Point.fromLngLat(3.7277, 51.0919),
-                Point.fromLngLat(3.7277, 51.1119), Point.fromLngLat(3.7077, 51.1119),
-                Point.fromLngLat(3.7077, 51.0919)
-            )))
+            Polygon.fromLngLats(
+                listOf(
+                    listOf(
+                        Point.fromLngLat(3.7077, 51.0919), Point.fromLngLat(3.7277, 51.0919),
+                        Point.fromLngLat(3.7277, 51.1119), Point.fromLngLat(3.7077, 51.1119),
+                        Point.fromLngLat(3.7077, 51.0919)
+                    )
+                )
+            )
         ),
         Feature.fromGeometry(
-            Polygon.fromLngLats(listOf(listOf(
-                Point.fromLngLat(3.7128, 51.0327), Point.fromLngLat(3.7328, 51.0327),
-                Point.fromLngLat(3.7328, 51.0527), Point.fromLngLat(3.7128, 51.0527),
-                Point.fromLngLat(3.7128, 51.0327)
-            )))
+            Polygon.fromLngLats(
+                listOf(
+                    listOf(
+                        Point.fromLngLat(3.7128, 51.0327), Point.fromLngLat(3.7328, 51.0327),
+                        Point.fromLngLat(3.7328, 51.0527), Point.fromLngLat(3.7128, 51.0527),
+                        Point.fromLngLat(3.7128, 51.0327)
+                    )
+                )
+            )
         ),
         Feature.fromGeometry(
-            Polygon.fromLngLats(listOf(listOf(
-                Point.fromLngLat(3.2147, 51.1993), Point.fromLngLat(3.2347, 51.1993),
-                Point.fromLngLat(3.2347, 51.2193), Point.fromLngLat(3.2147, 51.2193),
-                Point.fromLngLat(3.2147, 51.1993)
-            )))
+            Polygon.fromLngLats(
+                listOf(
+                    listOf(
+                        Point.fromLngLat(3.2147, 51.1993), Point.fromLngLat(3.2347, 51.1993),
+                        Point.fromLngLat(3.2347, 51.2193), Point.fromLngLat(3.2147, 51.2193),
+                        Point.fromLngLat(3.2147, 51.1993)
+                    )
+                )
+            )
         ),
         Feature.fromGeometry(
-            Polygon.fromLngLats(listOf(listOf(
-                Point.fromLngLat(4.3925, 51.2094), Point.fromLngLat(4.4125, 51.2094),
-                Point.fromLngLat(4.4125, 51.2294), Point.fromLngLat(4.3925, 51.2294),
-                Point.fromLngLat(4.3925, 51.2094)
-            )))
+            Polygon.fromLngLats(
+                listOf(
+                    listOf(
+                        Point.fromLngLat(4.3925, 51.2094), Point.fromLngLat(4.4125, 51.2094),
+                        Point.fromLngLat(4.4125, 51.2294), Point.fromLngLat(4.3925, 51.2294),
+                        Point.fromLngLat(4.3925, 51.2094)
+                    )
+                )
+            )
         ),
         Feature.fromGeometry(
-            Polygon.fromLngLats(listOf(listOf(
-                Point.fromLngLat(3.3324235, 51.1675755),
-                Point.fromLngLat(3.3327296, 51.1675733),
-                Point.fromLngLat(3.3327332, 51.1677083),
-                Point.fromLngLat(3.3331852, 51.1676971),
-                Point.fromLngLat(3.3331763, 51.1675621),
-                Point.fromLngLat(3.3331176, 51.1675554),
-                Point.fromLngLat(3.3331034, 51.1672987),
-                Point.fromLngLat(3.3330304, 51.1672999),
-                Point.fromLngLat(3.3330339, 51.1671425),
-                Point.fromLngLat(3.3322082, 51.1671503),
-                Point.fromLngLat(3.3322171, 51.1672485),
-                Point.fromLngLat(3.3324182, 51.1672363),
-                Point.fromLngLat(3.3324235, 51.1675755)
-            )))
+            Polygon.fromLngLats(
+                listOf(
+                    listOf(
+                        Point.fromLngLat(3.3324235, 51.1675755),
+                        Point.fromLngLat(3.3327296, 51.1675733),
+                        Point.fromLngLat(3.3327332, 51.1677083),
+                        Point.fromLngLat(3.3331852, 51.1676971),
+                        Point.fromLngLat(3.3331763, 51.1675621),
+                        Point.fromLngLat(3.3331176, 51.1675554),
+                        Point.fromLngLat(3.3331034, 51.1672987),
+                        Point.fromLngLat(3.3330304, 51.1672999),
+                        Point.fromLngLat(3.3330339, 51.1671425),
+                        Point.fromLngLat(3.3322082, 51.1671503),
+                        Point.fromLngLat(3.3322171, 51.1672485),
+                        Point.fromLngLat(3.3324182, 51.1672363),
+                        Point.fromLngLat(3.3324235, 51.1675755)
+                    )
+                )
+            )
         )
     )
 

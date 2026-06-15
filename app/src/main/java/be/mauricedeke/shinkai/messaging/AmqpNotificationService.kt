@@ -98,7 +98,7 @@ class AmqpNotificationService : Service() {
 
     private suspend fun flashLight() {
         try {
-            val cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
             val cameraId = cameraManager.cameraIdList.firstOrNull { id ->
                 cameraManager.getCameraCharacteristics(id)
                     .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
@@ -117,7 +117,11 @@ class AmqpNotificationService : Service() {
     private fun buildForegroundNotification(): Notification {
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         manager.createNotificationChannel(
-            NotificationChannel(SERVICE_CHANNEL_ID, SERVICE_CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW)
+            NotificationChannel(
+                SERVICE_CHANNEL_ID,
+                SERVICE_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_LOW
+            )
         )
         return NotificationCompat.Builder(this, SERVICE_CHANNEL_ID)
             .setContentTitle("ShinKai")

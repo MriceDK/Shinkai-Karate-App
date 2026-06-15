@@ -73,7 +73,12 @@ class KaartViewModel @Inject constructor(
     fun onLocationStop() = locationRepository.stop()
 
     fun onEventSelected(event: Event?) {
-        _uiState.update { it.copy(selectedEvent = event, routeGeometry = if (event != null) null else it.routeGeometry) }
+        _uiState.update {
+            it.copy(
+                selectedEvent = event,
+                routeGeometry = if (event != null) null else it.routeGeometry
+            )
+        }
     }
 
     fun onTrainingSelected(point: TrainingSessionPoint?) {

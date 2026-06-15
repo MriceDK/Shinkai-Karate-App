@@ -32,21 +32,30 @@ class ReminderScheduler @Inject constructor(
         if (settings.eventNotifications && settings.eventReminderEnabled) {
             val events = getEvents() ?: emptyList()
             val now = LocalDateTime.now()
-            Log.d(TAG, "Scheduling event reminders (${settings.reminderMinutesBefore} min before), found ${events.size} events")
+            Log.d(
+                TAG,
+                "Scheduling event reminders (${settings.reminderMinutesBefore} min before), found ${events.size} events"
+            )
             events.forEach { event ->
                 val date = event.localDate ?: run {
                     Log.d(TAG, "Skipping event '${event.title}' — no parseable date")
                     return@forEach
                 }
                 val time = parseTime(event.startTime) ?: run {
-                    Log.d(TAG, "Skipping event '${event.title}' — unparseable startTime '${event.startTime}'")
+                    Log.d(
+                        TAG,
+                        "Skipping event '${event.title}' — unparseable startTime '${event.startTime}'"
+                    )
                     return@forEach
                 }
                 val triggerAt = LocalDateTime.of(date, time)
                     .minusMinutes(settings.reminderMinutesBefore.toLong())
                 val delay = delayMillis(triggerAt, now)
                 if (delay > 0) {
-                    Log.d(TAG, "Scheduled reminder for '${event.title}' in ${delay / 60_000} min (fires at $triggerAt)")
+                    Log.d(
+                        TAG,
+                        "Scheduled reminder for '${event.title}' in ${delay / 60_000} min (fires at $triggerAt)"
+                    )
                     workManager.enqueue(
                         OneTimeWorkRequestBuilder<NotificationWorker>()
                             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -60,7 +69,10 @@ class ReminderScheduler @Inject constructor(
                             .build()
                     )
                 } else {
-                    Log.d(TAG, "Skipping event '${event.title}' — trigger time $triggerAt is in the past")
+                    Log.d(
+                        TAG,
+                        "Skipping event '${event.title}' — trigger time $triggerAt is in the past"
+                    )
                 }
             }
         }
@@ -68,17 +80,26 @@ class ReminderScheduler @Inject constructor(
         if (settings.trainingNotifications && settings.trainingReminderEnabled) {
             val trainings = getAllTrainings() ?: emptyList()
             val now = LocalDateTime.now()
-            Log.d(TAG, "Scheduling training reminders (${settings.trainingReminderMinutesBefore} min before), found ${trainings.size} trainings")
+            Log.d(
+                TAG,
+                "Scheduling training reminders (${settings.trainingReminderMinutesBefore} min before), found ${trainings.size} trainings"
+            )
             trainings.forEach { training ->
                 val time = parseTime(training.startTime) ?: run {
-                    Log.d(TAG, "Skipping training '${training.type}' on ${training.date} — unparseable startTime '${training.startTime}'")
+                    Log.d(
+                        TAG,
+                        "Skipping training '${training.type}' on ${training.date} — unparseable startTime '${training.startTime}'"
+                    )
                     return@forEach
                 }
                 val triggerAt = LocalDateTime.of(training.date, time)
                     .minusMinutes(settings.trainingReminderMinutesBefore.toLong())
                 val delay = delayMillis(triggerAt, now)
                 if (delay > 0) {
-                    Log.d(TAG, "Scheduled reminder for training '${training.type}' on ${training.date} in ${delay / 60_000} min (fires at $triggerAt)")
+                    Log.d(
+                        TAG,
+                        "Scheduled reminder for training '${training.type}' on ${training.date} in ${delay / 60_000} min (fires at $triggerAt)"
+                    )
                     workManager.enqueue(
                         OneTimeWorkRequestBuilder<NotificationWorker>()
                             .setInitialDelay(delay, TimeUnit.MILLISECONDS)
@@ -92,7 +113,10 @@ class ReminderScheduler @Inject constructor(
                             .build()
                     )
                 } else {
-                    Log.d(TAG, "Skipping training '${training.type}' on ${training.date} — trigger time $triggerAt is in the past")
+                    Log.d(
+                        TAG,
+                        "Skipping training '${training.type}' on ${training.date} — trigger time $triggerAt is in the past"
+                    )
                 }
             }
         }

@@ -39,14 +39,23 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(tokenStore: AuthTokenStore, sessionEventBus: SessionEventBus): OkHttpClient =
+    fun provideOkHttpClient(
+        tokenStore: AuthTokenStore,
+        sessionEventBus: SessionEventBus
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .certificatePinner(
                 CertificatePinner.Builder()
                     // Leaf certificate — shinkai.ktsd.dscloud.me
-                    .add("shinkai.ktsd.dscloud.me", "sha256/j8IW9C5CvzfSXbKo7CSKqBpqOpsIgft7Bdkg2BqUn4o=")
+                    .add(
+                        "shinkai.ktsd.dscloud.me",
+                        "sha256/j8IW9C5CvzfSXbKo7CSKqBpqOpsIgft7Bdkg2BqUn4o="
+                    )
                     // Intermediate CA — Let's Encrypt E7 (backup pin: survives leaf renewal)
-                    .add("shinkai.ktsd.dscloud.me", "sha256/y7xVm0TVJNahMr2sZydE2jQH8SquXV9yLF9seROHHHU=")
+                    .add(
+                        "shinkai.ktsd.dscloud.me",
+                        "sha256/y7xVm0TVJNahMr2sZydE2jQH8SquXV9yLF9seROHHHU="
+                    )
                     .build()
             )
             .addInterceptor(HttpLoggingInterceptor().apply {
@@ -54,7 +63,9 @@ object NetworkModule {
             })
             .addInterceptor { chain ->
                 val request = tokenStore.accessToken
-                    ?.let { chain.request().newBuilder().header("Authorization", "Bearer $it").build() }
+                    ?.let {
+                        chain.request().newBuilder().header("Authorization", "Bearer $it").build()
+                    }
                     ?: chain.request()
                 val response = chain.proceed(request)
                 if (response.code == 401) {

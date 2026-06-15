@@ -38,7 +38,11 @@ class MicrophoneRepositoryImpl @Inject constructor() : MicrophoneRepository {
 
         val sampleRate = 44100
         val bufferSize = maxOf(
-            AudioRecord.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT),
+            AudioRecord.getMinBufferSize(
+                sampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT
+            ),
             2048
         )
 
@@ -50,11 +54,16 @@ class MicrophoneRepositoryImpl @Inject constructor() : MicrophoneRepository {
                 AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize
             )
-        } catch (e: SecurityException) { return }
+        } catch (e: SecurityException) {
+            return
+        }
 
-        if (NoiseSuppressor.isAvailable()) NoiseSuppressor.create(recorder.audioSessionId)?.enabled = false
-        if (AutomaticGainControl.isAvailable()) AutomaticGainControl.create(recorder.audioSessionId)?.enabled = false
-        if (AcousticEchoCanceler.isAvailable()) AcousticEchoCanceler.create(recorder.audioSessionId)?.enabled = false
+        if (NoiseSuppressor.isAvailable()) NoiseSuppressor.create(recorder.audioSessionId)?.enabled =
+            false
+        if (AutomaticGainControl.isAvailable()) AutomaticGainControl.create(recorder.audioSessionId)?.enabled =
+            false
+        if (AcousticEchoCanceler.isAvailable()) AcousticEchoCanceler.create(recorder.audioSessionId)?.enabled =
+            false
 
         if (recorder.state != AudioRecord.STATE_INITIALIZED) {
             recorder.release()
