@@ -1,8 +1,8 @@
 package be.mauricedeke.shinkai.domain.usecase
 
 import be.mauricedeke.shinkai.domain.repository.EventRepository
-import be.mauricedeke.shinkai.geofence.GeofenceItem
-import be.mauricedeke.shinkai.geofence.GeofenceManager
+import be.mauricedeke.shinkai.data.geofence.GeofenceItem
+import be.mauricedeke.shinkai.data.geofence.GeofenceManager
 import java.time.LocalDate
 import javax.inject.Inject
 

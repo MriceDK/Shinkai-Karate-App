@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.geofence
+package be.mauricedeke.shinkai.data.geofence
 
 data class PendingLogPrompt(
     val name: String,

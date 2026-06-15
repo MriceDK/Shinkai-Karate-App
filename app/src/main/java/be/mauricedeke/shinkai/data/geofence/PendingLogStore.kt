@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.geofence
+package be.mauricedeke.shinkai.data.geofence
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
