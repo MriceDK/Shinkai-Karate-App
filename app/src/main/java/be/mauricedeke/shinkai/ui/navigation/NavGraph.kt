@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-import be.mauricedeke.shinkai.MainViewModel
+import be.mauricedeke.shinkai.ui.permissions.MainViewModel
 import be.mauricedeke.shinkai.ui.events.EventsScreen
 import be.mauricedeke.shinkai.ui.events.EventsViewModel
 import be.mauricedeke.shinkai.ui.events.detail.EventDetailScreen

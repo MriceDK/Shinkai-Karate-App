@@ -1,22 +1,18 @@
-package be.mauricedeke.shinkai
+package be.mauricedeke.shinkai.ui.permissions
 
-import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import be.mauricedeke.shinkai.data.messaging.AmqpServiceController
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
-import be.mauricedeke.shinkai.geofence.PendingLogPrompt
-import be.mauricedeke.shinkai.geofence.PendingLogStore
-import be.mauricedeke.shinkai.messaging.AmqpNotificationService
-import be.mauricedeke.shinkai.messaging.InAppNotification
-import be.mauricedeke.shinkai.messaging.NotificationEventBus
-import be.mauricedeke.shinkai.ui.permissions.AppPermission
+import be.mauricedeke.shinkai.data.geofence.PendingLogPrompt
+import be.mauricedeke.shinkai.data.geofence.PendingLogStore
+import be.mauricedeke.shinkai.data.messaging.InAppNotification
+import be.mauricedeke.shinkai.data.messaging.NotificationEventBus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -28,14 +24,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val notificationEventBus: NotificationEventBus,
     private val restoreSession: RestoreSessionUseCase,
     private val clearSession: ClearSessionUseCase,
     private val sessionEventBus: SessionEventBus,
     private val scheduleReminders: ScheduleRemindersUseCase,
     private val setupGeofences: SetupGeofencesUseCase,
-    private val pendingLogStore: PendingLogStore
+    private val pendingLogStore: PendingLogStore,
+    private val amqpServiceController: AmqpServiceController
 ) : ViewModel() {
 
     private val _inAppNotification = MutableSharedFlow<InAppNotification>()
@@ -58,7 +54,7 @@ class MainViewModel @Inject constructor(
             if (authenticated == true) {
                 scheduleReminders()
                 setupGeofences()
-                startAmqpService()
+                amqpServiceController.start()
             }
         }
         viewModelScope.launch {
@@ -79,11 +75,7 @@ class MainViewModel @Inject constructor(
             scheduleReminders()
             setupGeofences()
         }
-        startAmqpService()
-    }
-
-    fun startAmqpService() {
-        context.startForegroundService(Intent(context, AmqpNotificationService::class.java))
+        amqpServiceController.start()
     }
 
     fun requestPermission(permission: AppPermission) {

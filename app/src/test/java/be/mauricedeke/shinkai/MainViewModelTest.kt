@@ -1,15 +1,16 @@
 package be.mauricedeke.shinkai
 
-import android.content.Context
+import be.mauricedeke.shinkai.data.messaging.AmqpServiceController
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.domain.usecase.ClearSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.RestoreSessionUseCase
 import be.mauricedeke.shinkai.domain.usecase.ScheduleRemindersUseCase
 import be.mauricedeke.shinkai.domain.usecase.SetupGeofencesUseCase
-import be.mauricedeke.shinkai.geofence.PendingLogPrompt
-import be.mauricedeke.shinkai.geofence.PendingLogStore
-import be.mauricedeke.shinkai.messaging.NotificationEventBus
+import be.mauricedeke.shinkai.data.geofence.PendingLogPrompt
+import be.mauricedeke.shinkai.data.geofence.PendingLogStore
+import be.mauricedeke.shinkai.data.messaging.NotificationEventBus
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
+import be.mauricedeke.shinkai.ui.permissions.MainViewModel
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -28,12 +29,12 @@ import org.junit.Test
 
 class MainViewModelTest {
 
-    private val context: Context = mockk(relaxed = true)
     private val restoreSession: RestoreSessionUseCase = mockk(relaxed = true)
     private val clearSession: ClearSessionUseCase = mockk(relaxed = true)
     private val scheduleReminders: ScheduleRemindersUseCase = mockk(relaxed = true)
     private val setupGeofences: SetupGeofencesUseCase = mockk(relaxed = true)
     private val pendingLogStore: PendingLogStore = mockk(relaxed = true)
+    private val amqpServiceController: AmqpServiceController = mockk(relaxed = true)
     private lateinit var sessionEventBus: SessionEventBus
     private lateinit var vm: MainViewModel
 
@@ -52,7 +53,6 @@ class MainViewModelTest {
     }
 
     private fun buildVm() = MainViewModel(
-        context = context,
         notificationEventBus = NotificationEventBus(),
         restoreSession = restoreSession,
         clearSession = clearSession,
@@ -60,6 +60,7 @@ class MainViewModelTest {
         scheduleReminders = scheduleReminders,
         setupGeofences = setupGeofences,
         pendingLogStore = pendingLogStore,
+        amqpServiceController = amqpServiceController,
     )
 
     @Test

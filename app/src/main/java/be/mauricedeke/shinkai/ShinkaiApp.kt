@@ -36,9 +36,10 @@ import be.mauricedeke.shinkai.ui.navigation.Screen
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiBottomBar
 import be.mauricedeke.shinkai.ui.navigation.ShinkaiNavGraph
 import be.mauricedeke.shinkai.ui.permissions.AppPermission
+import be.mauricedeke.shinkai.ui.permissions.MainViewModel
 import be.mauricedeke.shinkai.ui.permissions.PermissionManager
+import be.mauricedeke.shinkai.ui.profiel.ThemeViewModel
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
-import be.mauricedeke.shinkai.ui.theme.ThemeViewModel
 
 @Composable
 fun ShinkaiApp() {

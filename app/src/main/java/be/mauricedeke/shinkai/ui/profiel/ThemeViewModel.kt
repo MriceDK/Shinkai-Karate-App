@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.ui.theme
+package be.mauricedeke.shinkai.ui.profiel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,5 +40,3 @@ class ThemeViewModel @Inject constructor(
         }
     }
 }
-
-
