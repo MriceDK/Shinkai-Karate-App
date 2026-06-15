@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets
 
 class LavinMQMessageConsumer(
     private val exchange: String,
+    private val routingKeyPrefix: String,
     private val factory: ConnectionFactory
 ) : MessageConsumer {
     private var consumerJob: Job? = null
@@ -30,7 +31,7 @@ class LavinMQMessageConsumer(
                 channel.exchangeDeclare(exchange, "direct", true)
 
                 val dynamicQueue = channel.queueDeclare("", false, true, true, null)
-                channel.queueBind(dynamicQueue.queue, exchange, "user-${userId}")
+                channel.queueBind(dynamicQueue.queue, exchange, "$routingKeyPrefix-$userId")
 
                 val deliverCallback = DeliverCallback { _, delivery ->
                     val message = String(delivery.body, StandardCharsets.UTF_8)

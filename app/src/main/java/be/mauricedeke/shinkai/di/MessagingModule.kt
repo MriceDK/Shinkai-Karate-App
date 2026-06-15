@@ -5,7 +5,10 @@ import be.mauricedeke.shinkai.data.messaging.LavinMQMessageConsumer
 import be.mauricedeke.shinkai.data.messaging.LavinMQMessagePublisher
 import be.mauricedeke.shinkai.data.messaging.MessageConsumer
 import be.mauricedeke.shinkai.data.messaging.MessagePublisher
+import be.mauricedeke.shinkai.domain.model.NotificationMessage
 import com.rabbitmq.client.ConnectionFactory
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,11 +40,28 @@ object MessagingModule {
 
     @Provides
     @Singleton
-    fun provideMessagePublisher(factory: ConnectionFactory): MessagePublisher =
-        LavinMQMessagePublisher(BuildConfig.AMQP_EXCHANGE, factory)
+    fun provideNotificationMessageAdapter(moshi: Moshi): JsonAdapter<NotificationMessage> =
+        moshi.adapter(NotificationMessage::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMessagePublisher(
+        factory: ConnectionFactory,
+        adapter: JsonAdapter<NotificationMessage>
+    ): MessagePublisher =
+        LavinMQMessagePublisher(
+            exchange = BuildConfig.AMQP_EXCHANGE,
+            routingKeyPrefix = BuildConfig.AMQP_PUBLISH_ROUTING_KEY,
+            factory = factory,
+            adapter = adapter
+        )
 
     @Provides
     @Singleton
     fun provideMessageConsumer(factory: ConnectionFactory): MessageConsumer =
-        LavinMQMessageConsumer(BuildConfig.AMQP_EXCHANGE, factory)
+        LavinMQMessageConsumer(
+            exchange = BuildConfig.AMQP_EXCHANGE,
+            routingKeyPrefix = BuildConfig.AMQP_SUBSCRIBE_ROUTING_KEY,
+            factory = factory
+        )
 }
