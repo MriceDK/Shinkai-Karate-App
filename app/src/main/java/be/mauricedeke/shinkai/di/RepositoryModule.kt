@@ -1,5 +1,7 @@
 package be.mauricedeke.shinkai.di
 
+import be.mauricedeke.shinkai.data.messaging.AmqpServiceController
+import be.mauricedeke.shinkai.data.messaging.AmqpServiceControllerImpl
 import be.mauricedeke.shinkai.data.repository.AccelerometerRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.EventRepositoryImpl
 import be.mauricedeke.shinkai.data.repository.GeocodingRepositoryImpl
@@ -83,4 +85,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindGeocodingRepository(impl: GeocodingRepositoryImpl): GeocodingRepository
+
+    @Binds
+    abstract fun bindAmqpServiceController(impl: AmqpServiceControllerImpl): AmqpServiceController
 }
