@@ -22,7 +22,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 - Made technieken per belt render dynamically from FakeDataSource
 - Added BeltColor enum and all belt definitions
 
-## Tuestday, June 2nd, 2026
+## Tuesday, June 2nd, 2026
 - Added `localDate` and `rsvp` fields to the Event model, updated FakeDataSource with future-dated events
 - Wired events and home screen to FakeDataSource, limited displayed events, added placeholders
 - Added manage events screen with per-event RSVP, past events restricted
@@ -172,7 +172,7 @@ ShinKai is a mobile companion app for members of a Shinkempo karate club. Member
 
 Ordered by priority / effort:
 
-1. **CI/CD** — GitHub Actions workflow that builds a signed APK and deploys to Firebase App Distribution
+- DONE
 
 ---
 
