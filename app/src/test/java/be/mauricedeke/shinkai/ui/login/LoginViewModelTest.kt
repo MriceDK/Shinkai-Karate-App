@@ -9,6 +9,7 @@ import be.mauricedeke.shinkai.data.remote.dto.ChangePasswordRequestDto
 import be.mauricedeke.shinkai.data.remote.dto.LoginRequestDto
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -50,7 +51,6 @@ class LoginViewModelTest {
         assertEquals("", state.password)
         assertFalse(state.isLoading)
         assertNull(state.errorMessage)
-        assertFalse(state.loginSuccess)
     }
 
     @Test
@@ -109,12 +109,14 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginClick_validCredentials_loginSuccess_setsLoginSuccessTrue() = runTest {
+    fun onLoginClick_validCredentials_emitsLoginSuccessEvent() = runTest {
         fakeApi.result = Result.success(AuthResponseDto("access_token", "user123", false))
         vm.onEmailChanged("user@shinkai.be")
         vm.onPasswordChanged("password")
         vm.onLoginClick()
-        assertTrue(vm.uiState.value.loginSuccess)
+        val event = vm.events.first()
+        assertTrue(event is LoginEvent.LoginSuccess)
+        assertFalse((event as LoginEvent.LoginSuccess).mustChangePassword)
         assertFalse(vm.uiState.value.isLoading)
     }
 
@@ -129,22 +131,13 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginHandled_clearsLoginSuccess() = runTest {
-        fakeApi.result = Result.success(AuthResponseDto("token", "user", false))
-        vm.onEmailChanged("u@t.com")
-        vm.onPasswordChanged("pw")
-        vm.onLoginClick()
-        vm.onLoginHandled()
-        assertFalse(vm.uiState.value.loginSuccess)
-    }
-
-    @Test
-    fun onLoginClick_success_mustChangePassword_propagatesToState() = runTest {
+    fun onLoginClick_success_mustChangePassword_emittedInEvent() = runTest {
         fakeApi.result = Result.success(AuthResponseDto("token", "user", mustChangePassword = true))
         vm.onEmailChanged("u@t.com")
         vm.onPasswordChanged("pw")
         vm.onLoginClick()
-        assertTrue(vm.uiState.value.mustChangePassword)
+        val event = vm.events.first() as LoginEvent.LoginSuccess
+        assertTrue(event.mustChangePassword)
     }
 
     private class FakeAuthApi : AuthApi {

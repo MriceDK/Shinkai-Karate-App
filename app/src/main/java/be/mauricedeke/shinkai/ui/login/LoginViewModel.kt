@@ -6,8 +6,10 @@ import be.mauricedeke.shinkai.data.local.datastore.AppDataStore
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
 import be.mauricedeke.shinkai.data.remote.client.AuthClient
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,6 +23,9 @@ class LoginViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _events = Channel<LoginEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun onEmailChanged(value: String) =
         _uiState.update { it.copy(email = value, errorMessage = null) }
@@ -40,13 +45,8 @@ class LoginViewModel @Inject constructor(
                 .onSuccess { response ->
                     tokenStore.accessToken = response.accessToken
                     appDataStore.setAccessToken(response.accessToken)
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            loginSuccess = true,
-                            mustChangePassword = response.mustChangePassword
-                        )
-                    }
+                    _uiState.update { it.copy(isLoading = false) }
+                    _events.send(LoginEvent.LoginSuccess(response.mustChangePassword))
                 }
                 .onFailure {
                     _uiState.update {
@@ -55,8 +55,6 @@ class LoginViewModel @Inject constructor(
                 }
         }
     }
-
-    fun onLoginHandled() = _uiState.update { it.copy(loginSuccess = false) }
 
     fun clearLoginForm() = _uiState.update { LoginUiState() }
 }

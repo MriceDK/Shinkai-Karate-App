@@ -139,12 +139,15 @@ fun ShinkaiNavGraph(
     val accountUiState by accountViewModel.uiState.collectAsStateWithLifecycle()
     val loginUiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(loginUiState.loginSuccess) {
-        if (loginUiState.loginSuccess) {
-            loginViewModel.onLoginHandled()
-            mainViewModel.onLoginSuccess()
-            navController.navigate(Screen.Home.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
+    LaunchedEffect(Unit) {
+        loginViewModel.events.collect { event ->
+            when (event) {
+                is be.mauricedeke.shinkai.ui.login.LoginEvent.LoginSuccess -> {
+                    mainViewModel.onLoginSuccess()
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
             }
         }
     }
