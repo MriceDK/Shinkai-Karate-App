@@ -2,6 +2,8 @@ package be.mauricedeke.shinkai.di
 
 import be.mauricedeke.shinkai.BuildConfig
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
+import be.mauricedeke.shinkai.data.remote.LocalDateJsonAdapter
+import be.mauricedeke.shinkai.data.remote.LocalDateTimeJsonAdapter
 import be.mauricedeke.shinkai.data.remote.SessionEventBus
 import be.mauricedeke.shinkai.data.remote.api.AuthApi
 import be.mauricedeke.shinkai.data.remote.api.BeltApi
@@ -34,6 +36,8 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(LocalDateJsonAdapter())
+        .add(LocalDateTimeJsonAdapter())
         .addLast(KotlinJsonAdapterFactory())
         .build()
 
