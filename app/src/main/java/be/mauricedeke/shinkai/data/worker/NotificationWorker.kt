@@ -12,7 +12,8 @@ class NotificationWorker(
     override suspend fun doWork(): Result {
         val title = inputData.getString(KEY_TITLE) ?: return Result.failure()
         val body = inputData.getString(KEY_BODY) ?: return Result.failure()
-        NotificationHelper.show(applicationContext, title, body)
+        val route = inputData.getString(KEY_ROUTE)
+        NotificationHelper.show(applicationContext, title, body, route)
         return Result.success()
     }
 }

@@ -11,3 +11,6 @@ const val REQUEST_CODE = 0
 
 const val KEY_TITLE = "NOTIFICATION_TITLE"
 const val KEY_BODY = "NOTIFICATION_BODY"
+const val KEY_ROUTE = "NOTIFICATION_ROUTE"
+
+const val EXTRA_DEEP_LINK_ROUTE = "deep_link_route"

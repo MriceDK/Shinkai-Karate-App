@@ -15,8 +15,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,7 +44,7 @@ import be.mauricedeke.shinkai.ui.profiel.ThemeViewModel
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 
 @Composable
-fun ShinkaiApp() {
+fun ShinkaiApp(deepLinkRoute: MutableState<String?> = remember { mutableStateOf(null) }) {
     val themeViewModel: ThemeViewModel = hiltViewModel()
     val themeUiState by themeViewModel.uiState.collectAsStateWithLifecycle()
     val systemDarkTheme = isSystemInDarkTheme()
@@ -85,7 +87,8 @@ fun ShinkaiApp() {
     ShinkaiAppContent(
         darkThemeEnabled = darkThemeEnabled,
         onDarkThemeToggle = themeViewModel::onDarkThemeToggle,
-        snackbarHostState = snackbarHostState
+        snackbarHostState = snackbarHostState,
+        deepLinkRoute = deepLinkRoute
     )
 }
 
@@ -93,7 +96,8 @@ fun ShinkaiApp() {
 private fun ShinkaiAppContent(
     darkThemeEnabled: Boolean,
     onDarkThemeToggle: (Boolean) -> Unit,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    deepLinkRoute: MutableState<String?> = remember { mutableStateOf(null) }
 ) {
     ShinkaikarateappTheme(darkTheme = darkThemeEnabled) {
         val view = LocalView.current
@@ -108,6 +112,14 @@ private fun ShinkaiAppContent(
         val navController = rememberNavController()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
+
+        LaunchedEffect(deepLinkRoute.value) {
+            val pending = deepLinkRoute.value ?: return@LaunchedEffect
+            navController.navigate(pending) {
+                launchSingleTop = true
+            }
+            deepLinkRoute.value = null
+        }
 
         val activeTab = when {
             currentRoute == null || currentRoute == Screen.Home.route -> Screen.Home.route
