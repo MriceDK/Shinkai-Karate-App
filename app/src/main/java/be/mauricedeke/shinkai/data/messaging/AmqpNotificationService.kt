@@ -1,10 +1,9 @@
-package be.mauricedeke.shinkai.messaging
+package be.mauricedeke.shinkai.data.messaging
 
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
@@ -15,8 +14,8 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import be.mauricedeke.shinkai.R
-import be.mauricedeke.shinkai.data.messaging.MessageConsumer
 import be.mauricedeke.shinkai.data.worker.KEY_BODY
+import be.mauricedeke.shinkai.data.worker.KEY_ROUTE
 import be.mauricedeke.shinkai.data.worker.KEY_TITLE
 import be.mauricedeke.shinkai.data.worker.NotificationWorker
 import be.mauricedeke.shinkai.data.worker.SERVICE_CHANNEL_ID
@@ -57,7 +56,7 @@ class AmqpNotificationService : Service() {
                     stopSelf()
                     return@launch
                 }
-                Log.d("Messagebroker", "Binding queue for routing key: user-$userId")
+                Log.d("Messagebroker", "Binding queue for user: $userId")
                 messageConsumer.onMessageReceived = { raw ->
                     scope.launch { handleMessage(raw) }
                 }
@@ -90,10 +89,23 @@ class AmqpNotificationService : Service() {
             "change", "update" -> notificationEventBus.emit(InAppNotification(type, title, body))
             else -> WorkManager.getInstance(applicationContext).enqueue(
                 OneTimeWorkRequestBuilder<NotificationWorker>()
-                    .setInputData(workDataOf(KEY_TITLE to title, KEY_BODY to body))
+                    .setInputData(
+                        workDataOf(
+                            KEY_TITLE to title,
+                            KEY_BODY to body,
+                            KEY_ROUTE to routeForType(type)
+                        )
+                    )
                     .build()
             )
         }
+    }
+
+    private fun routeForType(type: String): String = when (type) {
+        "event" -> "events"
+        "training" -> "home"
+        "exam" -> "events"
+        else -> "home"
     }
 
     private suspend fun flashLight() {

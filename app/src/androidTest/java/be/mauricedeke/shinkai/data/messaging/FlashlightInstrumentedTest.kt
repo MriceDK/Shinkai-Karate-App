@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.messaging
+package be.mauricedeke.shinkai.data.messaging
 
 import android.content.Context
 import android.hardware.camera2.CameraCharacteristics

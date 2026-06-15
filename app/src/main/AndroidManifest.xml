@@ -40,12 +40,12 @@
         </activity>
 
         <service
-            android:name=".messaging.AmqpNotificationService"
+            android:name=".data.messaging.AmqpNotificationService"
             android:foregroundServiceType="remoteMessaging"
             android:exported="false" />
 
         <receiver
-            android:name=".geofence.GeofenceBroadcastReceiver"
+            android:name=".data.geofence.GeofenceBroadcastReceiver"
             android:exported="true" />
 
         <provider

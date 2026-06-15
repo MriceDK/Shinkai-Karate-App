@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.messaging
+package be.mauricedeke.shinkai.data.messaging
 
 import be.mauricedeke.shinkai.domain.model.NotificationSettings
 

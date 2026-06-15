@@ -1,4 +1,4 @@
-package be.mauricedeke.shinkai.messaging
+package be.mauricedeke.shinkai.data.messaging
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
