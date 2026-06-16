@@ -73,7 +73,10 @@ fun ShinkaiApp(deepLinkRoute: MutableState<String?> = remember { mutableStateOf(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_RESUME) mainViewModel.recheckPendingLog()
+            if (event == Lifecycle.Event.ON_RESUME) {
+                mainViewModel.recheckPendingLog()
+                mainViewModel.onAppResumed()
+            }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }

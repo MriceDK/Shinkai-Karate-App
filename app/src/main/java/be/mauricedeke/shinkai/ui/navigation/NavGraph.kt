@@ -1,7 +1,12 @@
 package be.mauricedeke.shinkai.ui.navigation
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -11,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -85,6 +91,7 @@ fun ShinkaiNavGraph(
     val context = LocalContext.current
     val permissionRequest by mainViewModel.permissionRequest.collectAsStateWithLifecycle()
     val isAuthenticated by mainViewModel.isAuthenticated.collectAsStateWithLifecycle()
+    val resumeTick by mainViewModel.resumeTick.collectAsStateWithLifecycle()
 
     LaunchedEffect(isAuthenticated) {
         when (isAuthenticated) {
@@ -394,8 +401,34 @@ fun ShinkaiNavGraph(
         composable(Screen.Notifications.route) {
             val vm: NotificationsViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsStateWithLifecycle()
+            val notifGranted = remember(resumeTick, permissionRequest) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                } else true
+            }
+            val activity = context as? Activity
             NotificationsScreen(
                 uiState = uiState,
+                notificationPermissionGranted = notifGranted,
+                onGrantNotificationPermission = {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        val showRationale = activity != null &&
+                            ActivityCompat.shouldShowRequestPermissionRationale(
+                                activity, Manifest.permission.POST_NOTIFICATIONS
+                            )
+                        if (showRationale) {
+                            mainViewModel.requestPermission(AppPermission.Notifications)
+                        } else {
+                            context.startActivity(
+                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                    data = Uri.fromParts("package", context.packageName, null)
+                                }
+                            )
+                        }
+                    }
+                },
                 onSettingsChanged = vm::onSettingsChanged,
                 onBackClick = { navController.popBackStack() }
             )
@@ -404,8 +437,36 @@ fun ShinkaiNavGraph(
         composable(Screen.Location.route) {
             val vm: LocationViewModel = hiltViewModel()
             val uiState by vm.uiState.collectAsStateWithLifecycle()
+            val locGranted = remember(resumeTick, permissionRequest) {
+                ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(
+                        context, Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+            }
+            val activity = context as? Activity
             LocationScreen(
                 uiState = uiState,
+                locationPermissionGranted = locGranted,
+                onGrantLocationPermission = {
+                    val showRationale = activity != null && (
+                        ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity, Manifest.permission.ACCESS_FINE_LOCATION
+                        ) || ActivityCompat.shouldShowRequestPermissionRationale(
+                            activity, Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    )
+                    if (showRationale) {
+                        mainViewModel.requestPermission(AppPermission.Location)
+                    } else {
+                        context.startActivity(
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.fromParts("package", context.packageName, null)
+                            }
+                        )
+                    }
+                },
                 onSettingsChanged = vm::onSettingsChanged,
                 onSave = { vm.onSave(); navController.popBackStack() },
                 onBackClick = { navController.popBackStack() }
@@ -435,7 +496,7 @@ fun ShinkaiNavGraph(
         }
 
         composable(Screen.Kaart.route) {
-            val locationGranted = remember(permissionRequest) {
+            val locationGranted = remember(permissionRequest, resumeTick) {
                 ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.ACCESS_FINE_LOCATION

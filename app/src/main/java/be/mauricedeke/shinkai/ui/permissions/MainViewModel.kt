@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,6 +43,9 @@ class MainViewModel @Inject constructor(
 
     private val _pendingLogPrompt = MutableStateFlow<PendingLogPrompt?>(pendingLogStore.get())
     val pendingLogPrompt: StateFlow<PendingLogPrompt?> = _pendingLogPrompt.asStateFlow()
+
+    private val _resumeTick = MutableStateFlow(0)
+    val resumeTick: StateFlow<Int> = _resumeTick.asStateFlow()
 
     // null = still loading, true = valid token, false = no/expired token
     private val _isAuthenticated = MutableStateFlow<Boolean?>(null)
@@ -84,6 +88,10 @@ class MainViewModel @Inject constructor(
 
     fun onPermissionResult() {
         _permissionRequest.value = null
+    }
+
+    fun onAppResumed() {
+        _resumeTick.update { it + 1 }
     }
 
     fun recheckPendingLog() {
