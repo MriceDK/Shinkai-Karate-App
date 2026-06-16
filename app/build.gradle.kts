@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.application)
     // Add the Google services Gradle plugin
@@ -8,14 +6,6 @@ plugins {
     alias(libs.plugins.hilt.gradle)
     alias(libs.plugins.ksp)
 }
-
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) file.inputStream().use { load(it) }
-}
-
-fun secret(key: String): String =
-    localProperties.getProperty(key) ?: project.findProperty(key)?.toString().orEmpty()
 
 android {
     namespace = "be.mauricedeke.shinkai"
@@ -32,15 +22,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Moved to Firebase Remote Config — injected at runtime via ShinkaiApplication
-        // buildConfigField("String", "AMQP_USERNAME", "\"${secret("AMQPusername")}\"")
-        // buildConfigField("String", "AMQP_PASSWORD", "\"${secret("AMQPpassword")}\"")
-        // buildConfigField("String", "AMQP_URL", "\"${secret("AMQPurl")}\"")
-        // buildConfigField("String", "AMQP_EXCHANGE", "\"${secret("AMQPexchange")}\"")
-        // buildConfigField("String", "AMQP_VHOST", "\"${secret("AMQPvhost")}\"")
-        // buildConfigField("String", "MAPBOX_PUBLIC_TOKEN", "\"${secret("MAPBOX_PUBLIC_TOKEN")}\"")
-        // buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${secret("MAPBOX_ACCESS_TOKEN")}\"")
-        // buildConfigField("String", "API_BASE_URL", "\"${secret("API_BASE_URL")}\"")
+        buildConfigField("String", "AMQP_USERNAME", "\"${project.findProperty("AMQPusername")}\"")
+        buildConfigField("String", "AMQP_PASSWORD", "\"${project.findProperty("AMQPpassword")}\"")
+        buildConfigField("String", "AMQP_URL", "\"${project.findProperty("AMQPurl")}\"")
+        buildConfigField("String", "AMQP_EXCHANGE", "\"${project.findProperty("AMQPexchange")}\"")
+        buildConfigField("String", "AMQP_VHOST", "\"${project.findProperty("AMQPvhost")}\"")
+        buildConfigField("String", "MAPBOX_PUBLIC_TOKEN", "\"${project.findProperty("MAPBOX_PUBLIC_TOKEN")}\"")
+        buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${project.findProperty("MAPBOX_ACCESS_TOKEN")}\"")
+        buildConfigField("String", "API_BASE_URL", "\"${project.findProperty("API_BASE_URL")}\"")
 
 
 
@@ -140,7 +129,6 @@ dependencies {
     // FireBase
     implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-config")
 
 
 }

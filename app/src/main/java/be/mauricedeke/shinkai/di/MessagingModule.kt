@@ -1,7 +1,6 @@
 package be.mauricedeke.shinkai.di
 
-import com.google.firebase.Firebase
-import com.google.firebase.remoteconfig.remoteConfig
+import be.mauricedeke.shinkai.BuildConfig
 import be.mauricedeke.shinkai.data.messaging.LavinMQMessageConsumer
 import be.mauricedeke.shinkai.data.messaging.LavinMQMessagePublisher
 import be.mauricedeke.shinkai.data.messaging.MessageConsumer
@@ -27,18 +26,17 @@ object MessagingModule {
     @Provides
     @Singleton
     fun provideConnectionFactory(): ConnectionFactory {
-        val rc = Firebase.remoteConfig
-        val hostPort = rc.getString("amqp_url")
+        val hostPort = BuildConfig.AMQP_URL
         val hostParts = hostPort.split(":", limit = 2)
         val host = hostParts.firstOrNull().orEmpty()
         val port = hostParts.getOrNull(1)?.toIntOrNull() ?: ConnectionFactory.DEFAULT_AMQP_OVER_SSL_PORT
 
         return ConnectionFactory().apply {
-            username = rc.getString("amqp_username")
-            password = rc.getString("amqp_password")
+            username = BuildConfig.AMQP_USERNAME
+            password = BuildConfig.AMQP_PASSWORD
             this.host = host
             this.port = port
-            virtualHost = rc.getString("amqp_vhost")
+            virtualHost = BuildConfig.AMQP_VHOST
             useSslProtocol()
         }
     }
@@ -55,7 +53,7 @@ object MessagingModule {
         adapter: JsonAdapter<NotificationMessage>
     ): MessagePublisher =
         LavinMQMessagePublisher(
-            exchange = Firebase.remoteConfig.getString("amqp_exchange"),
+            exchange = BuildConfig.AMQP_EXCHANGE,
             routingKeyPrefix = PUBLISH_ROUTING_KEY_PREFIX,
             factory = factory,
             adapter = adapter
@@ -65,7 +63,7 @@ object MessagingModule {
     @Singleton
     fun provideMessageConsumer(factory: ConnectionFactory): MessageConsumer =
         LavinMQMessageConsumer(
-            exchange = Firebase.remoteConfig.getString("amqp_exchange"),
+            exchange = BuildConfig.AMQP_EXCHANGE,
             routingKeyPrefix = SUBSCRIBE_ROUTING_KEY_PREFIX,
             factory = factory
         )
