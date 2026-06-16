@@ -218,7 +218,7 @@ UI (Composables)
 
 ## Code Repository
 - [GitHub — st-client-mobile-Maurice-De-Kegel](https://github.com/Howest-TI-Project-BnD/st-client-mobile-Maurice-De-Kegel)
-- 
 
 ## APK
-- [Link to APK]
+- [Link to APK](https://appdistribution.firebase.dev/i/b0d43bfb2c9e44fe)
+
