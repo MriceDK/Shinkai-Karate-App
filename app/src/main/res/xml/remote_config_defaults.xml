@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>mapbox_public_token</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>mapbox_access_token</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>api_base_url</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>amqp_url</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>amqp_username</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>amqp_password</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>amqp_exchange</key>
+        <value></value>
+    </entry>
+    <entry>
+        <key>amqp_vhost</key>
+        <value></value>
+    </entry>
+</defaultsMap>

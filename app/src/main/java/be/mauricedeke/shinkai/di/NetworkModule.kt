@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.di
 
-import be.mauricedeke.shinkai.BuildConfig
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
 import be.mauricedeke.shinkai.data.remote.AuthTokenStore
 import be.mauricedeke.shinkai.data.remote.LocalDateJsonAdapter
 import be.mauricedeke.shinkai.data.remote.LocalDateTimeJsonAdapter
@@ -84,7 +85,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
-            .baseUrl(BuildConfig.API_BASE_URL)
+            .baseUrl(Firebase.remoteConfig.getString("api_base_url"))
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

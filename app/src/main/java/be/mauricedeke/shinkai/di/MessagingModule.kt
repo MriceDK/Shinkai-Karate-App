@@ -1,6 +1,7 @@
 package be.mauricedeke.shinkai.di
 
-import be.mauricedeke.shinkai.BuildConfig
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.remoteConfig
 import be.mauricedeke.shinkai.data.messaging.LavinMQMessageConsumer
 import be.mauricedeke.shinkai.data.messaging.LavinMQMessagePublisher
 import be.mauricedeke.shinkai.data.messaging.MessageConsumer
@@ -20,20 +21,24 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object MessagingModule {
 
+    private const val PUBLISH_ROUTING_KEY_PREFIX = "user"
+    private const val SUBSCRIBE_ROUTING_KEY_PREFIX = "user"
+
     @Provides
     @Singleton
     fun provideConnectionFactory(): ConnectionFactory {
-        val hostPort = BuildConfig.AMQP_URL
+        val rc = Firebase.remoteConfig
+        val hostPort = rc.getString("amqp_url")
         val hostParts = hostPort.split(":", limit = 2)
         val host = hostParts.firstOrNull().orEmpty()
         val port = hostParts.getOrNull(1)?.toIntOrNull() ?: ConnectionFactory.DEFAULT_AMQP_OVER_SSL_PORT
 
         return ConnectionFactory().apply {
-            username = BuildConfig.AMQP_USERNAME
-            password = BuildConfig.AMQP_PASSWORD
+            username = rc.getString("amqp_username")
+            password = rc.getString("amqp_password")
             this.host = host
             this.port = port
-            virtualHost = BuildConfig.AMQP_VHOST
+            virtualHost = rc.getString("amqp_vhost")
             useSslProtocol()
         }
     }
@@ -50,8 +55,8 @@ object MessagingModule {
         adapter: JsonAdapter<NotificationMessage>
     ): MessagePublisher =
         LavinMQMessagePublisher(
-            exchange = BuildConfig.AMQP_EXCHANGE,
-            routingKeyPrefix = BuildConfig.AMQP_PUBLISH_ROUTING_KEY,
+            exchange = Firebase.remoteConfig.getString("amqp_exchange"),
+            routingKeyPrefix = PUBLISH_ROUTING_KEY_PREFIX,
             factory = factory,
             adapter = adapter
         )
@@ -60,8 +65,8 @@ object MessagingModule {
     @Singleton
     fun provideMessageConsumer(factory: ConnectionFactory): MessageConsumer =
         LavinMQMessageConsumer(
-            exchange = BuildConfig.AMQP_EXCHANGE,
-            routingKeyPrefix = BuildConfig.AMQP_SUBSCRIBE_ROUTING_KEY,
+            exchange = Firebase.remoteConfig.getString("amqp_exchange"),
+            routingKeyPrefix = SUBSCRIBE_ROUTING_KEY_PREFIX,
             factory = factory
         )
 }

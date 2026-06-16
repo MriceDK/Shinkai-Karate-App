@@ -32,18 +32,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "AMQP_USERNAME", "\"${secret("AMQPusername")}\"")
-        buildConfigField("String", "AMQP_PASSWORD", "\"${secret("AMQPpassword")}\"")
-        buildConfigField("String", "AMQP_URL", "\"${secret("AMQPurl")}\"")
-        buildConfigField("String", "AMQP_EXCHANGE", "\"${secret("AMQPexchange")}\"")
-        buildConfigField("String", "AMQP_VHOST", "\"${secret("AMQPvhost")}\"")
-        buildConfigField("String", "AMQP_PUBLISH_ROUTING_KEY", "\"${secret("AMQPpublishroutingkey")}\"")
-        buildConfigField("String", "AMQP_SUBSCRIBE_ROUTING_KEY", "\"${secret("AMQPsubscriberoutingkey")}\"")
-
-        buildConfigField("String", "MAPBOX_PUBLIC_TOKEN", "\"${secret("MAPBOX_PUBLIC_TOKEN")}\"")
-        buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${secret("MAPBOX_ACCESS_TOKEN")}\"")
-
-        buildConfigField("String", "API_BASE_URL", "\"${secret("API_BASE_URL")}\"")
+        // Moved to Firebase Remote Config — injected at runtime via ShinkaiApplication
+        // buildConfigField("String", "AMQP_USERNAME", "\"${secret("AMQPusername")}\"")
+        // buildConfigField("String", "AMQP_PASSWORD", "\"${secret("AMQPpassword")}\"")
+        // buildConfigField("String", "AMQP_URL", "\"${secret("AMQPurl")}\"")
+        // buildConfigField("String", "AMQP_EXCHANGE", "\"${secret("AMQPexchange")}\"")
+        // buildConfigField("String", "AMQP_VHOST", "\"${secret("AMQPvhost")}\"")
+        // buildConfigField("String", "MAPBOX_PUBLIC_TOKEN", "\"${secret("MAPBOX_PUBLIC_TOKEN")}\"")
+        // buildConfigField("String", "MAPBOX_ACCESS_TOKEN", "\"${secret("MAPBOX_ACCESS_TOKEN")}\"")
+        // buildConfigField("String", "API_BASE_URL", "\"${secret("API_BASE_URL")}\"")
 
 
 
@@ -143,6 +140,7 @@ dependencies {
     // FireBase
     implementation(platform("com.google.firebase:firebase-bom:34.14.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-config")
 
 
 }
