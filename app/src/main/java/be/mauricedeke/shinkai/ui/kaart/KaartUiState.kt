@@ -16,7 +16,8 @@ data class TrainingSessionPoint(
 )
 
 data class KaartUiState(
-    val events: List<Event> = emptyList(),
+    val upcomingEvents: List<Event> = emptyList(),
+    val pastEvents: List<Event> = emptyList(),
     val trainingPoints: List<TrainingSessionPoint> = emptyList(),
     val userLocation: Point? = null,
     val selectedEvent: Event? = null,

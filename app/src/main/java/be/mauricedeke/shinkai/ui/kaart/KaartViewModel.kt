@@ -45,9 +45,13 @@ class KaartViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val today = LocalDate.now()
-            val events = (eventRepository.getEvents() ?: emptyList())
-                .filter { it.localDate == null || !it.localDate.isBefore(today) }
-            _uiState.update { it.copy(events = events) }
+            val all = (eventRepository.getEvents() ?: emptyList())
+                .filter { it.localDate != null }
+            val upcomingEvents = all.filter { !it.localDate!!.isBefore(today) }
+            val pastEvents = all.filter {
+                it.localDate!!.isBefore(today) && !it.localDate.isBefore(today.minusDays(7))
+            }
+            _uiState.update { it.copy(upcomingEvents = upcomingEvents, pastEvents = pastEvents) }
         }
         viewModelScope.launch {
             val sessions = trainingSessionClient.getTrainingSessions().getOrNull() ?: emptyList()

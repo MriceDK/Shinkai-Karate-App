@@ -137,8 +137,8 @@ fun KaartScreen(
         }
 
         val geofenceSourceState = rememberGeoJsonSourceState()
-        LaunchedEffect(uiState.events, uiState.trainingPoints) {
-            val eventFeatures = uiState.events
+        LaunchedEffect(uiState.upcomingEvents, uiState.trainingPoints) {
+            val eventFeatures = uiState.upcomingEvents
                 .filter { it.lat != null && it.lng != null }
                 .map { event ->
                     Feature.fromGeometry(
@@ -164,12 +164,28 @@ fun KaartScreen(
             lineWidth = DoubleValue(2.0)
         }
 
-        uiState.events.forEach { event ->
+        uiState.upcomingEvents.forEach { event ->
             if (event.lat != null && event.lng != null) {
                 key(event.id) {
                     PointAnnotation(point = Point.fromLngLat(event.lng, event.lat)) {
                         iconImage = markerIcon
                         iconSize = 0.8
+                        interactionsState.onClicked {
+                            onEventSelected(event)
+                            true
+                        }
+                    }
+                }
+            }
+        }
+
+        uiState.pastEvents.forEach { event ->
+            if (event.lat != null && event.lng != null) {
+                key("past-${event.id}") {
+                    PointAnnotation(point = Point.fromLngLat(event.lng, event.lat)) {
+                        iconImage = markerIcon
+                        iconSize = 0.8
+                        iconOpacity = 0.4
                         interactionsState.onClicked {
                             onEventSelected(event)
                             true
@@ -471,7 +487,7 @@ private fun geofenceCirclePoints(
 @Preview(name = "Default", showBackground = true, showSystemUi = true)
 @Composable
 fun KaartScreenPreview() {
-    ShinkaikarateappTheme { KaartScreen(uiState = KaartUiState(events = FakeDataSource.events)) }
+    ShinkaikarateappTheme { KaartScreen(uiState = KaartUiState(upcomingEvents = FakeDataSource.events)) }
 }
 
 @Preview(
@@ -482,5 +498,5 @@ fun KaartScreenPreview() {
 )
 @Composable
 fun KaartScreenDarkPreview() {
-    ShinkaikarateappTheme(darkTheme = true) { KaartScreen(uiState = KaartUiState(events = FakeDataSource.events)) }
+    ShinkaikarateappTheme(darkTheme = true) { KaartScreen(uiState = KaartUiState(upcomingEvents = FakeDataSource.events)) }
 }
