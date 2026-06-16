@@ -41,6 +41,7 @@ import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.ui.components.SectionHeader
 import be.mauricedeke.shinkai.ui.components.SettingsListItem
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
+import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.theme.toBeltColor
 import be.mauricedeke.shinkai.ui.theme.toColor
 import coil.compose.AsyncImage
@@ -133,7 +134,8 @@ fun ProfielScreen(
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     val beltName = profile!!.belt.ifBlank { "Geel" }
-                    val beltColor = beltName.toBeltColor().toColor(isDark = isDarkTheme)
+                    val resolvedBeltColor = beltName.toBeltColor()
+                    val beltColor = resolvedBeltColor.toColor(isDark = isDarkTheme)
                     Box(contentAlignment = Alignment.Center) {
                         Box(
                             modifier = Modifier
@@ -144,7 +146,7 @@ fun ProfielScreen(
                     }
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        beltName,
+                        resolvedBeltColor.displayName(),
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurface
                     )

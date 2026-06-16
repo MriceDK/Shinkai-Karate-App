@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.R
 import be.mauricedeke.shinkai.domain.model.BeltColor
 import be.mauricedeke.shinkai.domain.model.Kata
+import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -129,7 +130,7 @@ private fun KataCard(kata: Kata) {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        kata.belt,
+                        kata.beltColor.displayName(),
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

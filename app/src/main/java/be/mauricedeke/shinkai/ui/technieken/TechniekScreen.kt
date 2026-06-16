@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import be.mauricedeke.shinkai.domain.model.Belt
 import be.mauricedeke.shinkai.domain.model.BeltColor
+import be.mauricedeke.shinkai.domain.model.displayName
 import be.mauricedeke.shinkai.ui.theme.ShinkaikarateappTheme
 import be.mauricedeke.shinkai.ui.theme.toColor
 
@@ -188,7 +189,7 @@ private fun BeltCard(belt: Belt, onClick: () -> Unit) {
             }
             Spacer(Modifier.height(12.dp))
             Text(
-                belt.name,
+                belt.beltColor.displayName(),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Medium,
                 color = MaterialTheme.colorScheme.onSurface
