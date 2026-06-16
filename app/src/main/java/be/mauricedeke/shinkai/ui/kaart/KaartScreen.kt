@@ -137,7 +137,7 @@ fun KaartScreen(
         }
 
         val geofenceSourceState = rememberGeoJsonSourceState()
-        LaunchedEffect(uiState.upcomingEvents, uiState.trainingPoints) {
+        LaunchedEffect(uiState.upcomingEvents, uiState.upcomingTrainingPoints) {
             val eventFeatures = uiState.upcomingEvents
                 .filter { it.lat != null && it.lng != null }
                 .map { event ->
@@ -145,7 +145,7 @@ fun KaartScreen(
                         Polygon.fromLngLats(listOf(geofenceCirclePoints(event.lat!!, event.lng!!)))
                     )
                 }
-            val trainingFeatures = uiState.trainingPoints.map { point ->
+            val trainingFeatures = uiState.upcomingTrainingPoints.map { point ->
                 Feature.fromGeometry(
                     Polygon.fromLngLats(listOf(geofenceCirclePoints(point.lat, point.lng)))
                 )
@@ -195,11 +195,25 @@ fun KaartScreen(
             }
         }
 
-        uiState.trainingPoints.forEach { point ->
+        uiState.upcomingTrainingPoints.forEach { point ->
             key("training-${point.id}") {
                 PointAnnotation(point = Point.fromLngLat(point.lng, point.lat)) {
                     iconImage = markerIcon
                     iconSize = 0.8
+                    interactionsState.onClicked {
+                        onTrainingSelected(point)
+                        true
+                    }
+                }
+            }
+        }
+
+        uiState.pastTrainingPoints.forEach { point ->
+            key("past-training-${point.id}") {
+                PointAnnotation(point = Point.fromLngLat(point.lng, point.lat)) {
+                    iconImage = markerIcon
+                    iconSize = 0.8
+                    iconOpacity = 0.4
                     interactionsState.onClicked {
                         onTrainingSelected(point)
                         true

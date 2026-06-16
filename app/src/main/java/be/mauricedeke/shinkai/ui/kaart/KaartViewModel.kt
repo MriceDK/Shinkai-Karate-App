@@ -54,6 +54,7 @@ class KaartViewModel @Inject constructor(
             _uiState.update { it.copy(upcomingEvents = upcomingEvents, pastEvents = pastEvents) }
         }
         viewModelScope.launch {
+            val today = LocalDate.now()
             val sessions = trainingSessionClient.getTrainingSessions().getOrNull() ?: emptyList()
             val points = sessions.mapNotNull { dto ->
                 val lat = dto.lat ?: return@mapNotNull null
@@ -69,7 +70,15 @@ class KaartViewModel @Inject constructor(
                     lng = lng
                 )
             }
-            _uiState.update { it.copy(trainingPoints = points) }
+            val upcoming = points.filter { point ->
+                val date = runCatching { LocalDate.parse(point.date) }.getOrNull() ?: return@filter true
+                !date.isBefore(today)
+            }
+            val past = points.filter { point ->
+                val date = runCatching { LocalDate.parse(point.date) }.getOrNull() ?: return@filter false
+                date.isBefore(today) && !date.isBefore(today.minusDays(3))
+            }
+            _uiState.update { it.copy(upcomingTrainingPoints = upcoming, pastTrainingPoints = past) }
         }
     }
 
