@@ -17,15 +17,17 @@ class ComputeEventListsUseCaseTest {
         val result = useCase(emptyList(), emptyMap())
         assertTrue(result.upcomingEvents.isEmpty())
         assertTrue(result.allUpcomingEvents.isEmpty())
+        assertTrue(result.allEvents.isEmpty())
         assertTrue(result.inboxEvents.isEmpty())
     }
 
     @Test
-    fun invoke_pastEvent_isFiltered() {
+    fun invoke_pastEvent_isFilteredFromUpcomingButInAllEvents() {
         val past = Event(localDate = today.minusDays(1), title = "Past event")
         val result = useCase(listOf(past), emptyMap())
         assertTrue(result.upcomingEvents.isEmpty())
         assertTrue(result.allUpcomingEvents.isEmpty())
+        assertEquals(1, result.allEvents.size)
     }
 
     @Test
@@ -106,11 +108,12 @@ class ComputeEventListsUseCaseTest {
     }
 
     @Test
-    fun invoke_mixedPastAndFuture_onlyFutureInResults() {
+    fun invoke_mixedPastAndFuture_onlyFutureInUpcoming() {
         val past = Event(localDate = today.minusDays(1), title = "Past")
         val future = Event(localDate = today.plusDays(1), title = "Future")
         val result = useCase(listOf(past, future), emptyMap())
         assertEquals(1, result.allUpcomingEvents.size)
         assertEquals("Future", result.allUpcomingEvents[0].title)
+        assertEquals(2, result.allEvents.size)
     }
 }

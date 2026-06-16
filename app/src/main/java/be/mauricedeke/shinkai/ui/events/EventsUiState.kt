@@ -7,6 +7,7 @@ import java.util.UUID
 data class EventsUiState(
     val upcomingEvents: List<Event> = emptyList(),
     val allUpcomingEvents: List<Event> = emptyList(),
+    val allEvents: List<Event> = emptyList(),
     val inboxEvents: List<Event> = emptyList(),
     val rsvp: Map<UUID, Boolean?> = emptyMap(),
     val selectedDate: LocalDate? = null,

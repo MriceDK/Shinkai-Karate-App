@@ -8,6 +8,7 @@ import javax.inject.Inject
 data class EventListsResult(
     val upcomingEvents: List<Event>,
     val allUpcomingEvents: List<Event>,
+    val allEvents: List<Event>,
     val inboxEvents: List<Event>
 )
 
@@ -21,11 +22,14 @@ class ComputeEventListsUseCase @Inject constructor() {
             .filter { it.localDate == null || !it.localDate.isBefore(today) }
             .sortedWith(compareBy(nullsLast()) { it.localDate })
 
+        val all = events.sortedWith(compareBy(nullsLast()) { it.localDate })
+
         val pending = upcoming.filter { rsvp[it.id] == null }
 
         return EventListsResult(
             upcomingEvents = upcoming.take(4),
             allUpcomingEvents = upcoming,
+            allEvents = all,
             inboxEvents = pending
         )
     }

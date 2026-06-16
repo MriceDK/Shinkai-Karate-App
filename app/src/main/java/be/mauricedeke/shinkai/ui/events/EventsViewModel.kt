@@ -81,6 +81,7 @@ class EventsViewModel @Inject constructor(
             state.copy(
                 upcomingEvents = result.upcomingEvents,
                 allUpcomingEvents = result.allUpcomingEvents,
+                allEvents = result.allEvents,
                 inboxEvents = result.inboxEvents
             )
         }
