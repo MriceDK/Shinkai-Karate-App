@@ -63,7 +63,7 @@ object NetworkModule {
                     .build()
             )
             .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = HttpLoggingInterceptor.Level.NONE
             })
             .addInterceptor { chain ->
                 val request = tokenStore.accessToken
