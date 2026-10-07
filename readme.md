@@ -1,49 +1,119 @@
-# ShinKai: Karate Club App
+<div align="center">
 
-A mobile companion app for members of a Shinkempo karate club. Track your training, keep up with club events, study techniques per belt, and measure your progress with built-in strength tests.
+# 🥋 ShinKai: Karate Club App
 
-**Author:** Maurice De Kegel
+**A mobile companion app for members of a Shinkempo karate club, built with Kotlin and Jetpack Compose.**
 
-[Download the APK](https://appdistribution.firebase.dev/i/b0d43bfb2c9e44fe) · [LinkedIn](https://www.linkedin.com/in/dekegelmaurice)
+<p>
+  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white" alt="Kotlin badge">
+  <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android badge">
+  <img src="https://img.shields.io/badge/Jetpack_Compose-4285F4?style=for-the-badge&logo=jetpackcompose&logoColor=white" alt="Jetpack Compose badge">
+  <img src="https://img.shields.io/badge/Material_3-757575?style=for-the-badge&logo=materialdesign&logoColor=white" alt="Material 3 badge">
+  <img src="https://img.shields.io/badge/Mapbox-000000?style=for-the-badge&logo=mapbox&logoColor=white" alt="Mapbox badge">
+  <img src="https://img.shields.io/badge/Firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white" alt="Firebase badge">
+  <img src="https://img.shields.io/badge/Gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white" alt="Gradle badge">
+</p>
 
----
+[Download the APK](https://appdistribution.firebase.dev/i/b0d43bfb2c9e44fe)
 
-## Features
+</div>
 
-**Events**
-- Swipeable monthly calendar with an inbox for unanswered RSVPs
-- RSVP to events, open the location in your maps app, or add the event to your calendar
-- Reminders for upcoming events and trainings, with configurable lead time
-- Geofencing: arriving at an event prompts you to log your attendance
+> 🥋 Made for my own karate club, to track techniques, katas and training across belt levels.
 
-**Training**
-- Training history with a calendar view and per-training notes
-- Technique and kata overview per belt level
-- Searchable Japanese–Dutch lexicon
+## 📑 Table of Contents
 
-**Strength tests**
-- Punch force, measured with the accelerometer
-- Kiai volume, measured in dB with the microphone
-- Best scores saved per belt
+- [📖 About](#about)
+- [🏗️ Architecture](#architecture)
+- [✨ Features](#features)
+- [📱 Screens](#screens)
+- [🛠️ Tech Stack](#tech-stack)
+- [🚀 Getting Started](#getting-started)
+- [📄 License](#license)
+- [👤 Author](#author)
 
-**Map**
-- Mapbox map with live position, event markers and dojo zones
-- Turn-by-turn navigation to an event
+## 📖 About
 
-**Profile and settings**
-- Belt display, profile picture (camera or gallery) and editable account details
-- Customisable home screen shortcuts
-- Per-type notification toggles, plus light/dark theme
+- ShinKai is an Android app for members of a Shinkempo karate club.
+- It lets you track your training, keep up with club events, study techniques per belt and measure your progress with built-in strength tests.
+- The app is written in Kotlin with Jetpack Compose and follows an MVVM architecture with use cases and repositories.
+- It talks to a club backend over an SSL-pinned REST API and receives live updates through a message broker.
 
-**Live updates**
-- Push notifications over a LavinMQ (AMQP) message broker, filtered by your notification settings
+## 🏗️ Architecture
 
----
+```mermaid
+flowchart TB
+    UI[UI - Composables]
+    VM[ViewModel and UiState]
+    UC[Use Cases]
+    Repo[Repositories]
+    Remote["Remote - Retrofit and Moshi"]
+    Local["Local - Room and DataStore"]
+    Sensors["Sensors - accelerometer, microphone, location"]
+    API[Club REST API]
+    Broker[LavinMQ - AMQP]
 
-## Tech Stack
+    UI <--> VM
+    VM --> UC
+    UC --> Repo
+    Repo --> Remote
+    Repo --> Local
+    Repo --> Sensors
+    Remote --> API
+    Broker -->|push notifications| Repo
+```
 
-| Area | Technology |
-|---|---|
+## ✨ Features
+
+**📅 Events**
+
+- Swipeable monthly calendar with an inbox for unanswered RSVPs.
+- RSVP to events, open the location in your maps app, or add the event to your calendar.
+- Reminders for upcoming events and trainings, with a configurable lead time.
+- Geofencing: arriving at an event prompts you to log your attendance.
+
+**🏋️ Training**
+
+- Training history with a calendar view and per-training notes.
+- Technique and kata overview per belt level.
+- Searchable Japanese–Dutch lexicon.
+
+**💪 Strength tests**
+
+- Punch force, measured with the accelerometer.
+- Kiai volume, measured in dB with the microphone.
+- Best scores saved per belt.
+
+**🗺️ Map**
+
+- Mapbox map with your live position, event markers and dojo zones.
+- Turn-by-turn navigation to an event.
+
+**👤 Profile and settings**
+
+- Belt display, profile picture (camera or gallery) and editable account details.
+- Customisable home screen shortcuts.
+- Per-type notification toggles, plus light and dark theme.
+
+**🔔 Live updates**
+
+- Push notifications over a LavinMQ (AMQP) message broker, filtered by your notification settings.
+
+## 📱 Screens
+
+| Area | Screens |
+| --- | --- |
+| Main tabs | Home, Events, Kaart (map), Technieken, Profiel |
+| Events | Event detail, Manage events |
+| Learning | Techniques, Kata list, Lexicon |
+| Progress | Training history, Strength tests (punch force, kiai) |
+| Settings | Account, Notifications, Location |
+| Auth | Login |
+
+## 🛠️ Tech Stack
+
+| Area | Technologies |
+| --- | --- |
+| Language | Kotlin |
 | UI | Jetpack Compose, Material 3 |
 | Architecture | MVVM, UiState, Use Cases, Repositories, Hilt |
 | Networking | Retrofit + Moshi, SSL-pinned REST API |
@@ -54,33 +124,61 @@ A mobile companion app for members of a Shinkempo karate club. Track your traini
 | Maps and location | Mapbox (Maps + Navigation SDK), GPS, Geofencing API |
 | Sensors | Accelerometer, microphone, camera |
 | Testing | JUnit + MockK unit tests, instrumented Room DAO tests |
+| Build tool | Gradle (Kotlin DSL) |
 | CI/CD | Firebase App Distribution |
 
----
+## 🚀 Getting Started
 
-## Architecture
+### Install the app
 
+The quickest way to try the app is to [download the APK](https://appdistribution.firebase.dev/i/b0d43bfb2c9e44fe) through Firebase App Distribution.
+
+### Build from source
+
+#### Prerequisites
+
+- [Android Studio](https://developer.android.com/studio)
+- A JDK supported by your Android Studio version
+- An Android device or emulator
+- A Mapbox account for the Maps and Navigation SDK tokens
+
+#### Clone
+
+```bash
+git clone https://github.com/MriceDK/Shinkai-Karate-App.git
+cd Shinkai-Karate-App
 ```
-UI (Composables)
-    └── ViewModel  ←→  UiState
-            └── Use Cases
-                    └── Repositories
-                            ├── Remote (Retrofit + Moshi)
-                            ├── Local (Room, DataStore)
-                            └── Sensors (Accelerometer, Microphone, Location)
+
+#### Configuration
+
+<!-- TODO: document the values that must be set before building, such as the Mapbox access tokens, the REST API base URL and the LavinMQ connection details, and where they go (e.g. local.properties or gradle.properties). -->
+
+#### Run
+
+Open the project in Android Studio and run the `app` module on a device or emulator, or build from the command line:
+
+```bash
+./gradlew assembleDebug
 ```
 
----
+#### Test
 
-## Screens
+```bash
+./gradlew test
+```
 
-| Area | Screens |
-|---|---|
-| Main tabs | Home, Events, Kaart (map), Technieken, Profiel |
-| Events | Event detail, Manage events |
-| Learning | Techniques, Kata list, Lexicon |
-| Progress | Training history, Strength tests (punch force, kiai) |
-| Settings | Account, Notifications, Location |
-| Auth | Login |
+Instrumented Room DAO tests need a connected device or emulator:
 
----
+```bash
+./gradlew connectedAndroidTest
+```
+
+## 📄 License
+
+This project is licensed under the [Apache License 2.0](LICENSE).
+
+## 👤 Author
+
+| Name | GitHub | LinkedIn |
+| --- | --- | --- |
+| Maurice De Kegel | [MriceDK](https://github.com/MriceDK) | [LinkedIn](https://www.linkedin.com/in/dekegelmaurice/) |
