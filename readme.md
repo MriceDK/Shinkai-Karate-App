@@ -149,10 +149,37 @@ git clone https://github.com/MriceDK/Shinkai-Karate-App.git
 cd Shinkai-Karate-App
 ```
 
-#### Configuration
+---
 
-<!-- TODO: document the values that must be set before building, such as the Mapbox access tokens, the REST API base URL and the LavinMQ connection details, and where they go (e.g. local.properties or gradle.properties). -->
+## Configuration
 
+Before building the app, make sure the following Gradle properties are set:
+
+| Property | Purpose | Where it is used |
+|---|---|---|
+| `AMQPusername` | LavinMQ / AMQP username | `app/build.gradle.kts` -> `BuildConfig.AMQP_USERNAME` |
+| `AMQPpassword` | LavinMQ / AMQP password | `app/build.gradle.kts` -> `BuildConfig.AMQP_PASSWORD` |
+| `AMQPurl` | LavinMQ host, optionally with port | `app/build.gradle.kts` -> `BuildConfig.AMQP_URL` |
+| `AMQPvhost` | LavinMQ virtual host | `app/build.gradle.kts` -> `BuildConfig.AMQP_VHOST` |
+| `AMQPexchange` | LavinMQ exchange name | `app/build.gradle.kts` -> `BuildConfig.AMQP_EXCHANGE` |
+| `MAPBOX_PUBLIC_TOKEN` | Public Mapbox token for the Maps SDK | `app/build.gradle.kts` -> `BuildConfig.MAPBOX_PUBLIC_TOKEN` |
+| `MAPBOX_ACCESS_TOKEN` | Private Mapbox token for the Mapbox Maven repository and the app BuildConfig | `settings.gradle.kts` and `app/build.gradle.kts` -> `BuildConfig.MAPBOX_ACCESS_TOKEN` |
+| `API_BASE_URL` | REST API base URL | `app/build.gradle.kts` -> `BuildConfig.API_BASE_URL` |
+
+The project reads these values from `gradle.properties` by default, and CI can override them with `-P` flags. `local.properties` should remain machine-specific and is only used for local Android SDK settings.
+
+Example entries:
+
+```properties
+AMQPusername=your-amqp-username
+AMQPpassword=your-amqp-password
+AMQPurl=your-lavinmq-host
+AMQPvhost=your-vhost
+AMQPexchange=your-exchange
+MAPBOX_PUBLIC_TOKEN=your-mapbox-public-token
+MAPBOX_ACCESS_TOKEN=your-mapbox-access-token
+API_BASE_URL=https://your-api.example.com/api/v1/
+```
 #### Run
 
 Open the project in Android Studio and run the `app` module on a device or emulator, or build from the command line:
